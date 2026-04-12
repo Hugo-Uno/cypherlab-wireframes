@@ -1,1 +1,812 @@
-[market-activity content]
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Activity — Wireframe</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #0d1117; color: #e6edf3; font-size: 13px; }
+  .app { display: flex; height: 100vh; }
+
+  /* Sidebar */
+  .sidebar { width: 200px; background: #161b22; border-right: 1px solid #30363d; display: flex; flex-direction: column; flex-shrink: 0; }
+  .sidebar.collapsed { width: 48px; }
+  .sidebar.collapsed .sb-label { display: none; }
+  .sidebar.collapsed .sb-item { justify-content: center; padding: 10px 0; }
+  .sidebar.collapsed .sb-header h2 { display: none; }
+  .sb-header { padding: 14px 12px; border-bottom: 1px solid #30363d; display: flex; align-items: center; justify-content: space-between; }
+  .sb-header h2 { font-size: 14px; font-weight: 700; color: #a5f3a6; letter-spacing: 1px; }
+  .sb-collapse { background: none; border: none; color: #8b949e; cursor: pointer; font-size: 14px; }
+  .sb-nav { flex: 1; padding: 6px 0; overflow-y: auto; }
+  .sb-item { display: flex; align-items: center; gap: 10px; padding: 9px 16px; color: #8b949e; cursor: pointer; font-size: 13px; }
+  .sb-item:hover { background: #1c2129; color: #e6edf3; }
+  .sb-item.active { background: #1f6feb22; color: #a5f3a6; border-left: 3px solid #a5f3a6; }
+  .sb-icon { width: 18px; text-align: center; flex-shrink: 0; }
+  .sb-sub { padding-left: 44px; }
+  .sb-sub .sb-item { font-size: 12px; padding: 7px 16px; }
+
+  /* Main */
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* Top bar */
+  .topbar { display: flex; align-items: center; gap: 12px; padding: 10px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .topbar-search { background: #0d1117; border: 1px solid #30363d; color: #8b949e; padding: 6px 14px; border-radius: 6px; font-size: 12px; width: 260px; }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+  .env-badge { background: #238636; color: #fff; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .topbar-time { color: #8b949e; font-size: 12px; }
+  .notif-icon { position: relative; color: #8b949e; font-size: 16px; cursor: pointer; }
+  .notif-badge { position: absolute; top: -4px; right: -6px; background: #f85149; color: #fff; font-size: 8px; width: 14px; height: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+  .avatar { width: 28px; height: 28px; background: #30363d; border-radius: 50%; }
+
+  /* Match header */
+  .match-header { display: flex; align-items: center; gap: 16px; padding: 14px 20px; border-bottom: 1px solid #30363d; background: #0d1117; }
+  .back-link { color: #8b949e; font-size: 12px; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 4px; }
+  .back-link:hover { color: #e6edf3; }
+  .match-title-block { }
+  .match-title { font-size: 18px; font-weight: 700; }
+  .match-subtitle { font-size: 11px; color: #8b949e; margin-top: 2px; }
+
+  .current-odds { display: flex; gap: 8px; margin-left: 12px; }
+  .odds-chip { text-align: center; }
+  .odds-chip-label { font-size: 9px; color: #8b949e; }
+  .odds-chip-value { font-size: 16px; font-weight: 700; color: #e6edf3; }
+
+  .match-actions { display: flex; gap: 8px; margin-left: auto; }
+  .btn-action { padding: 6px 14px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 600; border: 1px solid; display: flex; align-items: center; gap: 6px; }
+  .btn-safe { background: #1f6feb22; border-color: #58a6ff; color: #58a6ff; }
+  .btn-suspend { background: #b6222233; border-color: #f85149; color: #f85149; }
+  .btn-override { background: #8957e522; border-color: #d2a8ff; color: #d2a8ff; }
+
+  .live-status { display: flex; align-items: center; gap: 8px; margin-left: 16px; }
+  .live-text { font-size: 11px; color: #8b949e; }
+  .live-badge-sm { background: #da3633; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+
+  .updated-text { font-size: 10px; color: #8b949e; text-align: right; line-height: 1.3; }
+
+  /* Content area */
+  .content { flex: 1; display: flex; overflow: hidden; }
+
+  /* Left: Activity */
+  .activity-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; border-right: 1px solid #30363d; }
+
+  /* Filter bar */
+  .filter-bar { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid #30363d; }
+  .filter-label { font-size: 11px; color: #8b949e; }
+  .filter-chip { background: #161b22; border: 1px solid #30363d; color: #e6edf3; padding: 4px 10px; border-radius: 6px; font-size: 11px; display: flex; align-items: center; gap: 4px; cursor: pointer; }
+  .filter-chip .icon { font-size: 12px; }
+  .time-tabs { margin-left: auto; display: flex; gap: 2px; }
+  .time-tab { padding: 4px 10px; font-size: 11px; border-radius: 4px; cursor: pointer; color: #8b949e; border: 1px solid transparent; }
+  .time-tab:hover { color: #e6edf3; }
+  .time-tab.active { background: #58a6ff; color: #fff; border-color: #58a6ff; }
+
+  /* Activity table */
+  .activity-scroll { flex: 1; overflow-y: auto; }
+  .act-table { width: 100%; border-collapse: collapse; }
+  .act-table thead { position: sticky; top: 0; z-index: 5; background: #0d1117; }
+  .act-table th { padding: 8px 10px; font-size: 11px; font-weight: 600; color: #8b949e; border-bottom: 1px solid #30363d; text-align: left; }
+  .act-table th.right { text-align: right; }
+  .act-table td { padding: 6px 10px; font-size: 12px; border-bottom: 1px solid #21262d; }
+  .act-table td.right { text-align: right; }
+  .act-table tbody tr:hover { background: #1c2129; }
+
+  /* Time cell */
+  .time-cell { font-weight: 700; color: #e6edf3; font-size: 13px; vertical-align: top; }
+  .time-total { color: #d2a8ff; font-weight: 800; font-size: 13px; }
+
+  /* Event tags */
+  .event-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+  .tag-close { background: #23863633; color: #3fb950; border: 1px solid #3fb95055; }
+  .tag-manual { background: #d2992233; color: #d29922; border: 1px solid #d2992255; }
+  .tag-safe { background: #3fb95033; color: #3fb950; border: 1px solid #3fb95055; }
+  .tag-red { background: #f8514933; color: #f85149; border: 1px solid #f8514955; }
+  .tag-score { background: #d2a8ff33; color: #d2a8ff; border: 1px solid #d2a8ff55; }
+  .tag-yellow { background: #d2992233; color: #d29922; border: 1px solid #d2992255; }
+  .tag-corner { background: #58a6ff33; color: #58a6ff; border: 1px solid #58a6ff55; }
+
+  /* Selection */
+  .sel-name { font-weight: 500; }
+  .sel-home { color: #58a6ff; }
+  .sel-draw { color: #d2a8ff; }
+  .sel-away { color: #f97583; }
+
+  /* Bets count */
+  .bets-num { font-variant-numeric: tabular-nums; }
+
+  /* WAO */
+  .wao { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+  /* Stake % - color coded */
+  .stake-pct { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .pct-high { color: #f85149; }
+  .pct-mid { color: #d29922; }
+  .pct-normal { color: #8b949e; }
+
+  /* Stake */
+  .stake-val { font-variant-numeric: tabular-nums; color: #3fb950; font-weight: 600; }
+
+  /* Right: Odds panel */
+  .odds-panel { width: 600px; background: #0d1117; padding: 24px; overflow-y: auto; flex-shrink: 0; }
+
+  .panel-section { margin-bottom: 20px; }
+  .panel-title { font-size: 12px; font-weight: 700; color: #8b949e; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; }
+
+  .odds-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; text-align: center; }
+  .odds-grid-label { font-size: 11px; color: #8b949e; margin-bottom: 6px; }
+  .odds-box { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px 6px; }
+  .odds-box-value { font-size: 20px; font-weight: 700; color: #e6edf3; }
+  .odds-box-pct { font-size: 12px; color: #8b949e; margin-top: 3px; }
+
+  .odds-box-new { background: #1f6feb22; border: 2px solid #1f6feb; border-radius: 8px; padding: 10px 6px; cursor: pointer; position: relative; }
+  .odds-box-new .odds-box-value { color: #58a6ff; font-size: 22px; }
+  .odds-box-new .odds-old { font-size: 11px; color: #8b949e; margin-bottom: 2px; }
+  .odds-box-new .odds-diff { font-size: 11px; font-weight: 600; margin-top: 2px; }
+  .odds-box-new .odds-diff.diff-up { color: #f85149; }
+  .odds-box-new .odds-diff.diff-down { color: #3fb950; }
+  .odds-box-new .odds-diff.diff-none { color: #484f58; }
+  .odds-box-new.changed { border-color: #d29922; background: #d2992215; }
+  .odds-box-new.changed .odds-box-value { color: #d29922; }
+
+  /* +/- controls */
+  .pct-controls { display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 4px; }
+  .pct-btn { width: 40px; height: 40px; border-radius: 8px; border: 1px solid #30363d; background: #161b22; color: #e6edf3; cursor: pointer; font-size: 22px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+  .pct-btn:hover { border-color: #58a6ff; color: #58a6ff; background: #1f6feb22; }
+  .pct-val { font-size: 13px; color: #e6edf3; min-width: 38px; text-align: center; font-weight: 600; }
+
+  /* Reason */
+  .reason-section { margin-top: 16px; }
+  .reason-label { font-size: 11px; color: #8b949e; margin-bottom: 6px; }
+  .reason-input { width: 100%; background: #161b22; border: 1px solid #30363d; color: #e6edf3; padding: 10px 14px; border-radius: 8px; font-size: 13px; resize: vertical; min-height: 70px; }
+  .reason-input::placeholder { color: #484f58; }
+  .reason-input:focus { border-color: #1f6feb; outline: none; }
+
+  .panel-actions { display: flex; gap: 8px; margin-top: 12px; }
+  .btn-remove { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #30363d; background: #161b22; color: #8b949e; font-size: 14px; cursor: pointer; font-weight: 600; }
+  .btn-remove:hover { border-color: #f85149; color: #f85149; }
+  .btn-apply { flex: 1; padding: 12px; border-radius: 8px; border: none; background: #238636; color: #fff; font-size: 14px; cursor: pointer; font-weight: 700; }
+  .btn-apply:hover { background: #2ea043; }
+
+  /* Operation Log */
+  .op-log { display: flex; flex-direction: column; gap: 0; }
+  .op-entry { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid #21262d; }
+  .op-entry:last-child { border-bottom: none; }
+  .op-time { font-size: 11px; color: #8b949e; min-width: 58px; flex-shrink: 0; font-variant-numeric: tabular-nums; padding-top: 2px; }
+  .op-body { flex: 1; }
+  .op-action { margin-bottom: 3px; }
+  .op-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+  .op-tag-override { background: #8957e533; color: #d2a8ff; border: 1px solid #8957e555; }
+  .op-tag-suspend { background: #f8514933; color: #f85149; border: 1px solid #f8514955; }
+  .op-tag-resume { background: #23863633; color: #3fb950; border: 1px solid #3fb95055; }
+  .op-tag-safe { background: #58a6ff33; color: #58a6ff; border: 1px solid #58a6ff55; }
+  .op-detail { font-size: 12px; color: #e6edf3; line-height: 1.4; }
+  .op-user { font-size: 11px; color: #8b949e; margin-top: 2px; }
+  .op-match-time { font-size: 10px; color: #d2a8ff; font-weight: 600; }
+  .op-operator { font-size: 11px; color: #8b949e; margin-left: 6px; }
+  .op-operator strong { color: #e6edf3; }
+
+  /* Odds change table */
+  .op-odds-change { margin: 6px 0; }
+  .op-odds-table { border-collapse: collapse; width: 100%; }
+  .op-odds-table td { padding: 2px 0; font-size: 12px; font-variant-numeric: tabular-nums; }
+  .op-sel { color: #8b949e; width: 44px; }
+  .op-old { color: #8b949e; text-align: right; width: 42px; }
+  .op-arrow { color: #484f58; text-align: center; width: 24px; }
+  .op-new { color: #e6edf3; font-weight: 700; text-align: right; width: 42px; }
+  .op-diff { text-align: right; width: 50px; font-size: 11px; font-weight: 600; }
+  .diff-up { color: #f85149; }
+  .diff-down { color: #3fb950; }
+
+  /* Reason (editable post-hoc) */
+  .op-reason { margin-top: 4px; font-size: 11px; display: flex; align-items: center; gap: 6px; }
+  .op-reason-text { color: #8b949e; font-style: italic; }
+  .op-reason-edit { background: none; border: none; color: #484f58; cursor: pointer; font-size: 12px; padding: 0; }
+  .op-reason-edit:hover { color: #58a6ff; }
+  .op-reason-empty { margin-top: 4px; }
+  .op-reason-placeholder { font-size: 11px; color: #484f58; cursor: pointer; }
+  .op-reason-placeholder:hover { color: #58a6ff; }
+
+  /* Wireframe note */
+  .wf-note { position: fixed; bottom: 10px; right: 20px; background: #d29922; color: #000; padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 700; z-index: 999; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sb-header">
+      <h2>CypherBook</h2>
+      <button class="sb-collapse" onclick="document.getElementById('sidebar').classList.toggle('collapsed')">◀</button>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-item"><span class="sb-icon">📊</span><span class="sb-label">Matches</span></div>
+      <div class="sb-item active"><span class="sb-icon">📈</span><span class="sb-label">Markets</span></div>
+      <div class="sb-item"><span class="sb-icon">👥</span><span class="sb-label">Players</span></div>
+      <div class="sb-item"><span class="sb-icon">🎫</span><span class="sb-label">Bets</span></div>
+      <div class="sb-item"><span class="sb-icon">📋</span><span class="sb-label">Audit Log</span></div>
+      <div class="sb-item"><span class="sb-icon">🔔</span><span class="sb-label">Alerts</span></div>
+      <div class="sb-item"><span class="sb-icon">👤</span><span class="sb-label">Merchants</span></div>
+      <div class="sb-item"><span class="sb-icon">🔐</span><span class="sb-label">Permissions</span></div>
+      <div class="sb-sub">
+        <div class="sb-item"><span class="sb-label">Admins</span></div>
+        <div class="sb-item"><span class="sb-label">Roles</span></div>
+      </div>
+      <div class="sb-item"><span class="sb-icon">📊</span><span class="sb-label">Reports</span></div>
+      <div class="sb-item"><span class="sb-icon">⚙️</span><span class="sb-label">Global Settings</span></div>
+      <div class="sb-item"><span class="sb-icon">🔧</span><span class="sb-label">System</span></div>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- Top Bar -->
+    <div class="topbar">
+      <input class="topbar-search" placeholder="Search matches, players, markets..." />
+      <div class="topbar-right">
+        <span class="env-badge">Production</span>
+        <span class="topbar-time">17:26:38</span>
+        <span class="notif-icon">🔔<span class="notif-badge">3</span></span>
+        <div class="avatar"></div>
+      </div>
+    </div>
+
+    <!-- Match Header -->
+    <div class="match-header">
+      <a class="back-link">← Back to Market</a>
+      <div class="match-title-block">
+        <div class="match-title">Real Madrid vs Barcelona</div>
+        <div class="match-subtitle">1X2 · Match Result</div>
+      </div>
+
+      <div class="current-odds">
+        <div class="odds-chip">
+          <div class="odds-chip-label">Real Madrid</div>
+          <div class="odds-chip-value">2.35</div>
+        </div>
+        <div class="odds-chip">
+          <div class="odds-chip-label">Draw</div>
+          <div class="odds-chip-value">3.40</div>
+        </div>
+        <div class="odds-chip">
+          <div class="odds-chip-label">Barcelona</div>
+          <div class="odds-chip-value">2.95</div>
+        </div>
+      </div>
+
+      <div class="match-actions">
+        <button class="btn-action btn-safe">🛡 Safe Mode</button>
+        <button class="btn-action btn-suspend">⛔ Suspend</button>
+        <button class="btn-action btn-override">✏️ Manual Update</button>
+      </div>
+
+      <div class="live-status">
+        <div class="updated-text">Updated<br/>just now</div>
+        <span class="live-text">⚡ Live</span>
+        <span class="live-badge-sm">● Live</span>
+      </div>
+    </div>
+
+    <!-- Content: Activity + Odds Panel -->
+    <div class="content">
+
+      <!-- Activity Panel -->
+      <div class="activity-panel">
+
+        <!-- Filters -->
+        <div class="filter-bar">
+          <span class="filter-label">Filters:</span>
+          <span class="filter-chip"><span class="icon">▽</span> 10 selected</span>
+
+          <div class="time-tabs">
+            <span class="filter-label" style="margin-right:4px;">Time:</span>
+            <span class="time-tab">12h</span>
+            <span class="time-tab">1h</span>
+            <span class="time-tab active">All</span>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="activity-scroll">
+          <table class="act-table">
+            <thead>
+              <tr>
+                <th style="width:60px;">Time ↓</th>
+                <th style="width:110px;">Event</th>
+                <th>Selection</th>
+                <th class="right">Bets</th>
+                <th class="right">WAO</th>
+                <th class="right">Stake %</th>
+                <th class="right">Stake</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- TOTAL -->
+              <tr style="background:#161b22;">
+                <td class="time-total">TOTAL</td>
+                <td>—</td>
+                <td><span class="sel-name sel-home">Real Madrid</span></td>
+                <td class="right bets-num" style="font-weight:700;">241</td>
+                <td class="right wao">1.84</td>
+                <td class="right stake-pct pct-high">49.7%</td>
+                <td class="right stake-val">37,700</td>
+              </tr>
+              <tr style="background:#161b22;">
+                <td></td><td>—</td>
+                <td><span class="sel-name sel-draw">Draw</span></td>
+                <td class="right bets-num" style="font-weight:700;">163</td>
+                <td class="right wao">1.95</td>
+                <td class="right stake-pct pct-mid">31.1%</td>
+                <td class="right stake-val">23,600</td>
+              </tr>
+              <tr style="background:#161b22;">
+                <td></td><td>—</td>
+                <td><span class="sel-name sel-away">Barcelona</span></td>
+                <td class="right bets-num" style="font-weight:700;">106</td>
+                <td class="right wao">2.27</td>
+                <td class="right stake-pct pct-normal">19.2%</td>
+                <td class="right stake-val">14,600</td>
+              </tr>
+
+              <!-- FT — Market Close -->
+              <tr>
+                <td class="time-cell">FT</td>
+                <td><span class="event-tag tag-close">● Market Close</span></td>
+                <td><span class="sel-name sel-home">Real Madrid</span></td>
+                <td class="right bets-num">9</td>
+                <td class="right wao">1.60</td>
+                <td class="right stake-pct pct-high">42.3%</td>
+                <td class="right stake-val">1,100</td>
+              </tr>
+              <tr>
+                <td></td><td></td>
+                <td><span class="sel-name sel-draw">Draw</span></td>
+                <td class="right bets-num">7</td>
+                <td class="right wao">2.00</td>
+                <td class="right stake-pct pct-normal">32.7%</td>
+                <td class="right stake-val">850</td>
+              </tr>
+              <tr>
+                <td></td><td></td>
+                <td><span class="sel-name sel-away">Barcelona</span></td>
+                <td class="right bets-num">5</td>
+                <td class="right wao">2.20</td>
+                <td class="right stake-pct pct-normal">25.0%</td>
+                <td class="right stake-val">650</td>
+              </tr>
+
+              <!-- 00:78 — Manual edit -->
+              <tr>
+                <td class="time-cell">00:78</td>
+                <td><span class="event-tag tag-manual">● Manual edit</span></td>
+                <td><span class="sel-name sel-home">Real Madrid</span></td>
+                <td class="right bets-num">4</td>
+                <td class="right wao">1.82</td>
+                <td class="right stake-pct pct-normal">33.3%</td>
+                <td class="right stake-val">400</td>
+              </tr>
+              <tr>
+                <td></td><td></td>
+                <td><span class="sel-name sel-draw">Draw</span></td>
+                <td class="right bets-num">6</td>
+                <td class="right wao">2.10</td>
+                <td class="right stake-pct pct-high">41.7%</td>
+                <td class="right stake-val">500</td>
+              </tr>
+              <tr>
+                <td></td><td></td>
+                <td><span class="sel-name sel-away">Barcelona</span></td>
+                <td class="right bets-num">3</td>
+                <td class="right wao">2.15</td>
+                <td class="right stake-pct pct-normal">25.0%</td>
+                <td class="right stake-val">300</td>
+              </tr>
+
+              <!-- 00:68 — Manual adjustment -->
+              <tr>
+                <td class="time-cell">00:68</td>
+                <td><span class="event-tag tag-manual">● Manual<br/>adjustment</span></td>
+                <td><span class="sel-name sel-home">Real Madrid</span></td>
+                <td class="right bets-num">8</td>
+                <td class="right wao">1.80</td>
+                <td class="right stake-pct pct-high">51.1%</td>
+                <td class="right stake-val">1,200</td>
+              </tr>
+              <tr>
+                <td></td><td></td>
+                <td><span class="sel-name sel-draw">Draw</span></td>
+                <td class="right bets-num">5</td>
+                <td class="right wao">2.00</td>
+                <td class="right stake-pct pct-normal">27.7%</td>
+                <td class="right stake-val">650</td>
+              </tr>
+              <tr>
+                <td></td><td></td>
+                <td><span class="sel-name sel-away">Barcelona</span></td>
+                <td class="right bets-num">4</td>
+                <td class="right wao">2.25</td>
+                <td class="right stake-pct pct-normal">21.3%</td>
+                <td class="right stake-val">500</td>
+              </tr>
+
+              <!-- 00:62 — Safe mode -->
+              <tr>
+                <td class="time-cell">00:62</td>
+                <td><span class="event-tag tag-safe">● Safe mode</span></td>
+                <td><span class="sel-name sel-home">Real Madrid</span></td>
+                <td class="right bets-num">18</td>
+                <td class="right wao">1.78</td>
+                <td class="right stake-pct pct-high">57.1%</td>
+                <td class="right stake-val">2,800</td>
+              </tr>
+              <tr>
+                <td></td><td></td>
+                <td><span class="sel-name sel-draw">Draw</span></td>
+                <td class="right bets-num">8</td>
+                <td class="right wao">2.05</td>
+                <td class="right stake-pct pct-mid">24.5%</td>
+                <td class="right stake-val">1,200</td>
+              </tr>
+              <tr>
+                <td></td><td></td>
+                <td><span class="sel-name sel-away">Barcelona</span></td>
+                <td class="right bets-num">6</td>
+                <td class="right wao">2.30</td>
+                <td class="right stake-pct pct-normal">18.4%</td>
+                <td class="right stake-val">900</td>
+              </tr>
+
+              <!-- 00:52 — Red Card -->
+              <tr>
+                <td class="time-cell">00:52</td>
+                <td><span class="event-tag tag-red">● Red Card</span></td>
+                <td><span class="sel-name sel-home">Real Madrid</span></td>
+                <td class="right bets-num">25</td>
+                <td class="right wao">1.65</td>
+                <td class="right stake-pct pct-normal">29.0%</td>
+                <td class="right stake-val">4,500</td>
+              </tr>
+              <tr>
+                <td></td><td></td>
+                <td><span class="sel-name sel-draw">Draw</span></td>
+                <td class="right bets-num">45</td>
+                <td class="right wao">1.95</td>
+                <td class="right stake-pct pct-high">54.8%</td>
+                <td class="right stake-val">8,500</td>
+              </tr>
+              <tr>
+                <td></td><td></td>
+                <td><span class="sel-name sel-away">Barcelona</span></td>
+                <td class="right bets-num">15</td>
+                <td class="right wao">2.40</td>
+                <td class="right stake-pct pct-normal">16.1%</td>
+                <td class="right stake-val">2,500</td>
+              </tr>
+
+              <!-- 00:34 — Score change -->
+              <tr>
+                <td class="time-cell">00:34</td>
+                <td><span class="event-tag tag-score">● Score change</span></td>
+                <td><span class="sel-name sel-home">Real Madrid</span></td>
+                <td class="right bets-num">65</td>
+                <td class="right wao">1.72</td>
+                <td class="right stake-pct pct-high">87.6%</td>
+                <td class="right stake-val">12,000</td>
+              </tr>
+              <tr>
+                <td></td><td></td>
+                <td><span class="sel-name sel-draw">Draw</span></td>
+                <td class="right bets-num">9</td>
+                <td class="right wao">2.35</td>
+                <td class="right stake-pct pct-normal">6.6%</td>
+                <td class="right stake-val">900</td>
+              </tr>
+              <tr>
+                <td></td><td></td>
+                <td><span class="sel-name sel-away">Barcelona</span></td>
+                <td class="right bets-num">8</td>
+                <td class="right wao">2.50</td>
+                <td class="right stake-pct pct-normal">5.8%</td>
+                <td class="right stake-val">800</td>
+              </tr>
+
+              <!-- 00:18 — Yellow Card -->
+              <tr>
+                <td class="time-cell">00:18</td>
+                <td><span class="event-tag tag-yellow">● Yellow Card</span></td>
+                <td><span class="sel-name sel-home">Real Madrid</span></td>
+                <td class="right bets-num">30</td>
+                <td class="right wao">1.90</td>
+                <td class="right stake-pct pct-high">60.8%</td>
+                <td class="right stake-val">4,500</td>
+              </tr>
+              <tr>
+                <td></td><td></td>
+                <td><span class="sel-name sel-draw">Draw</span></td>
+                <td class="right bets-num">14</td>
+                <td class="right wao">1.92</td>
+                <td class="right stake-pct pct-normal">23.0%</td>
+                <td class="right stake-val">1,700</td>
+              </tr>
+              <tr>
+                <td></td><td></td>
+                <td><span class="sel-name sel-away">Barcelona</span></td>
+                <td class="right bets-num">10</td>
+                <td class="right wao">2.35</td>
+                <td class="right stake-pct pct-normal">16.2%</td>
+                <td class="right stake-val">1,200</td>
+              </tr>
+
+              <!-- 00:05 — Corner -->
+              <tr>
+                <td class="time-cell">00:05</td>
+                <td><span class="event-tag tag-corner">● Corner</span></td>
+                <td><span class="sel-name sel-home">Real Madrid</span></td>
+                <td class="right bets-num">22</td>
+                <td class="right wao">1.92</td>
+                <td class="right stake-pct pct-high">42.7%</td>
+                <td class="right stake-val">3,200</td>
+              </tr>
+              <tr>
+                <td></td><td></td>
+                <td><span class="sel-name sel-draw">Draw</span></td>
+                <td class="right bets-num">18</td>
+                <td class="right wao">1.88</td>
+                <td class="right stake-pct pct-normal">33.3%</td>
+                <td class="right stake-val">2,500</td>
+              </tr>
+              <tr>
+                <td></td><td></td>
+                <td><span class="sel-name sel-away">Barcelona</span></td>
+                <td class="right bets-num">12</td>
+                <td class="right wao">2.28</td>
+                <td class="right stake-pct pct-normal">24.0%</td>
+                <td class="right stake-val">1,800</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Odds Panel (Right) -->
+      <div class="odds-panel">
+
+        <!-- Spread -->
+        <div class="panel-section" style="margin-bottom:16px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span class="panel-title" style="margin-bottom:0;">Spread</span>
+            <button class="pct-btn" style="width:36px; height:36px; font-size:18px;" onclick="adjustSpread(-0.1)">−</button>
+            <span id="spread-val" style="font-size:20px; font-weight:800; color:#3fb950; min-width:54px; text-align:center;">5.0%</span>
+            <button class="pct-btn" style="width:36px; height:36px; font-size:18px;" onclick="adjustSpread(0.1)">+</button>
+            <span style="font-size:11px; color:#8b949e; margin-left:8px;">Min <strong style="color:#58a6ff;">2.0%</strong> &middot; Max <strong style="color:#f85149;">12.0%</strong></span>
+          </div>
+        </div>
+
+        <!-- Average Odds: All Vendor -->
+        <div class="panel-section">
+          <div class="panel-title">Average Odds: All Vendor</div>
+          <div class="odds-grid">
+            <div class="odds-grid-label">Real Madrid</div>
+            <div class="odds-grid-label">Draw</div>
+            <div class="odds-grid-label">Barcelona</div>
+          </div>
+          <div class="odds-grid" style="margin-top:4px;">
+            <div class="odds-box">
+              <div class="odds-box-value">2.30</div>
+              <div class="odds-box-pct">43.5%</div>
+            </div>
+            <div class="odds-box">
+              <div class="odds-box-value">3.33</div>
+              <div class="odds-box-pct">30.0%</div>
+            </div>
+            <div class="odds-box">
+              <div class="odds-box-value">2.89</div>
+              <div class="odds-box-pct">34.6%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Current Odds: BetRadar -->
+        <div class="panel-section">
+          <div class="panel-title">Current Odds: BetRader</div>
+          <div class="odds-grid">
+            <div class="odds-grid-label">Real Madrid</div>
+            <div class="odds-grid-label">Draw</div>
+            <div class="odds-grid-label">Barcelona</div>
+          </div>
+          <div class="odds-grid" style="margin-top:4px;">
+            <div class="odds-box">
+              <div class="odds-box-value">2.35</div>
+              <div class="odds-box-pct">43%</div>
+            </div>
+            <div class="odds-box">
+              <div class="odds-box-value">3.40</div>
+              <div class="odds-box-pct">29%</div>
+            </div>
+            <div class="odds-box">
+              <div class="odds-box-value">2.95</div>
+              <div class="odds-box-pct">34%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- New Odds (linked +/- controls) -->
+        <div class="panel-section" id="newOddsPanel" style="background:#1f6feb11; border:1px solid #1f6feb33; border-radius:8px; padding:14px;">
+          <div class="panel-title" style="color:#58a6ff;">New Odds</div>
+          <div class="odds-grid">
+            <div class="odds-grid-label">Real Madrid</div>
+            <div class="odds-grid-label">Draw</div>
+            <div class="odds-grid-label">Barcelona</div>
+          </div>
+          <div class="odds-grid" style="margin-top:4px;">
+            <div class="odds-box-new changed" id="box-home">
+              <div class="odds-old">2.35</div>
+              <div class="odds-box-value" id="new-home">2.36</div>
+              <div class="odds-diff diff-up" id="diff-home">+0.01</div>
+            </div>
+            <div class="odds-box-new" id="box-draw">
+              <div class="odds-old" id="old-draw" style="visibility:hidden;">3.40</div>
+              <div class="odds-box-value" id="new-draw">3.40</div>
+              <div class="odds-diff diff-none" id="diff-draw" style="visibility:hidden;">0.00</div>
+            </div>
+            <div class="odds-box-new" id="box-away">
+              <div class="odds-old" id="old-away" style="visibility:hidden;">2.95</div>
+              <div class="odds-box-value" id="new-away">2.95</div>
+              <div class="odds-diff diff-none" id="diff-away" style="visibility:hidden;">0.00</div>
+            </div>
+          </div>
+          <!-- +/- fine tune -->
+          <div class="odds-grid" style="margin-top:6px;">
+            <div class="pct-controls">
+              <button class="pct-btn" onclick="adjustOdds('home',-0.01)">−</button>
+              <span class="pct-val" id="pct-home">43%</span>
+              <button class="pct-btn" onclick="adjustOdds('home',0.01)">+</button>
+            </div>
+            <div class="pct-controls">
+              <button class="pct-btn" onclick="adjustOdds('draw',-0.01)">−</button>
+              <span class="pct-val" id="pct-draw">29%</span>
+              <button class="pct-btn" onclick="adjustOdds('draw',0.01)">+</button>
+            </div>
+            <div class="pct-controls">
+              <button class="pct-btn" onclick="adjustOdds('away',-0.01)">−</button>
+              <span class="pct-val" id="pct-away">34%</span>
+              <button class="pct-btn" onclick="adjustOdds('away',0.01)">+</button>
+            </div>
+          </div>
+          <!-- Quick Adjust per selection: + row -->
+          <div class="odds-grid" style="margin-top:10px; gap:8px;">
+            <div style="display:flex; gap:3px;">
+              <button class="pct-btn" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;" onclick="quickAdjustSel('home',0.03)">+3%</button>
+              <button class="pct-btn" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;" onclick="quickAdjustSel('home',0.05)">+5%</button>
+              <button class="pct-btn" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;" onclick="quickAdjustSel('home',0.07)">+7%</button>
+            </div>
+            <div style="display:flex; gap:3px;">
+              <button class="pct-btn" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;" onclick="quickAdjustSel('draw',0.03)">+3%</button>
+              <button class="pct-btn" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;" onclick="quickAdjustSel('draw',0.05)">+5%</button>
+              <button class="pct-btn" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;" onclick="quickAdjustSel('draw',0.07)">+7%</button>
+            </div>
+            <div style="display:flex; gap:3px;">
+              <button class="pct-btn" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;" onclick="quickAdjustSel('away',0.03)">+3%</button>
+              <button class="pct-btn" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;" onclick="quickAdjustSel('away',0.05)">+5%</button>
+              <button class="pct-btn" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;" onclick="quickAdjustSel('away',0.07)">+7%</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="panel-actions">
+          <button class="btn-remove">Suspend</button>
+          <button class="btn-apply">Update</button>
+        </div>
+
+        <!-- Operation Log (below Override) -->
+        <div class="panel-section" style="margin-top:24px; border-top:1px solid #30363d; padding-top:20px;">
+          <div class="panel-title">Operation Log</div>
+          <div class="op-log">
+            <div class="op-entry">
+              <div class="op-time">17:24:38<br/><span class="op-match-time">78'</span></div>
+              <div class="op-body">
+                <div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Hugo</span></div>
+                <div class="op-odds-change">
+                  <table class="op-odds-table">
+                    <tr><td class="op-sel">Home</td><td class="op-old">2.30</td><td class="op-arrow">→</td><td class="op-new">2.35</td><td class="op-diff diff-up">+0.05</td></tr>
+                    <tr><td class="op-sel">Draw</td><td class="op-old">3.33</td><td class="op-arrow">→</td><td class="op-new">3.40</td><td class="op-diff diff-up">+0.07</td></tr>
+                    <tr><td class="op-sel">Away</td><td class="op-old">2.89</td><td class="op-arrow">→</td><td class="op-new">2.95</td><td class="op-diff diff-up">+0.06</td></tr>
+                  </table>
+                </div>
+                <div class="op-reason"><span class="op-reason-text">Market imbalance correction</span> <button class="op-reason-edit" title="編輯備註">✎</button></div>
+              </div>
+            </div>
+            <div class="op-entry">
+              <div class="op-time">16:48:10<br/><span class="op-match-time">PM</span></div>
+              <div class="op-body">
+                <div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Hugo</span></div>
+                <div class="op-odds-change">
+                  <table class="op-odds-table">
+                    <tr><td class="op-sel">Home</td><td class="op-old">2.25</td><td class="op-arrow">→</td><td class="op-new">2.30</td><td class="op-diff diff-up">+0.05</td></tr>
+                    <tr><td class="op-sel">Draw</td><td class="op-old">3.30</td><td class="op-arrow">→</td><td class="op-new">3.33</td><td class="op-diff diff-up">+0.03</td></tr>
+                    <tr><td class="op-sel">Away</td><td class="op-old">2.95</td><td class="op-arrow">→</td><td class="op-new">2.89</td><td class="op-diff diff-down">-0.06</td></tr>
+                  </table>
+                </div>
+                <div class="op-reason"><span class="op-reason-text">Pre-match line adjustment</span> <button class="op-reason-edit" title="編輯備註">✎</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wf-note">WIREFRAME v1.1 — Market Activity</div>
+
+<script>
+// Spread control
+var spreadVal = 5.0;
+var spreadMin = 2.0;
+var spreadMax = 12.0;
+function adjustSpread(delta) {
+  spreadVal = Math.round((spreadVal + delta) * 10) / 10;
+  if (spreadVal < spreadMin) spreadVal = spreadMin;
+  if (spreadVal > spreadMax) spreadVal = spreadMax;
+  var el = document.getElementById('spread-val');
+  el.textContent = spreadVal.toFixed(1) + '%';
+  el.style.color = spreadVal <= spreadMin ? '#58a6ff' : spreadVal >= spreadMax ? '#f85149' : '#3fb950';
+}
+
+// Original odds (from BetRadar current)
+const origOdds = { home: 2.35, draw: 3.40, away: 2.95 };
+const currentOdds = { home: 2.36, draw: 3.40, away: 2.95 };
+
+function quickAdjust(pct) {
+  ['home','draw','away'].forEach(function(sel) {
+    quickAdjustSel(sel, pct);
+  });
+}
+
+function quickAdjustSel(sel, pct) {
+  var change = Math.round(origOdds[sel] * pct * 100) / 100;
+  currentOdds[sel] = Math.round((origOdds[sel] + change) * 100) / 100;
+  if (currentOdds[sel] < 1.01) currentOdds[sel] = 1.01;
+  updateBox(sel);
+  updatePct();
+}
+
+function updateBox(sel) {
+  document.getElementById('new-' + sel).textContent = currentOdds[sel].toFixed(2);
+  var diff = Math.round((currentOdds[sel] - origOdds[sel]) * 100) / 100;
+  var box = document.getElementById('box-' + sel);
+  var diffEl = document.getElementById('diff-' + sel);
+  var oldEl = box.querySelector('.odds-old');
+  if (Math.abs(diff) > 0.001) {
+    box.classList.add('changed');
+    oldEl.style.visibility = 'visible';
+    oldEl.textContent = origOdds[sel].toFixed(2);
+    diffEl.style.visibility = 'visible';
+    diffEl.textContent = (diff > 0 ? '+' : '') + diff.toFixed(2);
+    diffEl.className = 'odds-diff ' + (diff > 0 ? 'diff-up' : 'diff-down');
+  } else {
+    box.classList.remove('changed');
+    oldEl.style.visibility = 'hidden';
+    diffEl.style.visibility = 'hidden';
+    diffEl.className = 'odds-diff diff-none';
+  }
+}
+
+function updatePct() {
+  var total = (1/currentOdds.home) + (1/currentOdds.draw) + (1/currentOdds.away);
+  document.getElementById('pct-home').textContent = Math.round((1/currentOdds.home)/total*100) + '%';
+  document.getElementById('pct-draw').textContent = Math.round((1/currentOdds.draw)/total*100) + '%';
+  document.getElementById('pct-away').textContent = Math.round((1/currentOdds.away)/total*100) + '%';
+}
+
+function adjustOdds(sel, delta) {
+  currentOdds[sel] = Math.round((currentOdds[sel] + delta) * 100) / 100;
+  if (currentOdds[sel] < 1.01) currentOdds[sel] = 1.01;
+  updateBox(sel);
+  updatePct();
+}
+</script>
+</body>
+</html>

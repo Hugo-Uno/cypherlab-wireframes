@@ -19,3 +19,725 @@
   .sb-item:hover { background: #1c2129; color: #e6edf3; }
   .sb-item.active { background: #1f6feb22; color: #a5f3a6; border-left: 3px solid #a5f3a6; }
   .sb-icon { width: 18px; text-align: center; flex-shrink: 0; }
+
+  /* Main */
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* Top bar */
+  .topbar { display: flex; align-items: center; gap: 12px; padding: 10px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .topbar-search { background: #0d1117; border: 1px solid #30363d; color: #8b949e; padding: 6px 14px; border-radius: 6px; font-size: 12px; width: 320px; }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+  .env-badge { background: #238636; color: #fff; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .topbar-time { color: #8b949e; font-size: 12px; }
+  .notif-icon { position: relative; color: #8b949e; font-size: 16px; cursor: pointer; }
+  .notif-badge { position: absolute; top: -4px; right: -6px; background: #f85149; color: #fff; font-size: 8px; width: 14px; height: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+  .avatar { width: 28px; height: 28px; background: #30363d; border-radius: 50%; }
+
+  /* Page Header */
+  .page-header { padding: 16px 20px 0; }
+  .page-title { font-size: 18px; font-weight: 700; }
+  .page-subtitle { font-size: 12px; color: #8b949e; margin-top: 2px; }
+
+  /* Filters - Exposed directly, no hidden panel */
+  .filters { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px 20px; border-bottom: 1px solid #30363d; background: #0d1117; }
+  .filter-row { display: flex; align-items: center; gap: 8px; width: 100%; flex-wrap: wrap; }
+  .filter-item { display: flex; align-items: center; gap: 6px; }
+  .filter-label { font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+  .filter-select { background: #161b22; border: 1px solid #30363d; color: #e6edf3; padding: 5px 10px; border-radius: 6px; font-size: 12px; min-width: 120px; }
+  .filter-input { background: #161b22; border: 1px solid #30363d; color: #e6edf3; padding: 5px 10px; border-radius: 6px; font-size: 12px; width: 160px; }
+  .filter-input-short { width: 100px; }
+  .filter-date { width: 150px; }
+  .filter-sep { color: #8b949e; font-size: 11px; }
+  .filter-btn { background: #238636; border: none; color: #fff; padding: 5px 14px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 600; }
+  .filter-btn:hover { background: #2ea043; }
+  .filter-btn-clear { background: none; border: 1px solid #30363d; color: #8b949e; padding: 5px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; }
+  .filter-toggle { display: flex; gap: 2px; }
+  .toggle-btn { padding: 5px 12px; font-size: 11px; border: 1px solid #30363d; background: #161b22; color: #8b949e; cursor: pointer; }
+  .toggle-btn:first-child { border-radius: 6px 0 0 6px; }
+  .toggle-btn:last-child { border-radius: 0 6px 6px 0; }
+  .toggle-btn.active { background: #1f6feb; color: #fff; border-color: #1f6feb; }
+  /* Custom multi-select dropdown */
+  .multi-select { position: relative; display: inline-block; min-width: 200px; }
+  .multi-select-btn { display: flex; align-items: center; gap: 6px; background: #161b22; border: 1px solid #30363d; color: #e6edf3; padding: 5px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; min-width: 200px; }
+  .multi-select-btn:hover { border-color: #58a6ff; }
+  .multi-select-btn .ms-text { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .multi-select-btn .ms-count { background: #1f6feb; color: #fff; font-size: 9px; padding: 1px 6px; border-radius: 8px; font-weight: 700; }
+  .multi-select-btn .ms-chevron { font-size: 10px; color: #8b949e; }
+  .ms-panel { position: absolute; top: 100%; left: 0; margin-top: 4px; background: #161b22; border: 1px solid #30363d; border-radius: 8px; width: 260px; z-index: 200; box-shadow: 0 8px 24px rgba(0,0,0,0.4); display: none; }
+  .ms-panel.open { display: block; }
+  .ms-search { width: 100%; padding: 8px 10px; background: #0d1117; border: none; border-bottom: 1px solid #30363d; color: #e6edf3; font-size: 12px; border-radius: 8px 8px 0 0; }
+  .ms-search::placeholder { color: #484f58; }
+  .ms-search:focus { outline: none; }
+  .ms-list { max-height: 200px; overflow-y: auto; padding: 4px 0; }
+  .ms-item { display: flex; align-items: center; gap: 8px; padding: 7px 10px; cursor: pointer; font-size: 12px; color: #e6edf3; }
+  .ms-item:hover { background: #1f6feb22; }
+  .ms-item .ms-check { width: 16px; height: 16px; border: 1px solid #30363d; border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 10px; background: #0d1117; }
+  .ms-item.checked .ms-check { background: #1f6feb; border-color: #1f6feb; color: #fff; }
+  .ms-item .ms-name { flex: 1; }
+  .ms-item .ms-sub { font-size: 10px; color: #8b949e; }
+  .ms-actions { display: flex; gap: 8px; padding: 6px 10px; border-top: 1px solid #30363d; }
+  .ms-action-btn { background: none; border: none; color: #58a6ff; font-size: 11px; cursor: pointer; padding: 2px 0; }
+  .ms-action-btn:hover { text-decoration: underline; }
+  .ms-highlight { background: #d2992244; border-radius: 2px; padding: 0 1px; }
+
+  /* Table */
+  .table-wrap { flex: 1; overflow: auto; padding: 0 20px 20px; }
+  table { width: 100%; border-collapse: collapse; table-layout: auto; margin-top: 12px; }
+  th { text-align: left; padding: 8px 8px; font-size: 11px; color: #8b949e; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; border-bottom: 1px solid #30363d; position: sticky; top: 0; background: #0d1117; cursor: pointer; white-space: nowrap; }
+  th:hover { color: #e6edf3; }
+  th .sort-icon { font-size: 10px; margin-left: 2px; }
+  td { padding: 10px 8px; font-size: 12px; border-bottom: 1px solid #21262d; vertical-align: middle; }
+  tr:hover td { background: #161b22; }
+
+  /* ID cells - truncated */
+  .id-cell { font-family: 'SF Mono', monospace; font-size: 11px; color: #8b949e; cursor: pointer; position: relative; }
+  .id-cell .id-short { display: inline; }
+  .id-cell .id-full { display: none; position: absolute; background: #30363d; color: #e6edf3; padding: 4px 8px; border-radius: 4px; font-size: 11px; white-space: nowrap; z-index: 10; top: -30px; left: 0; }
+  .id-cell:hover .id-full { display: block; }
+  .id-cell:hover .id-short { color: #58a6ff; text-decoration: underline; }
+
+  /* Phase badge */
+  .phase-badge { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; display: inline-block; }
+  .phase-live { background: #23863633; color: #3fb950; border: 1px solid #3fb95066; }
+  .phase-pre { background: #1f6feb22; color: #58a6ff; border: 1px solid #58a6ff66; }
+
+  /* Status badge */
+  .status-badge { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; display: inline-block; }
+  .status-settled { background: #23863633; color: #3fb950; border: 1px solid #3fb95066; }
+  .status-pending { background: #d2992233; color: #d29922; border: 1px solid #d2992266; }
+  .status-accepted { background: #1f6feb22; color: #58a6ff; border: 1px solid #58a6ff66; }
+  .status-rejected { background: #b6222233; color: #f85149; border: 1px solid #f8514966; }
+
+  /* Flag badge */
+  .flag-badge { font-size: 9px; font-weight: 600; padding: 2px 6px; border-radius: 3px; display: inline-block; }
+  .flag-high { background: #b6222233; color: #f85149; border: 1px solid #f8514966; }
+  .flag-medium { background: #d2992233; color: #d29922; border: 1px solid #d2992266; }
+  .flag-none { color: #8b949e; font-size: 11px; }
+
+  /* Numbers */
+  .num { font-family: 'SF Mono', monospace; }
+  .num-green { color: #3fb950; }
+  .num-red { color: #f85149; }
+  .num-yellow { color: #d29922; }
+
+  /* Market cell */
+  .market-name { font-weight: 600; font-size: 12px; }
+  .market-sub { font-size: 10px; color: #8b949e; }
+
+  /* Selection cell - handicap indented */
+  .selection-main { font-weight: 500; }
+  .selection-handicap { font-size: 11px; color: #d2a8ff; margin-left: 4px; }
+
+  /* Time diff */
+  .time-diff { font-size: 10px; color: #d29922; }
+  .time-diff::before { content: 'Δ '; }
+
+  /* Elapsed badge */
+  .elapsed { font-size: 10px; background: #d2992233; color: #d29922; padding: 1px 6px; border-radius: 3px; margin-left: 4px; }
+
+  /* Action */
+  .action-label { font-size: 11px; color: #8b949e; }
+
+  /* Result counts */
+  .result-label { font-size: 11px; }
+  .result-won { color: #3fb950; }
+  .result-lost { color: #f85149; }
+  .result-pending { color: #8b949e; }
+
+  /* Pagination */
+  .pagination { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border-top: 1px solid #30363d; background: #161b22; }
+  .page-info { font-size: 12px; color: #8b949e; }
+  .page-btns { display: flex; gap: 4px; }
+  .page-btn { background: #0d1117; border: 1px solid #30363d; color: #8b949e; padding: 4px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; }
+  .page-btn.active { background: #1f6feb; color: #fff; border-color: #1f6feb; }
+  .page-btn:hover:not(.active) { border-color: #58a6ff; color: #e6edf3; }
+  .page-size { display: flex; align-items: center; gap: 6px; }
+  .page-size label { font-size: 11px; color: #8b949e; }
+  .page-size select { background: #0d1117; border: 1px solid #30363d; color: #e6edf3; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sb-header">
+      <h2>CypherBook</h2>
+      <button class="sb-collapse">«</button>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-item"><span class="sb-icon">📋</span> Dashboard</div>
+      <div class="sb-item"><span class="sb-icon">⚽</span> Matches</div>
+      <div class="sb-item"><span class="sb-icon">📊</span> Markets</div>
+      <div class="sb-item"><span class="sb-icon">👥</span> Players</div>
+      <div class="sb-item active"><span class="sb-icon">🎫</span> Wagers</div>
+      <div class="sb-item"><span class="sb-icon">📝</span> Audit Log</div>
+      <div class="sb-item"><span class="sb-icon">🔔</span> Alerts</div>
+      <div style="border-top: 1px solid #30363d; margin: 8px 0;"></div>
+      <div class="sb-item"><span class="sb-icon">🏪</span> Merchants</div>
+      <div class="sb-item"><span class="sb-icon">🔑</span> Permissions</div>
+      <div class="sb-item"><span class="sb-icon">📈</span> Reports</div>
+      <div class="sb-item"><span class="sb-icon">⚙️</span> Global Settings</div>
+      <div class="sb-item"><span class="sb-icon">🛠</span> System</div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main">
+    <!-- Top Bar -->
+    <div class="topbar">
+      <input class="topbar-search" placeholder="🔍 Search by Wager ID, Match ID, Player ID, or Team..." />
+      <div class="topbar-right">
+        <span class="env-badge">Production</span>
+        <span class="topbar-time">🕐 23:15:22</span>
+        <span class="notif-icon">🔔<span class="notif-badge">3</span></span>
+        <div class="avatar"></div>
+      </div>
+    </div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="page-title">Wagers</div>
+      <div class="page-subtitle">查看所有注單，支援跨 merchant、跨賽事篩選</div>
+    </div>
+
+    <!-- Filters - Exposed directly (NOT behind a button) -->
+    <div class="filters">
+      <!-- Row 1: Core filters -->
+      <div class="filter-row">
+        <div class="filter-item">
+          <span class="filter-label">Merchant</span>
+          <div class="multi-select" id="merchantSelect">
+            <button class="multi-select-btn" onclick="toggleMsDropdown(this);">
+              <span class="ms-text">All Merchants</span>
+              <span class="ms-chevron">▾</span>
+            </button>
+            <div class="ms-panel"></div>
+          </div>
+        </div>
+        <div class="filter-item">
+          <span class="filter-label">Player ID</span>
+          <input class="filter-input filter-input-short" placeholder="e.g. p1, p2..." />
+        </div>
+        <div class="filter-item">
+          <span class="filter-label">Phase</span>
+          <div class="filter-toggle">
+            <button class="toggle-btn active">All</button>
+            <button class="toggle-btn">Pre-Match</button>
+            <button class="toggle-btn">Live</button>
+          </div>
+        </div>
+        <div class="filter-item">
+          <span class="filter-label">Status</span>
+          <div class="filter-toggle">
+            <button class="toggle-btn active">All</button>
+            <button class="toggle-btn">Settled</button>
+            <button class="toggle-btn">Unsettled</button>
+          </div>
+        </div>
+      </div>
+      <!-- Row 2: Time + actions -->
+      <div class="filter-row">
+        <div class="filter-item">
+          <span class="filter-label">Bet Time</span>
+          <input class="filter-input filter-date" type="text" placeholder="2026-04-10 00:00" />
+          <span class="filter-sep">~</span>
+          <input class="filter-input filter-date" type="text" placeholder="2026-04-12 23:59" />
+        </div>
+        <div class="filter-item">
+          <span class="filter-label">Match Time</span>
+          <input class="filter-input filter-date" type="text" placeholder="Start" />
+          <span class="filter-sep">~</span>
+          <input class="filter-input filter-date" type="text" placeholder="End" />
+        </div>
+        <button class="filter-btn">Apply Filters</button>
+        <button class="filter-btn-clear">Clear</button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Wager ID <span class="sort-icon">↕</span></th>
+            <th>Member ID <span class="sort-icon">↕</span></th>
+            <th>Merchant <span class="sort-icon">↕</span></th>
+            <th>Home / Away</th>
+            <th>Match Time <span class="sort-icon">↕</span></th>
+            <th>Phase</th>
+            <th>Market</th>
+            <th>Selection</th>
+            <th>Odds <span class="sort-icon">↕</span></th>
+            <th>Stake <span class="sort-icon">↕</span></th>
+            <th>Exposure <span class="sort-icon">↕</span></th>
+            <th>Bet Time <span class="sort-icon">↕</span></th>
+            <th>Game Time</th>
+            <th>Result</th>
+            <th>GGR <span class="sort-icon">↕</span></th>
+            <th>Status</th>
+            <th>Flags</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Row 1 -->
+          <tr>
+            <td class="id-cell">
+              <span class="id-short">WG-3A1</span>
+              <span class="id-full">WG-3A1F82-0410-001 (click to copy)</span>
+            </td>
+            <td class="id-cell">
+              <span class="id-short">MB-F29</span>
+              <span class="id-full">MB-F29C44-syndicateX (click to copy)</span>
+            </td>
+            <td>
+              <div style="font-weight: 500;">BetKing</div>
+              <div style="font-size: 10px; color: #8b949e;">betking.com</div>
+            </td>
+            <td>
+              <div style="font-weight: 600;">Arsenal <span style="color: #8b949e;">vs</span> Chelsea</div>
+              <div style="font-size: 10px; color: #8b949e;">Premier League</div>
+            </td>
+            <td>
+              <div>Apr 10</div>
+              <div style="font-size: 10px; color: #8b949e;">20:00</div>
+            </td>
+            <td><span class="phase-badge phase-live">● Live</span></td>
+            <td>
+              <div class="market-name">Full Time Result</div>
+              <div class="market-sub">1X2 · Winner</div>
+            </td>
+            <td>
+              <span class="selection-main">Arsenal</span>
+            </td>
+            <td class="num">2.05</td>
+            <td class="num" style="font-weight: 600;">$5,000</td>
+            <td class="num num-red">$10,250</td>
+            <td>
+              <div>Apr 10</div>
+              <div style="font-size: 10px; color: #8b949e;">20:31</div>
+              <div class="time-diff">31m after KO</div>
+            </td>
+            <td>
+              <div style="font-weight: 500;">31:22</div>
+              <div style="font-size: 10px; color: #8b949e;">Server: 20:31:22</div>
+            </td>
+            <td><span class="result-label result-won">Won</span></td>
+            <td class="num num-red">-$5,250</td>
+            <td><span class="status-badge status-settled">Settled</span></td>
+            <td><span class="flag-badge flag-high">⚠ HIGH</span></td>
+          </tr>
+
+          <!-- Row 2 -->
+          <tr>
+            <td class="id-cell">
+              <span class="id-short">WG-7B2</span>
+              <span class="id-full">WG-7B2E91-0410-002 (click to copy)</span>
+            </td>
+            <td class="id-cell">
+              <span class="id-short">MB-A11</span>
+              <span class="id-full">MB-A11D33-player42 (click to copy)</span>
+            </td>
+            <td>
+              <div style="font-weight: 500;">SportsBet</div>
+              <div style="font-size: 10px; color: #8b949e;">sportsbet.io</div>
+            </td>
+            <td>
+              <div style="font-weight: 600;">R. Madrid <span style="color: #8b949e;">vs</span> Barcelona</div>
+              <div style="font-size: 10px; color: #8b949e;">La Liga</div>
+            </td>
+            <td>
+              <div>Apr 10</div>
+              <div style="font-size: 10px; color: #8b949e;">22:00</div>
+              <span class="elapsed">Live 68m</span>
+            </td>
+            <td><span class="phase-badge phase-live">● Live</span></td>
+            <td>
+              <div class="market-name">Total Goals</div>
+              <div class="market-sub">Over/Under 2.5</div>
+            </td>
+            <td>
+              <span class="selection-main">Over</span>
+              <span class="selection-handicap">2.5</span>
+            </td>
+            <td class="num">1.85</td>
+            <td class="num" style="font-weight: 600;">$10,000</td>
+            <td class="num num-red">$18,500</td>
+            <td>
+              <div>Apr 10</div>
+              <div style="font-size: 10px; color: #8b949e;">22:45</div>
+              <div class="time-diff">45m after KO</div>
+            </td>
+            <td>
+              <div style="font-weight: 500;">68:12</div>
+              <div style="font-size: 10px; color: #8b949e;">Server: 23:08:12</div>
+            </td>
+            <td><span class="result-label result-pending">—</span></td>
+            <td class="num">—</td>
+            <td><span class="status-badge status-pending">Pending</span></td>
+            <td><span class="flag-badge flag-medium">⚡ MED</span></td>
+          </tr>
+
+          <!-- Row 3 -->
+          <tr>
+            <td class="id-cell">
+              <span class="id-short">WG-C93</span>
+              <span class="id-full">WG-C93D12-0410-003 (click to copy)</span>
+            </td>
+            <td class="id-cell">
+              <span class="id-short">MB-E55</span>
+              <span class="id-full">MB-E55F88-newuser7 (click to copy)</span>
+            </td>
+            <td>
+              <div style="font-weight: 500;">LuckyBet</div>
+              <div style="font-size: 10px; color: #8b949e;">luckybet.com</div>
+            </td>
+            <td>
+              <div style="font-weight: 600;">Inter <span style="color: #8b949e;">vs</span> AC Milan</div>
+              <div style="font-size: 10px; color: #8b949e;">Serie A</div>
+            </td>
+            <td>
+              <div>Apr 11</div>
+              <div style="font-size: 10px; color: #8b949e;">03:00</div>
+            </td>
+            <td><span class="phase-badge phase-pre">Pre-Match</span></td>
+            <td>
+              <div class="market-name">Asian Handicap</div>
+              <div class="market-sub">Spread -1.5</div>
+            </td>
+            <td>
+              <span class="selection-main">Inter</span>
+              <span class="selection-handicap">-1.5</span>
+            </td>
+            <td class="num">2.10</td>
+            <td class="num" style="font-weight: 600;">$3,000</td>
+            <td class="num num-yellow">$6,300</td>
+            <td>
+              <div>Apr 10</div>
+              <div style="font-size: 10px; color: #8b949e;">18:22</div>
+            </td>
+            <td>
+              <div style="color: #8b949e;">—</div>
+              <div style="font-size: 10px; color: #8b949e;">Pre-Match</div>
+            </td>
+            <td><span class="result-label result-pending">—</span></td>
+            <td class="num">—</td>
+            <td><span class="status-badge status-accepted">Accepted</span></td>
+            <td><span class="flag-none">—</span></td>
+          </tr>
+
+          <!-- Row 4 -->
+          <tr>
+            <td class="id-cell">
+              <span class="id-short">WG-D04</span>
+              <span class="id-full">WG-D04A77-0410-004 (click to copy)</span>
+            </td>
+            <td class="id-cell">
+              <span class="id-short">MB-F29</span>
+              <span class="id-full">MB-F29C44-syndicateX (click to copy)</span>
+            </td>
+            <td>
+              <div style="font-weight: 500;">BetKing</div>
+              <div style="font-size: 10px; color: #8b949e;">betking.com</div>
+            </td>
+            <td>
+              <div style="font-weight: 600;">Arsenal <span style="color: #8b949e;">vs</span> Chelsea</div>
+              <div style="font-size: 10px; color: #8b949e;">Premier League</div>
+            </td>
+            <td>
+              <div>Apr 10</div>
+              <div style="font-size: 10px; color: #8b949e;">20:00</div>
+            </td>
+            <td><span class="phase-badge phase-live">● Live</span></td>
+            <td>
+              <div class="market-name">Both Teams Score</div>
+              <div class="market-sub">Yes/No</div>
+            </td>
+            <td>
+              <span class="selection-main">Yes</span>
+            </td>
+            <td class="num">1.72</td>
+            <td class="num" style="font-weight: 600;">$8,000</td>
+            <td class="num num-red">$13,760</td>
+            <td>
+              <div>Apr 10</div>
+              <div style="font-size: 10px; color: #8b949e;">20:15</div>
+              <div class="time-diff">15m after KO</div>
+            </td>
+            <td>
+              <div style="font-weight: 500;">15:44</div>
+              <div style="font-size: 10px; color: #8b949e;">Server: 20:15:44</div>
+            </td>
+            <td><span class="result-label result-lost">Lost</span></td>
+            <td class="num num-green">+$8,000</td>
+            <td><span class="status-badge status-settled">Settled</span></td>
+            <td><span class="flag-badge flag-high">⚠ HIGH</span></td>
+          </tr>
+
+          <!-- Row 5 -->
+          <tr>
+            <td class="id-cell">
+              <span class="id-short">WG-E15</span>
+              <span class="id-full">WG-E15B66-0410-005 (click to copy)</span>
+            </td>
+            <td class="id-cell">
+              <span class="id-short">MB-B82</span>
+              <span class="id-full">MB-B82C99-casual22 (click to copy)</span>
+            </td>
+            <td>
+              <div style="font-weight: 500;">SportsBet</div>
+              <div style="font-size: 10px; color: #8b949e;">sportsbet.io</div>
+            </td>
+            <td>
+              <div style="font-weight: 600;">Lakers <span style="color: #8b949e;">vs</span> Celtics</div>
+              <div style="font-size: 10px; color: #8b949e;">NBA</div>
+            </td>
+            <td>
+              <div>Apr 11</div>
+              <div style="font-size: 10px; color: #8b949e;">09:30</div>
+            </td>
+            <td><span class="phase-badge phase-pre">Pre-Match</span></td>
+            <td>
+              <div class="market-name">Money Line</div>
+              <div class="market-sub">Winner</div>
+            </td>
+            <td>
+              <span class="selection-main">Lakers</span>
+            </td>
+            <td class="num">1.90</td>
+            <td class="num" style="font-weight: 600;">$2,500</td>
+            <td class="num num-yellow">$4,750</td>
+            <td>
+              <div>Apr 10</div>
+              <div style="font-size: 10px; color: #8b949e;">22:10</div>
+            </td>
+            <td>
+              <div style="color: #8b949e;">—</div>
+              <div style="font-size: 10px; color: #8b949e;">Pre-Match</div>
+            </td>
+            <td><span class="result-label result-pending">—</span></td>
+            <td class="num">—</td>
+            <td><span class="status-badge status-accepted">Accepted</span></td>
+            <td><span class="flag-none">—</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <div class="page-info">Showing 1-5 of 1,248 wagers</div>
+      <div class="page-btns">
+        <button class="page-btn">‹</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">…</button>
+        <button class="page-btn">250</button>
+        <button class="page-btn">›</button>
+      </div>
+      <div class="page-size">
+        <label>Per page:</label>
+        <select>
+          <option>5</option>
+          <option selected>25</option>
+          <option>50</option>
+          <option>100</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+// === Merchant data ===
+const MERCHANTS = [
+  { id: 'betking',   name: 'BetKing',   domain: 'betking.com' },
+  { id: 'sportsbet', name: 'SportsBet', domain: 'sportsbet.io' },
+  { id: 'luckybet',  name: 'LuckyBet',  domain: 'luckybet.com' },
+  { id: 'megabet',   name: 'MegaBet',   domain: 'megabet.com' },
+  { id: 'betpro',    name: 'BetPro',    domain: 'betpro.net' },
+];
+
+// Track selected merchants (empty = all)
+let selectedMerchants = new Set();
+let activeMsPanel = null;
+
+// === Toggle multi-select dropdown ===
+function toggleMsDropdown(btn) {
+  const wrapper = btn.closest('.multi-select');
+  const panel = wrapper.querySelector('.ms-panel');
+
+  if (panel === activeMsPanel) {
+    closeMsDropdown();
+    return;
+  }
+  closeMsDropdown();
+  renderMsDropdown(panel, '');
+  panel.classList.add('open');
+  activeMsPanel = panel;
+  const input = panel.querySelector('.ms-search');
+  if (input) setTimeout(() => input.focus(), 0);
+}
+
+// === Close dropdown ===
+function closeMsDropdown() {
+  if (activeMsPanel) {
+    activeMsPanel.classList.remove('open');
+    activeMsPanel = null;
+  }
+}
+
+// === Render dropdown contents ===
+function renderMsDropdown(panel, query) {
+  const q = query.toLowerCase();
+  const filtered = MERCHANTS.filter(m => !q || m.name.toLowerCase().includes(q) || m.domain.toLowerCase().includes(q));
+
+  let html = '<input class="ms-search" placeholder="Search merchant..." value="' + escHtml(query) + '" oninput="onMsSearch(this)" onclick="event.stopPropagation();" />';
+  html += '<div class="ms-list">';
+
+  if (filtered.length === 0) {
+    html += '<div style="padding: 12px 10px; color: #8b949e; font-size: 12px; text-align: center;">No merchants found</div>';
+  }
+
+  filtered.forEach(m => {
+    const isChecked = selectedMerchants.has(m.id);
+    const displayName = q ? highlightMs(m.name, q) : escHtml(m.name);
+    html += '<div class="ms-item' + (isChecked ? ' checked' : '') + '" onclick="event.stopPropagation(); toggleMerchant(\'' + m.id + '\', this);">';
+    html += '  <span class="ms-check">' + (isChecked ? '✓' : '') + '</span>';
+    html += '  <span class="ms-name">' + displayName + '</span>';
+    html += '  <span class="ms-sub">' + escHtml(m.domain) + '</span>';
+    html += '</div>';
+  });
+
+  html += '</div>';
+  html += '<div class="ms-actions">';
+  html += '  <button class="ms-action-btn" onclick="event.stopPropagation(); selectAllMerchants();">Select All</button>';
+  html += '  <button class="ms-action-btn" onclick="event.stopPropagation(); clearAllMerchants();">Clear All</button>';
+  html += '</div>';
+  panel.innerHTML = html;
+}
+
+// === Search handler ===
+function onMsSearch(input) {
+  const panel = input.closest('.ms-panel');
+  const query = input.value;
+  renderMsDropdown(panel, query);
+  const newInput = panel.querySelector('.ms-search');
+  if (newInput) {
+    newInput.focus();
+    newInput.setSelectionRange(query.length, query.length);
+  }
+}
+
+// === Toggle a merchant ===
+function toggleMerchant(merchantId, itemEl) {
+  if (selectedMerchants.has(merchantId)) {
+    selectedMerchants.delete(merchantId);
+  } else {
+    selectedMerchants.add(merchantId);
+  }
+  // Re-render panel
+  const panel = itemEl.closest('.ms-panel');
+  const searchVal = panel.querySelector('.ms-search')?.value || '';
+  renderMsDropdown(panel, searchVal);
+  // Restore search focus
+  const newInput = panel.querySelector('.ms-search');
+  if (newInput) {
+    newInput.focus();
+    newInput.setSelectionRange(searchVal.length, searchVal.length);
+  }
+  updateMsButton();
+}
+
+// === Select All ===
+function selectAllMerchants() {
+  MERCHANTS.forEach(m => selectedMerchants.add(m.id));
+  if (activeMsPanel) {
+    const searchVal = activeMsPanel.querySelector('.ms-search')?.value || '';
+    renderMsDropdown(activeMsPanel, searchVal);
+  }
+  updateMsButton();
+}
+
+// === Clear All ===
+function clearAllMerchants() {
+  selectedMerchants.clear();
+  if (activeMsPanel) {
+    const searchVal = activeMsPanel.querySelector('.ms-search')?.value || '';
+    renderMsDropdown(activeMsPanel, searchVal);
+  }
+  updateMsButton();
+}
+
+// === Update button label ===
+function updateMsButton() {
+  const wrapper = document.getElementById('merchantSelect');
+  const btn = wrapper.querySelector('.multi-select-btn');
+  const count = selectedMerchants.size;
+
+  if (count === 0 || count === MERCHANTS.length) {
+    btn.innerHTML = '<span class="ms-text">All Merchants</span><span class="ms-chevron">▾</span>';
+  } else if (count === 1) {
+    const m = MERCHANTS.find(m => selectedMerchants.has(m.id));
+    btn.innerHTML = '<span class="ms-text">' + escHtml(m.name) + '</span><span class="ms-chevron">▾</span>';
+  } else {
+    const names = MERCHANTS.filter(m => selectedMerchants.has(m.id)).map(m => m.name).join(', ');
+    btn.innerHTML = '<span class="ms-text">' + escHtml(names) + '</span><span class="ms-count">' + count + '</span><span class="ms-chevron">▾</span>';
+  }
+}
+
+// === Highlight match ===
+function highlightMs(name, query) {
+  const lower = name.toLowerCase();
+  const idx = lower.indexOf(query);
+  if (idx === -1) return escHtml(name);
+  const before = name.substring(0, idx);
+  const match  = name.substring(idx, idx + query.length);
+  const after  = name.substring(idx + query.length);
+  return escHtml(before) + '<span class="ms-highlight">' + escHtml(match) + '</span>' + escHtml(after);
+}
+
+// === HTML escape ===
+function escHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// === Close on outside click ===
+document.addEventListener('click', function(e) {
+  if (activeMsPanel && !e.target.closest('.multi-select')) {
+    closeMsDropdown();
+  }
+});
+
+// === Close on Escape ===
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeMsDropdown();
+});
+
+// === Toggle buttons (Phase, Status) ===
+document.querySelectorAll('.filter-toggle').forEach(group => {
+  group.querySelectorAll('.toggle-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      group.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+});
+
+// === ID click-to-copy ===
+document.querySelectorAll('.id-cell').forEach(cell => {
+  cell.addEventListener('click', function() {
+    const full = this.querySelector('.id-full');
+    if (full) {
+      const text = full.textContent.replace(' (click to copy)', '');
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = full.textContent;
+        full.textContent = '✓ Copied!';
+        full.style.display = 'block';
+        setTimeout(() => { full.textContent = orig; full.style.display = ''; }, 1200);
+      });
+    }
+  });
+});
+</script>
+</body>
+</html>
