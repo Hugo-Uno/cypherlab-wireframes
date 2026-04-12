@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wager Page — Wireframe</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #0d1117; color: #e6edf3; font-size: 13px; }
+  .app { display: flex; height: 100vh; }
+
+  /* Sidebar */
+  .sidebar { width: 200px; background: #161b22; border-right: 1px solid #30363d; display: flex; flex-direction: column; flex-shrink: 0; }
+  .sb-header { padding: 14px 12px; border-bottom: 1px solid #30363d; display: flex; align-items: center; justify-content: space-between; }
+  .sb-header h2 { font-size: 14px; font-weight: 700; color: #a5f3a6; letter-spacing: 1px; }
+  .sb-collapse { background: none; border: none; color: #8b949e; cursor: pointer; font-size: 14px; }
+  .sb-nav { flex: 1; padding: 6px 0; overflow-y: auto; }
+  .sb-item { display: flex; align-items: center; gap: 10px; padding: 9px 16px; color: #8b949e; cursor: pointer; font-size: 13px; }
+  .sb-item:hover { background: #1c2129; color: #e6edf3; }
+  .sb-item.active { background: #1f6feb22; color: #a5f3a6; border-left: 3px solid #a5f3a6; }
+  .sb-icon { width: 18px; text-align: center; flex-shrink: 0; }
