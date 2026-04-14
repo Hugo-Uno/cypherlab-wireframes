@@ -179,6 +179,96 @@
   .status-suspended { background: #b6222233; color: #f85149; border: 1px solid #f8514944; animation: livePulse 1.5s infinite; }
   .status-closed { background: #6e768133; color: #8b949e; border: 1px solid #8b949e44; }
 
+  /* ============================================= */
+  /* Manual Takeover (Trader side)                 */
+  /* ============================================= */
+  .btn-request  { background: #8957e522; border-color: #d2a8ff; color: #d2a8ff; }
+  .btn-request:hover { background: #8957e544; }
+
+  /* Waiting chip (replaces the button while pending) */
+  .chip-waiting {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 12px; border-radius: 6px;
+    background: #d2992222; border: 1px solid #d29922;
+    color: #d29922; font-size: 12px; font-weight: 600;
+  }
+  .chip-waiting .spinner {
+    width: 12px; height: 12px; border: 2px solid #d2992244;
+    border-top-color: #d29922; border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  .chip-waiting .escalate { color: #ffa657; font-size: 11px; margin-left: 4px; }
+  .chip-waiting .cancel-x { cursor: pointer; color: #8b949e; margin-left: 4px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Active chip (after approved) */
+  .chip-manual {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 12px; border-radius: 6px;
+    background: #23863622; border: 1px solid #3fb950;
+    color: #3fb950; font-size: 12px; font-weight: 700;
+  }
+  .chip-manual .dot { width: 8px; height: 8px; border-radius: 50%; background: #3fb950; box-shadow: 0 0 6px #3fb95088; animation: pulse 1.8s infinite; }
+  .chip-manual .approver { color: #8b949e; font-weight: 400; font-size: 11px; }
+  .chip-manual .fill-reason { color: #58a6ff; font-size: 11px; cursor: pointer; text-decoration: underline; margin-left: 6px; font-weight: 400; }
+
+  /* Manual mode banner (top, shown when active) */
+  .manual-banner {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 20px; background: #23863622;
+    border-bottom: 1px solid #3fb95066;
+  }
+  .manual-banner .icon { font-size: 16px; }
+  .manual-banner .text { flex: 1; color: #3fb950; font-size: 12px; font-weight: 500; }
+  .manual-banner .text strong { color: #e6edf3; }
+  .manual-banner .revoke { background: #b6222233; border: 1px solid #f85149; color: #f85149; padding: 4px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: 600; }
+
+  /* ============================================= */
+  /* Super Trader approval toast (bottom-right)    */
+  /* ============================================= */
+  .super-toast {
+    position: fixed; bottom: 60px; right: 20px;
+    width: 340px; background: #161b22;
+    border: 1px solid #d29922; border-radius: 8px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    z-index: 900; overflow: hidden;
+    animation: toastIn 0.3s ease-out;
+  }
+  @keyframes toastIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  .super-toast-header { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #d2992222; border-bottom: 1px solid #30363d; }
+  .super-toast-header .bell { font-size: 14px; animation: shake 0.8s ease-in-out 3; }
+  @keyframes shake { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-15deg); } 75% { transform: rotate(15deg); } }
+  .super-toast-header .title { flex: 1; font-size: 13px; font-weight: 700; color: #d29922; }
+  .super-toast-header .close { background: none; border: none; color: #8b949e; cursor: pointer; font-size: 14px; }
+  .super-toast-body { padding: 12px 14px; }
+  .super-toast-body .req-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 12px; }
+  .super-toast-body .req-row .k { color: #8b949e; }
+  .super-toast-body .req-row .v { color: #e6edf3; font-weight: 600; }
+  .super-toast-body .match-name { color: #58a6ff; font-weight: 700; }
+  .super-toast-actions { display: flex; gap: 8px; padding: 10px 14px; border-top: 1px solid #30363d; }
+  .super-toast-actions button { flex: 1; padding: 8px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid; }
+  .toast-reject { background: #b6222233; border-color: #f85149; color: #f85149; }
+  .toast-approve { background: #23863633; border-color: #3fb950; color: #3fb950; }
+  .toast-countdown { height: 3px; background: #30363d; position: relative; overflow: hidden; }
+  .toast-countdown-bar { height: 100%; background: #d29922; width: 90%; transition: width 1s linear; }
+
+  /* ============================================= */
+  /* Wireframe demo state switcher                  */
+  /* ============================================= */
+  .demo-switcher {
+    position: fixed; bottom: 50px; left: 20px;
+    background: #161b22; border: 1px dashed #d29922;
+    padding: 8px 10px; border-radius: 8px; z-index: 999;
+    display: flex; gap: 6px; align-items: center;
+    font-size: 11px;
+  }
+  .demo-switcher .demo-label { color: #d29922; font-weight: 700; margin-right: 4px; }
+  .demo-switcher button {
+    background: #0d1117; border: 1px solid #30363d; color: #8b949e;
+    padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;
+  }
+  .demo-switcher button.active { border-color: #d29922; color: #d29922; background: #d2992222; }
+
   /* Wireframe label */
   .wf-note { position: fixed; bottom: 10px; right: 20px; background: #d29922; color: #000; padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 700; z-index: 999; }
 </style>
@@ -232,6 +322,11 @@
       </div>
       <div class="score-display">1 — 0</div>
       <div class="match-actions">
+        <!-- Manual Takeover slot (swaps button/chip based on state) -->
+        <div id="takeoverSlot">
+          <!-- state: idle -->
+          <button id="btnRequest" class="btn-action btn-request" onclick="setState('waiting')">&#128275; Request Manual Takeover</button>
+        </div>
         <button class="btn-action btn-activity">&#128200; Activity</button>
         <button class="btn-action btn-safe">&#128274; Safe Mode</button>
         <button class="btn-action btn-suspend-lg">&#9888; Suspend All</button>
@@ -249,6 +344,13 @@
       </span>
       <button class="alert-banner-action">View Detail</button>
       <button class="alert-banner-dismiss" title="Dismiss">&times;</button>
+    </div>
+
+    <!-- Manual Mode Banner (shown when active) -->
+    <div id="manualBanner" class="manual-banner" style="display: none;">
+      <span class="icon">&#128275;</span>
+      <span class="text">Manual takeover active &middot; <strong>Hugo</strong> is operating this match &middot; approved by <strong>Zoey</strong> at 20:42</span>
+      <button class="revoke" onclick="setState('idle')">Revoke Access</button>
     </div>
 
     <!-- Filter Bar (simplified for single match) -->
@@ -293,7 +395,7 @@
             <th colspan="4" class="col-group-home">HOME</th>
             <th colspan="4" class="col-group-away">AWAY</th>
             <th colspan="4" class="col-group-draw">DRAW</th>
-            <th style="border-bottom:2px solid #30363d; color:#ffa657;">LE%</th>
+            <th style="border-bottom:2px solid #30363d;"></th>
             <th style="border-bottom:2px solid #30363d;"></th>
             <th style="border-bottom:2px solid #30363d;"></th>
           </tr>
@@ -686,6 +788,38 @@
   </div>
 </div>
 
+<!-- Super Trader approval toast (shown in super-receiving state) -->
+<div id="superToast" class="super-toast" style="display: none;">
+  <div class="super-toast-header">
+    <span class="bell">&#128276;</span>
+    <span class="title">Manual Takeover Request</span>
+    <button class="close" onclick="hideSuperToast()">&times;</button>
+  </div>
+  <div class="super-toast-body">
+    <div class="req-row"><span class="k">Requester</span><span class="v">Hugo</span></div>
+    <div class="req-row"><span class="k">Match</span><span class="v match-name">Arsenal vs Chelsea</span></div>
+    <div class="req-row"><span class="k">Scope</span><span class="v">Full match</span></div>
+    <div class="req-row"><span class="k">Requested</span><span class="v">20:42:15 &middot; 3s ago</span></div>
+    <div class="req-row" style="margin-top:8px; padding-top:8px; border-top:1px solid #30363d;">
+      <span class="k">Reason</span><span class="v" style="color:#8b949e; font-style:italic;">(not provided — can fill later)</span>
+    </div>
+  </div>
+  <div class="toast-countdown"><div class="toast-countdown-bar" id="countdownBar"></div></div>
+  <div class="super-toast-actions">
+    <button class="toast-reject" onclick="setState('idle')">Reject</button>
+    <button class="toast-approve" onclick="setState('active')">&#10004; Approve</button>
+  </div>
+</div>
+
+<!-- Demo state switcher (wireframe only) -->
+<div class="demo-switcher">
+  <span class="demo-label">DEMO</span>
+  <button id="dsIdle" onclick="setState('idle')">Idle</button>
+  <button id="dsWaiting" onclick="setState('waiting')">Waiting</button>
+  <button id="dsSuper" onclick="setState('super-receiving')">Super side</button>
+  <button id="dsActive" onclick="setState('active')">Active</button>
+</div>
+
 <!-- Wireframe Label -->
 <div class="wf-note">WIREFRAME v2.1 &mdash; Trader Market View (Single Match)</div>
 
@@ -694,6 +828,88 @@ function toggleSidebar() {
   const sb = document.getElementById('sidebar');
   sb.classList.toggle('collapsed');
 }
+
+// ================= Manual Takeover state machine =================
+let _takeoverState = 'idle';
+let _waitTimer = null;
+let _waitCounter = 60;
+
+function setState(s) {
+  _takeoverState = s;
+  clearInterval(_waitTimer);
+
+  const slot = document.getElementById('takeoverSlot');
+  const banner = document.getElementById('manualBanner');
+  const toast = document.getElementById('superToast');
+
+  // Update demo switcher active state
+  ['Idle','Waiting','Super','Active'].forEach(id => {
+    const el = document.getElementById('ds' + id);
+    if (el) el.classList.remove('active');
+  });
+  const mapping = { 'idle':'Idle', 'waiting':'Waiting', 'super-receiving':'Super', 'active':'Active' };
+  const dsEl = document.getElementById('ds' + mapping[s]);
+  if (dsEl) dsEl.classList.add('active');
+
+  banner.style.display = 'none';
+  toast.style.display = 'none';
+
+  if (s === 'idle') {
+    slot.innerHTML = '<button id="btnRequest" class="btn-action btn-request" onclick="setState(\'waiting\')">&#128275; Request Manual Takeover</button>';
+  }
+  else if (s === 'waiting') {
+    _waitCounter = 60;
+    slot.innerHTML = renderWaiting();
+    _waitTimer = setInterval(() => {
+      _waitCounter--;
+      if (_waitCounter <= 0) { clearInterval(_waitTimer); return; }
+      slot.innerHTML = renderWaiting();
+    }, 1000);
+  }
+  else if (s === 'super-receiving') {
+    // Keep trader side in waiting while showing super toast
+    slot.innerHTML = renderWaiting();
+    toast.style.display = 'block';
+    animateCountdown();
+  }
+  else if (s === 'active') {
+    slot.innerHTML = renderActive();
+    banner.style.display = 'flex';
+  }
+}
+
+function renderWaiting() {
+  const escalated = _waitCounter < 30;
+  return '<div class="chip-waiting">'
+       + '<span class="spinner"></span>'
+       + (escalated
+          ? 'Escalated · any Super Trader <span class="escalate">' + _waitCounter + 's</span>'
+          : 'Waiting for Zoey\u2026 <span class="escalate">' + _waitCounter + 's</span>')
+       + '<span class="cancel-x" onclick="setState(\'idle\')" title="Cancel">&times;</span>'
+       + '</div>';
+}
+
+function renderActive() {
+  return '<div class="chip-manual">'
+       + '<span class="dot"></span>'
+       + 'Manual Mode'
+       + '<span class="approver">· approved by Zoey</span>'
+       + '<span class="fill-reason" onclick="alert(\'Inline reason input (TBD)\')">&#128221; Add reason</span>'
+       + '</div>';
+}
+
+function hideSuperToast() {
+  document.getElementById('superToast').style.display = 'none';
+}
+
+function animateCountdown() {
+  const bar = document.getElementById('countdownBar');
+  bar.style.width = '100%';
+  setTimeout(() => { bar.style.width = '0%'; bar.style.transition = 'width 60s linear'; }, 50);
+}
+
+// init
+setState('idle');
 </script>
 </body>
 </html>

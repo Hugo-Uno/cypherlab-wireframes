@@ -239,15 +239,25 @@
       <div class="filter-row">
         <div class="filter-item">
           <span class="filter-label">Bet Time</span>
-          <input class="filter-input filter-date" type="text" placeholder="2026-04-10 00:00" />
+          <input class="filter-input filter-date" id="betTimeStart" type="text" placeholder="2026-04-10 00:00" />
           <span class="filter-sep">~</span>
-          <input class="filter-input filter-date" type="text" placeholder="2026-04-12 23:59" />
+          <input class="filter-input filter-date" id="betTimeEnd" type="text" placeholder="2026-04-12 23:59" />
+          <div class="filter-toggle time-preset" data-target="bet" style="margin-left: 4px;">
+            <button class="toggle-btn" onclick="setTimePreset(this,1,'bet')">1D</button>
+            <button class="toggle-btn" onclick="setTimePreset(this,5,'bet')">5D</button>
+            <button class="toggle-btn" onclick="setTimePreset(this,7,'bet')">7D</button>
+          </div>
         </div>
         <div class="filter-item">
           <span class="filter-label">Match Time</span>
-          <input class="filter-input filter-date" type="text" placeholder="Start" />
+          <input class="filter-input filter-date" id="matchTimeStart" type="text" placeholder="Start" />
           <span class="filter-sep">~</span>
-          <input class="filter-input filter-date" type="text" placeholder="End" />
+          <input class="filter-input filter-date" id="matchTimeEnd" type="text" placeholder="End" />
+          <div class="filter-toggle time-preset" data-target="match" style="margin-left: 4px;">
+            <button class="toggle-btn" onclick="setTimePreset(this,1,'match')">1D</button>
+            <button class="toggle-btn" onclick="setTimePreset(this,5,'match')">5D</button>
+            <button class="toggle-btn" onclick="setTimePreset(this,7,'match')">7D</button>
+          </div>
         </div>
         <button class="filter-btn">Apply Filters</button>
         <button class="filter-btn-clear">Clear</button>
@@ -722,6 +732,20 @@ document.querySelectorAll('.filter-toggle').forEach(group => {
     });
   });
 });
+
+// === Time presets (1D / 5D / 7D) ===
+function setTimePreset(btn, days, target) {
+  const group = btn.parentElement;
+  group.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const pad = n => String(n).padStart(2, '0');
+  const fmt = d => d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+  const end = new Date();
+  const start = new Date(end.getTime() - days * 24 * 60 * 60 * 1000);
+  const prefix = target === 'match' ? 'matchTime' : 'betTime';
+  document.getElementById(prefix + 'Start').value = fmt(start);
+  document.getElementById(prefix + 'End').value = fmt(end);
+}
 
 // === ID click-to-copy ===
 document.querySelectorAll('.id-cell').forEach(cell => {

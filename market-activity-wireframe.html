@@ -47,6 +47,73 @@
   .match-title { font-size: 18px; font-weight: 700; }
   .match-subtitle { font-size: 11px; color: #8b949e; margin-top: 2px; }
 
+  /* Market selector (dropdown) */
+  .market-selector-wrap { position: relative; display: inline-block; margin-top: 3px; }
+  .market-selector-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #161b22; border: 1px solid #30363d; border-radius: 6px;
+    padding: 4px 10px; font-size: 12px; color: #e6edf3;
+    cursor: pointer; font-weight: 600; transition: border-color 0.15s;
+  }
+  .market-selector-btn:hover { border-color: #58a6ff; color: #58a6ff; }
+  .market-selector-btn .chev { color: #8b949e; font-size: 10px; margin-left: 2px; }
+  .market-selector-btn .kbd { font-size: 9px; background: #0d1117; border: 1px solid #30363d; padding: 1px 4px; border-radius: 3px; color: #8b949e; margin-left: 6px; font-family: 'SF Mono', monospace; }
+
+  .ms-panel {
+    position: absolute; top: calc(100% + 6px); left: 0;
+    width: 420px; max-height: 520px;
+    background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    z-index: 200; display: none;
+    flex-direction: column; overflow: hidden;
+  }
+  .ms-panel.open { display: flex; }
+  .ms-search-wrap { padding: 10px 12px; border-bottom: 1px solid #30363d; }
+  .ms-search { width: 100%; background: #0d1117; border: 1px solid #30363d; color: #e6edf3; padding: 6px 10px; border-radius: 6px; font-size: 12px; outline: none; }
+  .ms-search:focus { border-color: #58a6ff; }
+  .ms-body { flex: 1; overflow-y: auto; padding: 4px 0; }
+
+  .ms-group-label {
+    font-size: 10px; font-weight: 700; color: #8b949e;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    padding: 8px 14px 4px 14px;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .ms-group-label .icon { font-size: 11px; }
+
+  .ms-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 14px; cursor: pointer;
+    border-left: 3px solid transparent;
+  }
+  .ms-item:hover, .ms-item.kbd-focus { background: #1c2129; border-left-color: #58a6ff; }
+  .ms-item.selected { background: #1f6feb22; border-left-color: #a5f3a6; }
+  .ms-item-name { flex: 1; font-size: 12px; color: #e6edf3; }
+  .ms-item-name mark { background: #d2992255; color: #d29922; padding: 0 2px; border-radius: 2px; }
+  .ms-item-meta { display: flex; align-items: center; gap: 10px; font-size: 10px; color: #8b949e; }
+  .ms-item-odds { color: #d2a8ff; font-weight: 700; font-family: 'SF Mono', monospace; font-size: 11px; }
+  .ms-item-turnover { font-family: 'SF Mono', monospace; color: #e6edf3; }
+  .ms-badge { font-size: 9px; padding: 1px 6px; border-radius: 3px; font-weight: 600; }
+  .ms-badge.open   { background: #23863633; color: #3fb950; border: 1px solid #3fb95044; }
+  .ms-badge.susp   { background: #b6222233; color: #f85149; border: 1px solid #f8514944; }
+  .ms-badge.closed { background: #6e768133; color: #8b949e; border: 1px solid #8b949e44; }
+
+  .ms-pin {
+    color: #555c66; font-size: 12px; cursor: pointer;
+    padding: 2px 4px; border-radius: 3px;
+  }
+  .ms-pin:hover { color: #d29922; background: #d2992222; }
+  .ms-pin.pinned { color: #d29922; }
+
+  .ms-footer {
+    padding: 6px 12px; border-top: 1px solid #30363d;
+    font-size: 10px; color: #8b949e;
+    display: flex; gap: 14px; background: #0d1117;
+  }
+  .ms-footer .hint-key { background: #161b22; border: 1px solid #30363d; padding: 1px 5px; border-radius: 3px; font-family: 'SF Mono', monospace; color: #e6edf3; }
+
+  .ms-empty { padding: 30px; text-align: center; color: #8b949e; font-size: 12px; }
+
   .current-odds { display: flex; gap: 8px; margin-left: 12px; }
   .odds-chip { text-align: center; }
   .odds-chip-label { font-size: 9px; color: #8b949e; }
@@ -258,7 +325,25 @@
       <a class="back-link">← Back to Market</a>
       <div class="match-title-block">
         <div class="match-title">Real Madrid vs Barcelona</div>
-        <div class="match-subtitle">1X2 · Match Result</div>
+        <div class="market-selector-wrap">
+          <button class="market-selector-btn" id="msBtn" onclick="toggleMarketSelector(event)">
+            <span id="msCurrentName">1X2 · Match Result</span>
+            <span class="chev">▾</span>
+            <span class="kbd">/</span>
+          </button>
+          <div class="ms-panel" id="msPanel">
+            <div class="ms-search-wrap">
+              <input type="text" class="ms-search" id="msSearch" placeholder="Search markets…" oninput="renderMarketList()" onkeydown="handleMsKey(event)" />
+            </div>
+            <div class="ms-body" id="msBody"><!-- populated by JS --></div>
+            <div class="ms-footer">
+              <span><span class="hint-key">↑↓</span> navigate</span>
+              <span><span class="hint-key">↵</span> select</span>
+              <span><span class="hint-key">esc</span> close</span>
+              <span style="margin-left:auto;">13 markets</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="current-odds">
@@ -809,6 +894,194 @@ function adjustOdds(sel, delta) {
   updateBox(sel);
   updatePct();
 }
+
+// ============================================================
+// Market Selector Dropdown
+// ============================================================
+const MARKETS = [
+  // Main
+  { id: '1x2',         group: 'Main',         name: '1X2 · Match Result',        status: 'open',   turnover: 128400, pinned: true },
+  { id: 'dnb',         group: 'Main',         name: 'Draw No Bet',               status: 'open',   turnover: 42100 },
+  { id: 'dc',          group: 'Main',         name: 'Double Chance',             status: 'open',   turnover: 31800 },
+  { id: 'btts',        group: 'Main',         name: 'Both Teams to Score',       status: 'open',   turnover: 58900, pinned: true },
+  // Handicap
+  { id: 'ah',          group: 'Handicap',     name: 'Asian Handicap',            status: 'open',   turnover: 96200, pinned: true },
+  { id: 'eh',          group: 'Handicap',     name: 'European Handicap',         status: 'susp',   turnover: 12400 },
+  // Goals
+  { id: 'ou25',        group: 'Goals',        name: 'Over / Under 2.5',          status: 'open',   turnover: 74600 },
+  { id: 'ou35',        group: 'Goals',        name: 'Over / Under 3.5',          status: 'open',   turnover: 28300 },
+  { id: 'total_home',  group: 'Goals',        name: 'Home Team Total Goals',     status: 'open',   turnover: 9200 },
+  // Corners
+  { id: 'corners_ou',  group: 'Corners',      name: 'Corners O/U 9.5',           status: 'open',   turnover: 15700 },
+  { id: 'corners_ah',  group: 'Corners',      name: 'Corners Asian Handicap',    status: 'closed', turnover: 0 },
+  // Cards
+  { id: 'cards_ou',    group: 'Cards',        name: 'Cards O/U 4.5',             status: 'open',   turnover: 6800 },
+  // Player Props
+  { id: 'player_gs',   group: 'Player Props', name: 'Anytime Goalscorer',        status: 'open',   turnover: 22900 },
+];
+
+let _msOpen = false;
+let _msSelected = '1x2';
+let _msFocusIdx = 0;
+let _msRecent = ['1x2','ah','btts'];
+let _msFiltered = [];
+
+function toggleMarketSelector(e) {
+  if (e) e.stopPropagation();
+  _msOpen = !_msOpen;
+  const panel = document.getElementById('msPanel');
+  if (_msOpen) {
+    panel.classList.add('open');
+    document.getElementById('msSearch').value = '';
+    renderMarketList();
+    setTimeout(() => document.getElementById('msSearch').focus(), 20);
+  } else {
+    panel.classList.remove('open');
+  }
+}
+
+function closeMarketSelector() {
+  _msOpen = false;
+  document.getElementById('msPanel').classList.remove('open');
+}
+
+function statusBadge(s) {
+  if (s === 'open')   return '<span class="ms-badge open">OPEN</span>';
+  if (s === 'susp')   return '<span class="ms-badge susp">SUSP</span>';
+  if (s === 'closed') return '<span class="ms-badge closed">CLOSED</span>';
+  return '';
+}
+
+function fmtTurnover(n) {
+  if (n >= 1000) return '$' + (n/1000).toFixed(1) + 'k';
+  return '$' + n;
+}
+
+function highlight(name, q) {
+  if (!q) return escapeHtml(name);
+  const i = name.toLowerCase().indexOf(q.toLowerCase());
+  if (i < 0) return escapeHtml(name);
+  return escapeHtml(name.slice(0,i)) + '<mark>' + escapeHtml(name.slice(i,i+q.length)) + '</mark>' + escapeHtml(name.slice(i+q.length));
+}
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function renderMarketItem(m, q) {
+  const isSel = m.id === _msSelected;
+  const pinIcon = m.pinned ? '<span class="ms-pin active" title="pinned">★</span>' : '';
+  return `<div class="ms-item${isSel ? ' selected' : ''}" data-id="${m.id}" onclick="selectMarket('${m.id}')">
+    ${pinIcon}
+    <span class="ms-item-name">${highlight(m.name, q)}</span>
+    <span class="ms-item-meta">${statusBadge(m.status)} <span class="ms-item-turnover">${fmtTurnover(m.turnover)}</span></span>
+  </div>`;
+}
+
+function renderMarketList() {
+  const q = (document.getElementById('msSearch').value || '').trim();
+  const body = document.getElementById('msBody');
+  const all = MARKETS.filter(m => !q || m.name.toLowerCase().includes(q.toLowerCase()));
+  _msFiltered = all;
+
+  if (all.length === 0) {
+    body.innerHTML = '<div class="ms-empty">No markets match "' + escapeHtml(q) + '"</div>';
+    return;
+  }
+
+  let html = '';
+  if (!q) {
+    const pinned = all.filter(m => m.pinned);
+    if (pinned.length) {
+      html += '<div class="ms-group-label">★ Pinned</div>';
+      pinned.forEach(m => html += renderMarketItem(m, q));
+    }
+    const recent = _msRecent.map(id => all.find(m => m.id === id)).filter(Boolean);
+    if (recent.length) {
+      html += '<div class="ms-group-label">Recent</div>';
+      recent.forEach(m => html += renderMarketItem(m, q));
+    }
+    const groups = {};
+    all.forEach(m => { (groups[m.group] = groups[m.group] || []).push(m); });
+    Object.keys(groups).forEach(g => {
+      html += '<div class="ms-group-label">' + g + '</div>';
+      groups[g].forEach(m => html += renderMarketItem(m, q));
+    });
+    // rebuild flat list for keyboard navigation (in render order)
+    _msFiltered = [];
+    const seen = new Set();
+    pinned.forEach(m => { if (!seen.has(m.id)) { _msFiltered.push(m); seen.add(m.id); } });
+    recent.forEach(m => { if (!seen.has(m.id)) { _msFiltered.push(m); seen.add(m.id); } });
+    Object.keys(groups).forEach(g => groups[g].forEach(m => { if (!seen.has(m.id)) { _msFiltered.push(m); seen.add(m.id); } }));
+  } else {
+    all.forEach(m => html += renderMarketItem(m, q));
+  }
+  body.innerHTML = html;
+  _msFocusIdx = 0;
+  updateKbdFocus();
+}
+
+function updateKbdFocus() {
+  const items = document.querySelectorAll('#msBody .ms-item');
+  items.forEach(el => el.classList.remove('kbd-focus'));
+  if (_msFiltered[_msFocusIdx]) {
+    const targetId = _msFiltered[_msFocusIdx].id;
+    // Find first item with matching data-id (pinned/recent may duplicate, highlight first)
+    for (const el of items) {
+      if (el.getAttribute('data-id') === targetId) {
+        el.classList.add('kbd-focus');
+        el.scrollIntoView({ block: 'nearest' });
+        break;
+      }
+    }
+  }
+}
+
+function handleMsKey(e) {
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    _msFocusIdx = Math.min(_msFocusIdx + 1, _msFiltered.length - 1);
+    updateKbdFocus();
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    _msFocusIdx = Math.max(_msFocusIdx - 1, 0);
+    updateKbdFocus();
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    const m = _msFiltered[_msFocusIdx];
+    if (m) selectMarket(m.id);
+  } else if (e.key === 'Escape') {
+    e.preventDefault();
+    closeMarketSelector();
+  }
+}
+
+function selectMarket(id) {
+  const m = MARKETS.find(x => x.id === id);
+  if (!m) return;
+  _msSelected = id;
+  document.getElementById('msCurrentName').textContent = m.name;
+  // update recent (dedupe, push to front, cap 5)
+  _msRecent = [id, ..._msRecent.filter(x => x !== id)].slice(0,5);
+  closeMarketSelector();
+}
+
+// Global: "/" to focus search, click outside to close
+document.addEventListener('keydown', function(e) {
+  if (e.key === '/' && !_msOpen && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+    e.preventDefault();
+    toggleMarketSelector();
+  }
+});
+
+document.addEventListener('click', function(e) {
+  if (!_msOpen) return;
+  const panel = document.getElementById('msPanel');
+  const btn = document.getElementById('msBtn');
+  if (!panel.contains(e.target) && !btn.contains(e.target)) {
+    closeMarketSelector();
+  }
+});
 </script>
 </body>
 </html>
