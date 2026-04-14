@@ -169,9 +169,10 @@
       <button class="sb-collapse">«</button>
     </div>
     <div class="sb-nav">
-      <div class="sb-item active"><span class="sb-icon">📋</span> Dashboard</div>
+      <div class="sb-item active" onclick="location.href='trader-dashboard-wireframe.html'"><span class="sb-icon">📋</span> Dashboard</div>
       <div class="sb-item"><span class="sb-icon">⚽</span> Matches</div>
-      <div class="sb-item"><span class="sb-icon">📊</span> Markets</div>
+      <div class="sb-item" onclick="location.href='trader-market-view-wireframe.html'"><span class="sb-icon">📊</span> Markets</div>
+      <div class="sb-item" onclick="location.href='market-activity-wireframe.html'" style="padding-left: 36px; font-size: 12px;"><span class="sb-icon">📉</span> Market Activity</div>
       <div class="sb-item"><span class="sb-icon">👥</span> Players</div>
       <div class="sb-item"><span class="sb-icon">🎫</span> Wagers</div>
       <div class="sb-item"><span class="sb-icon">📝</span> Audit Log</div>
@@ -248,13 +249,12 @@
           <tr>
             <th>Match</th>
             <th>Trader</th>
-            <th>Sport</th>
+            <th>Super Trader</th>
             <th>Start Time</th>
             <th>Phase</th>
             <th>Score / Timer</th>
             <th>Markets</th>
             <th>Turnover</th>
-            <th>Net Exposure</th>
             <th>Risk</th>
             <th>Status</th>
           </tr>
@@ -276,7 +276,16 @@
                 <div class="dropdown-panel"></div>
               </div>
             </td>
-            <td><span class="sport-icon">⚽</span></td>
+            <td>
+              <div class="trader-assign" data-assigned="hugo">
+                <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
+                  <span class="trader-avatar-sm hugo">H</span>
+                  <span class="assign-name">Hugo</span>
+                  <span class="chevron">▾</span>
+                </button>
+                <div class="dropdown-panel"></div>
+              </div>
+            </td>
             <td>
               <div>Apr 12</div>
               <div style="font-size: 10px; color: #8b949e;">20:00</div>
@@ -288,7 +297,6 @@
             </td>
             <td class="num">8</td>
             <td class="num" style="font-weight: 600;">$125,000</td>
-            <td class="num num-red">-$15,000</td>
             <td><span class="risk-badge risk-high">High</span></td>
             <td><span class="status-badge status-open">Open</span></td>
           </tr>
@@ -308,7 +316,16 @@
                 <div class="dropdown-panel"></div>
               </div>
             </td>
-            <td><span class="sport-icon">⚽</span></td>
+            <td>
+              <div class="trader-assign" data-assigned="hugo">
+                <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
+                  <span class="trader-avatar-sm hugo">H</span>
+                  <span class="assign-name">Hugo</span>
+                  <span class="chevron">▾</span>
+                </button>
+                <div class="dropdown-panel"></div>
+              </div>
+            </td>
             <td>
               <div>Apr 12</div>
               <div style="font-size: 10px; color: #8b949e;">19:00</div>
@@ -320,7 +337,6 @@
             </td>
             <td class="num">10</td>
             <td class="num" style="font-weight: 600;">$203,000</td>
-            <td class="num num-red">-$28,000</td>
             <td><span class="risk-badge risk-high">High</span></td>
             <td><span class="status-badge status-open">Open</span></td>
           </tr>
@@ -341,7 +357,16 @@
                 <div class="dropdown-panel"></div>
               </div>
             </td>
-            <td><span class="sport-icon">⚽</span></td>
+            <td>
+              <div class="trader-assign" data-assigned="zoey">
+                <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
+                  <span class="trader-avatar-sm zoey">Z</span>
+                  <span class="assign-name">Zoey</span>
+                  <span class="chevron">▾</span>
+                </button>
+                <div class="dropdown-panel"></div>
+              </div>
+            </td>
             <td>
               <div>Apr 12</div>
               <div style="font-size: 10px; color: #8b949e;">22:00</div>
@@ -352,7 +377,6 @@
             </td>
             <td class="num">6</td>
             <td class="num" style="font-weight: 600;">$78,000</td>
-            <td class="num num-red">-$8,200</td>
             <td><span class="risk-badge risk-med">Medium</span></td>
             <td><span class="status-badge status-open">Open</span></td>
           </tr>
@@ -372,7 +396,16 @@
                 <div class="dropdown-panel"></div>
               </div>
             </td>
-            <td><span class="sport-icon">🏀</span></td>
+            <td>
+              <div class="trader-assign" data-assigned="hugo">
+                <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
+                  <span class="trader-avatar-sm hugo">H</span>
+                  <span class="assign-name">Hugo</span>
+                  <span class="chevron">▾</span>
+                </button>
+                <div class="dropdown-panel"></div>
+              </div>
+            </td>
             <td>
               <div>Apr 13</div>
               <div style="font-size: 10px; color: #8b949e;">09:30</div>
@@ -383,7 +416,6 @@
             </td>
             <td class="num">4</td>
             <td class="num" style="font-weight: 600;">$22,000</td>
-            <td class="num num-green">+$1,200</td>
             <td><span class="risk-badge risk-low">Low</span></td>
             <td><span class="status-badge status-open">Open</span></td>
           </tr>
@@ -403,7 +435,16 @@
                 <div class="dropdown-panel"></div>
               </div>
             </td>
-            <td><span class="sport-icon">⚽</span></td>
+            <td>
+              <div class="trader-assign" data-assigned="">
+                <button class="trader-assign-btn unassigned" onclick="event.stopPropagation(); toggleDropdown(this);">
+                  <span class="trader-avatar-sm empty"></span>
+                  <span class="assign-name">+ Assign</span>
+                  <span class="chevron">▾</span>
+                </button>
+                <div class="dropdown-panel"></div>
+              </div>
+            </td>
             <td>
               <div>Apr 13</div>
               <div style="font-size: 10px; color: #8b949e;">00:30</div>
@@ -414,7 +455,6 @@
             </td>
             <td class="num">8</td>
             <td class="num" style="font-weight: 600;">$57,000</td>
-            <td class="num num-red">-$4,100</td>
             <td><span class="risk-badge risk-med">Medium</span></td>
             <td><span class="status-badge status-open">Open</span></td>
           </tr>
