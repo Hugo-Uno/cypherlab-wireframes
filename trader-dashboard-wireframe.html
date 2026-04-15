@@ -135,6 +135,15 @@
   .dropdown-item .trader-name { flex: 1; }
   .dropdown-item .trader-load { font-size: 10px; color: #8b949e; }
   .dropdown-item .check { color: #3fb950; font-size: 12px; }
+  .dropdown-item .check-box { font-size: 13px; color: #8b949e; width: 14px; text-align: center; }
+  .dropdown-item.selected .check-box { color: #3fb950; }
+  .dropdown-footer { padding: 6px 8px; border-top: 1px solid #30363d; display: flex; justify-content: space-between; align-items: center; }
+  .dropdown-count { font-size: 11px; color: #8b949e; }
+  .dropdown-done { background: #1f6feb; color: #fff; border: none; padding: 4px 12px; border-radius: 6px; font-size: 11px; cursor: pointer; }
+  .dropdown-done:hover { background: #388bfd; }
+  .stacked-avatars { display: inline-flex; }
+  .stacked-avatars .trader-avatar-sm { margin-left: -6px; border: 2px solid #161b22; box-sizing: content-box; }
+  .stacked-avatars .trader-avatar-sm:first-child { margin-left: 0; }
   .highlight { background: #d2992244; border-radius: 2px; padding: 0 1px; }
 
   /* Unassigned */
@@ -267,7 +276,7 @@
               <div style="font-size: 10px; color: #8b949e;">Premier League · MK-3A1F82</div>
             </td>
             <td>
-              <div class="trader-assign" data-assigned="hugo">
+              <div class="trader-assign" data-multi="1" data-assigned="hugo">
                 <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
                   <span class="trader-avatar-sm hugo">H</span>
                   <span class="assign-name">Hugo</span>
@@ -307,7 +316,7 @@
               <div style="font-size: 10px; color: #8b949e;">La Liga · MK-7B2E91</div>
             </td>
             <td>
-              <div class="trader-assign" data-assigned="zoey">
+              <div class="trader-assign" data-multi="1" data-assigned="zoey">
                 <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
                   <span class="trader-avatar-sm zoey">Z</span>
                   <span class="assign-name">Zoey</span>
@@ -348,7 +357,7 @@
               <div style="font-size: 10px; color: #8b949e;">Serie A · MK-C93D12</div>
             </td>
             <td>
-              <div class="trader-assign" data-assigned="rico">
+              <div class="trader-assign" data-multi="1" data-assigned="rico">
                 <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
                   <span class="trader-avatar-sm rico">R</span>
                   <span class="assign-name">Rico</span>
@@ -387,7 +396,7 @@
               <div style="font-size: 10px; color: #8b949e;">NBA · MK-D04A77</div>
             </td>
             <td>
-              <div class="trader-assign" data-assigned="hugo">
+              <div class="trader-assign" data-multi="1" data-assigned="hugo">
                 <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
                   <span class="trader-avatar-sm hugo">H</span>
                   <span class="assign-name">Hugo</span>
@@ -426,7 +435,7 @@
               <div style="font-size: 10px; color: #8b949e;">Premier League · MK-E15B66</div>
             </td>
             <td>
-              <div class="trader-assign" data-assigned="">
+              <div class="trader-assign" data-multi="1" data-assigned="">
                 <button class="trader-assign-btn unassigned" onclick="event.stopPropagation(); toggleDropdown(this);">
                   <span class="trader-avatar-sm empty"></span>
                   <span class="assign-name">+ Assign</span>
@@ -522,8 +531,7 @@ function toggleDropdown(btn) {
   closeDropdown();
 
   // Populate & open
-  const assigned = wrapper.dataset.assigned || '';
-  renderDropdown(panel, assigned, '');
+  renderDropdown(panel, wrapper, '');
   panel.classList.add('open');
   activePanel = panel;
 
@@ -540,10 +548,28 @@ function closeDropdown() {
   }
 }
 
+// === Helpers: multi vs single ===
+function isMulti(wrapper) { return wrapper.dataset.multi === '1'; }
+function assignedList(wrapper) {
+  const raw = (wrapper.dataset.assigned || '').trim();
+  if (!raw) return [];
+  return raw.split(',').map(s => s.trim()).filter(Boolean);
+}
+function setAssigned(wrapper, ids) {
+  wrapper.dataset.assigned = ids.join(',');
+}
+function avatarHtml(t, extraCls) {
+  const style = t.cls ? '' : ' style="background: ' + t.color + '33; color: ' + t.color + ';"';
+  const cls = 'trader-avatar-sm' + (t.cls ? ' ' + t.cls : '') + (extraCls ? ' ' + extraCls : '');
+  return '<span class="' + cls + '"' + style + '>' + t.name.charAt(0) + '</span>';
+}
+
 // === Render dropdown contents ===
-function renderDropdown(panel, assignedId, query) {
+function renderDropdown(panel, wrapper, query) {
   const q = query.toLowerCase();
   const filtered = TRADERS.filter(t => !q || t.name.toLowerCase().includes(q));
+  const multi = isMulti(wrapper);
+  const selected = assignedList(wrapper);
 
   let html = '<input class="dropdown-search" placeholder="Search trader..." value="' + escHtml(query) + '" oninput="onSearchInput(this)" onclick="event.stopPropagation();" />';
   html += '<div class="dropdown-list">';
@@ -553,21 +579,33 @@ function renderDropdown(panel, assignedId, query) {
   }
 
   filtered.forEach(t => {
-    const isSelected = t.id === assignedId;
-    const avatarStyle = t.cls ? '' : ' style="background: ' + t.color + '33; color: ' + t.color + ';"';
-    const avatarCls = 'trader-avatar-sm' + (t.cls ? ' ' + t.cls : '');
+    const isSelected = selected.indexOf(t.id) !== -1;
     const displayName = q ? highlightMatch(t.name, q) : escHtml(t.name);
     const loadText = t.matches === 1 ? '1 match' : t.matches + ' matches';
+    const handler = multi
+      ? "event.stopPropagation(); toggleTrader(this, '" + t.id + "');"
+      : "event.stopPropagation(); selectTrader(this, '" + t.id + "');";
 
-    html += '<div class="dropdown-item' + (isSelected ? ' selected' : '') + '" onclick="event.stopPropagation(); selectTrader(this, \'' + t.id + '\');">';
-    html += '  <span class="' + avatarCls + '"' + avatarStyle + '>' + t.name.charAt(0) + '</span>';
+    html += '<div class="dropdown-item' + (isSelected ? ' selected' : '') + '" onclick="' + handler + '">';
+    if (multi) {
+      html += '  <span class="check-box">' + (isSelected ? '☑' : '☐') + '</span>';
+    }
+    html += '  ' + avatarHtml(t);
     html += '  <span class="trader-name">' + displayName + '</span>';
     html += '  <span class="trader-load">' + loadText + '</span>';
-    if (isSelected) html += '  <span class="check">✓</span>';
+    if (!multi && isSelected) html += '  <span class="check">✓</span>';
     html += '</div>';
   });
 
   html += '</div>';
+
+  if (multi) {
+    html += '<div class="dropdown-footer">';
+    html += '  <span class="dropdown-count">' + selected.length + ' selected</span>';
+    html += '  <button class="dropdown-done" onclick="event.stopPropagation(); closeDropdown();">Done</button>';
+    html += '</div>';
+  }
+
   panel.innerHTML = html;
 }
 
@@ -575,10 +613,9 @@ function renderDropdown(panel, assignedId, query) {
 function onSearchInput(input) {
   const panel = input.closest('.dropdown-panel');
   const wrapper = panel.closest('.trader-assign');
-  const assigned = wrapper.dataset.assigned || '';
   const query = input.value;
 
-  renderDropdown(panel, assigned, query);
+  renderDropdown(panel, wrapper, query);
 
   // Restore cursor in the newly rendered input
   const newInput = panel.querySelector('.dropdown-search');
@@ -588,29 +625,72 @@ function onSearchInput(input) {
   }
 }
 
-// === Select a trader ===
+// === Update the trigger button to reflect current selection ===
+function updateButton(wrapper) {
+  const btn = wrapper.querySelector('.trader-assign-btn');
+  const ids = assignedList(wrapper);
+  const traders = ids.map(id => TRADERS.find(t => t.id === id)).filter(Boolean);
+
+  btn.setAttribute('onclick', 'event.stopPropagation(); toggleDropdown(this);');
+
+  if (traders.length === 0) {
+    btn.className = 'trader-assign-btn unassigned';
+    btn.innerHTML = '<span class="trader-avatar-sm empty">+</span>'
+      + '<span class="assign-name">Assign</span>'
+      + '<span class="chevron">▾</span>';
+    return;
+  }
+
+  btn.className = 'trader-assign-btn';
+
+  if (traders.length === 1) {
+    const t = traders[0];
+    btn.innerHTML = avatarHtml(t)
+      + '<span class="assign-name">' + escHtml(t.name) + '</span>'
+      + '<span class="chevron">▾</span>';
+    return;
+  }
+
+  // 2+ — stacked avatars + count
+  const avatars = traders.slice(0, 3).map(t => avatarHtml(t)).join('');
+  const label = traders.length === 2
+    ? escHtml(traders[0].name) + ', ' + escHtml(traders[1].name)
+    : traders.length + ' traders';
+  btn.innerHTML = '<span class="stacked-avatars">' + avatars + '</span>'
+    + '<span class="assign-name">' + label + '</span>'
+    + '<span class="chevron">▾</span>';
+}
+
+// === Select a trader (single mode) ===
 function selectTrader(itemEl, traderId) {
   const panel = itemEl.closest('.dropdown-panel');
   const wrapper = panel.closest('.trader-assign');
-  const btn = wrapper.querySelector('.trader-assign-btn');
   const trader = TRADERS.find(t => t.id === traderId);
-
   if (!trader) return;
 
-  // Update data attribute
-  wrapper.dataset.assigned = trader.id;
-
-  // Update button appearance
-  const avatarStyle = trader.cls ? '' : ' style="background: ' + trader.color + '33; color: ' + trader.color + ';"';
-  const avatarCls = 'trader-avatar-sm' + (trader.cls ? ' ' + trader.cls : '');
-
-  btn.className = 'trader-assign-btn';
-  btn.innerHTML = '<span class="' + avatarCls + '"' + avatarStyle + '>' + trader.name.charAt(0) + '</span>'
-    + '<span class="assign-name">' + escHtml(trader.name) + '</span>'
-    + '<span class="chevron">▾</span>';
-  btn.setAttribute('onclick', 'event.stopPropagation(); toggleDropdown(this);');
-
+  setAssigned(wrapper, [trader.id]);
+  updateButton(wrapper);
   closeDropdown();
+}
+
+// === Toggle a trader (multi mode) ===
+function toggleTrader(itemEl, traderId) {
+  const panel = itemEl.closest('.dropdown-panel');
+  const wrapper = panel.closest('.trader-assign');
+  const ids = assignedList(wrapper);
+  const idx = ids.indexOf(traderId);
+  if (idx === -1) ids.push(traderId);
+  else ids.splice(idx, 1);
+
+  setAssigned(wrapper, ids);
+  updateButton(wrapper);
+
+  // Re-render panel without closing, preserve search query
+  const searchInput = panel.querySelector('.dropdown-search');
+  const query = searchInput ? searchInput.value : '';
+  renderDropdown(panel, wrapper, query);
+  const newInput = panel.querySelector('.dropdown-search');
+  if (newInput) newInput.focus();
 }
 
 // === Highlight matching characters ===
