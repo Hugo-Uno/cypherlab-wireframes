@@ -1089,10 +1089,7 @@ function formatCountdown(diffMs, targetTs, nowTs) {
     } else if (dayDiff === 1) {
       label = ' <span class="cd-label tomorrow">Tomorrow</span>';
     } else if (dayDiff >= 2) {
-      const d = new Date(targetTs);
-      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-      const dateStr = months[d.getMonth()] + ' ' + d.getDate();
-      label = ' <span class="cd-label later">' + dateStr + '</span>';
+      label = ' <span class="cd-label later">In ' + dayDiff + ' days</span>';
     }
   }
 
