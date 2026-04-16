@@ -56,7 +56,78 @@
   .role-toggle-text { font-size: 12px; font-weight: 600; color: #a5f3a6; }
 
   /* Stats cards */
-  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .stat-split { display: flex; align-items: baseline; gap: 4px; font-variant-numeric: tabular-nums; }
+  .stat-split .win { color: #3fb950; font-size: 22px; font-weight: 700; }
+  .stat-split .sep { color: #484f58; font-size: 16px; font-weight: 400; }
+  .stat-split .lose { color: #f85149; font-size: 22px; font-weight: 700; }
+
+  /* Compact W/L split for table cells */
+  .wl-split { display: inline-flex; align-items: baseline; gap: 3px; font-variant-numeric: tabular-nums; }
+  .wl-split .win { color: #3fb950; font-weight: 600; }
+  .wl-split .sep { color: #484f58; }
+  .wl-split .lose { color: #f85149; font-weight: 600; }
+  .cutoff-pill { background: #0d1117; border: 1px solid #30363d; color: #d29922; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; letter-spacing: 0.3px; }
+
+  /* Dual-timezone rows in Start Time cell */
+  .tz-row { display: grid; grid-template-columns: 22px 44px auto; column-gap: 6px; align-items: baseline; line-height: 1.45; }
+  .tz-label { color: #8b949e; font-weight: 600; font-size: 10px; font-family: 'SF Mono', ui-monospace, monospace; }
+  .tz-time  { color: #e6edf3; font-weight: 600; font-size: 12px; font-variant-numeric: tabular-nums; }
+  .tz-date  { color: #8b949e; font-size: 10px; }
+
+  /* Single-timezone Start Time cell (one per UTC offset column) */
+  .tz-time-single { color: #e6edf3; font-weight: 600; font-size: 13px; font-variant-numeric: tabular-nums; font-family: 'SF Mono', ui-monospace, monospace; line-height: 1.3; }
+  .tz-date-single { color: #8b949e; font-size: 10px; margin-top: 2px; }
+
+  /* Countdown urgency */
+  .countdown { font-variant-numeric: tabular-nums; }
+  .countdown-soon { color: #d29922; font-weight: 700; }
+  .countdown-imminent { color: #f85149; font-weight: 700; }
+  .countdown-live { color: #f85149; font-weight: 700; }
+
+  /* ===== Filter bar ===== */
+  .filter-bar { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; }
+  .filter-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .filter-row + .filter-row { margin-top: 10px; padding-top: 10px; border-top: 1px dashed #21262d; }
+  .filter-group-label { font-size: 10px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; min-width: 48px; }
+
+  /* Pill tabs (Phase) */
+  .pill-tabs { display: inline-flex; background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 2px; }
+  .pill-tab { background: none; border: none; color: #8b949e; padding: 5px 12px; font-size: 12px; border-radius: 4px; cursor: pointer; font-weight: 500; }
+  .pill-tab:hover { color: #e6edf3; }
+  .pill-tab.active { background: #1f6feb33; color: #58a6ff; }
+
+  /* Chip buttons */
+  .chip { background: #0d1117; border: 1px solid #30363d; color: #8b949e; padding: 5px 10px; border-radius: 16px; font-size: 11px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; }
+  .chip:hover { border-color: #58a6ff; color: #e6edf3; }
+  .chip.active { background: #1f6feb22; border-color: #58a6ff; color: #58a6ff; }
+  .chip-group { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+
+  /* Risk / Status chip colors when active */
+  .chip.risk-high.active   { background: #f8514922; border-color: #f85149; color: #f85149; }
+  .chip.risk-med.active    { background: #d2992222; border-color: #d29922; color: #d29922; }
+  .chip.risk-low.active    { background: #23863622; border-color: #3fb950; color: #3fb950; }
+  .chip.status-open.active { background: #23863622; border-color: #3fb950; color: #3fb950; }
+  .chip.status-susp.active { background: #d2992222; border-color: #d29922; color: #d29922; }
+  .chip.status-closed.active { background: #484f5822; border-color: #8b949e; color: #8b949e; }
+
+  /* More filters toggle + collapsible body */
+  .more-filters-btn { background: transparent; border: 1px dashed #30363d; color: #8b949e; padding: 5px 12px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: 600; }
+  .more-filters-btn:hover { border-color: #58a6ff; color: #58a6ff; }
+  .more-filters-btn.open { border-style: solid; border-color: #58a6ff; color: #58a6ff; }
+  .filter-advanced { display: none; }
+  .filter-advanced.open { display: block; }
+
+  /* Filter summary */
+  .filter-summary { margin-left: auto; font-size: 11px; color: #8b949e; display: flex; align-items: center; gap: 10px; }
+  .filter-summary .count-badge { background: #1f6feb33; color: #58a6ff; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .clear-all-btn { background: none; border: none; color: #f85149; font-size: 11px; cursor: pointer; font-weight: 600; padding: 0; }
+  .clear-all-btn:hover { text-decoration: underline; }
+
+  /* Filter select (PIC, League) */
+  .filter-select { background: #0d1117; border: 1px solid #30363d; color: #e6edf3; padding: 5px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; min-width: 140px; }
+  .filter-select:hover { border-color: #58a6ff; }
+
   .stat-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 14px 16px; }
   .stat-label { font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; }
   .stat-value { font-size: 24px; font-weight: 700; margin-top: 4px; font-family: 'SF Mono', monospace; }
@@ -73,8 +144,8 @@
 
   /* Match table */
   .match-table { width: 100%; border-collapse: collapse; }
-  .match-table th { text-align: left; padding: 8px 10px; font-size: 11px; color: #8b949e; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; border-bottom: 1px solid #30363d; white-space: nowrap; }
-  .match-table td { padding: 12px 10px; font-size: 12px; border-bottom: 1px solid #21262d; vertical-align: middle; }
+  .match-table th { text-align: left; padding: 6px 10px; font-size: 11px; color: #8b949e; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; border-bottom: 1px solid #30363d; white-space: nowrap; }
+  .match-table td { padding: 6px 10px; font-size: 12px; border-bottom: 1px solid #21262d; vertical-align: middle; }
   .match-table tr { cursor: pointer; }
   .match-table tr:hover td { background: #1c2129; }
 
@@ -90,6 +161,19 @@
   /* Live timer */
   .live-timer { font-family: 'SF Mono', monospace; font-size: 13px; font-weight: 700; color: #f85149; }
   .countdown { font-size: 11px; color: #8b949e; }
+
+  /* Timer row = period prefix + clock (inline) */
+  .timer-row { display: inline-flex; align-items: baseline; gap: 6px; }
+  .period-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; display: inline-block; letter-spacing: 0.3px; border: 1px solid; font-family: 'SF Mono', ui-monospace, monospace; }
+  .period-badge.h1 { color: #58a6ff; background: #1f6feb22; border-color: #58a6ff66; }
+  .period-badge.h2 { color: #d29922; background: #d2992222; border-color: #d2992266; }
+  .period-badge.ht { color: #8b949e; background: transparent; border-color: #30363d; }
+
+  /* Countdown relative-day label (colored) */
+  .cd-label { margin-left: 6px; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 0.2px; border: 1px solid; vertical-align: middle; }
+  .cd-label.today    { color: #d29922; background: #d2992222; border-color: #d2992266; }
+  .cd-label.tomorrow { color: #58a6ff; background: #1f6feb22; border-color: #58a6ff66; }
+  .cd-label.later    { color: #8b949e; background: transparent; border-color: #30363d; }
 
   /* Score */
   .score { font-size: 16px; font-weight: 800; letter-spacing: 1px; }
@@ -112,10 +196,28 @@
   .num-red { color: #f85149; }
 
   /* Trader assign dropdown */
-  .trader-assign { position: relative; display: inline-block; }
+  .trader-assign { position: relative; display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .trader-assign-btn { display: flex; align-items: center; gap: 6px; background: #0d1117; border: 1px solid #30363d; color: #e6edf3; padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; min-width: 120px; }
+  .trader-assign-btn.compact { min-width: auto; padding: 4px 8px; }
   .trader-assign-btn:hover { border-color: #58a6ff; }
   .trader-assign-btn .chevron { font-size: 10px; color: #8b949e; margin-left: auto; }
+  .trader-assign-btn .assign-name { max-width: 160px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Name chips (outside button, role-colored) */
+  .assigned-names { display: inline-flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+  .name-chip { font-size: 11px; padding: 2px 8px; border-radius: 4px; border: 1px solid; line-height: 1.5; white-space: nowrap; font-weight: 500; }
+  .name-chip.role-super  { border-color: #d29922; color: #d29922; background: #d2992222; }
+  .name-chip.role-senior { border-color: #8957e5; color: #d2a8ff; background: #8957e522; }
+  .name-chip.role-trader { border-color: #238636; color: #3fb950; background: #23863622; }
+  .name-chip.role-junior { border-color: #484f58; color: #8b949e; background: transparent; border-style: dashed; }
+  .name-chip.more { border-color: #30363d; color: #8b949e; background: #161b22; }
+
+  /* Role badge in dropdown */
+  .role-badge { font-size: 9px; padding: 1px 5px; border-radius: 3px; border: 1px solid; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+  .role-badge.role-super  { border-color: #d29922; color: #d29922; background: #d2992222; }
+  .role-badge.role-senior { border-color: #8957e5; color: #d2a8ff; background: #8957e522; }
+  .role-badge.role-trader { border-color: #238636; color: #3fb950; background: #23863622; }
+  .role-badge.role-junior { border-color: #484f58; color: #8b949e; background: transparent; }
   .trader-avatar-sm { width: 18px; height: 18px; background: #30363d; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; flex-shrink: 0; }
   .trader-avatar-sm.hugo { background: #1f6feb33; color: #58a6ff; }
   .trader-avatar-sm.zoey { background: #8957e533; color: #d2a8ff; }
@@ -201,6 +303,7 @@
       <input class="topbar-search" placeholder="🔍 Search matches, players, markets..." />
       <div class="topbar-right">
         <span class="env-badge">Production</span>
+        <span class="cutoff-pill" title="Daily settlement cutoff">⏱ Cutoff 12:00 (UTC+8)</span>
         <span class="topbar-time">🕐 20:45:12</span>
         <span class="notif-icon">🔔<span class="notif-badge">5</span></span>
         <div class="avatar">H</div>
@@ -216,7 +319,7 @@
         </div>
         <div class="shift-info">
           Shift: <strong>20:00 – 04:00 (UTC+8)</strong><br>
-          Role: <strong style="color: #d2a8ff;">Super Trader</strong>
+          Role: <strong style="color: #d2a8ff;">Supervisor</strong>
         </div>
       </div>
 
@@ -234,8 +337,22 @@
         </div>
         <div class="stat-card">
           <div class="stat-label">Total Turnover</div>
-          <div class="stat-value stat-green">$485K</div>
+          <div class="stat-value stat-green">$7,437,500</div>
           <div class="stat-sub">today's shift</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Wagers (W / L)</div>
+          <div class="stat-value stat-split">
+            <span class="win">44,120</span>
+            <span class="sep">/</span>
+            <span class="lose">23,195</span>
+          </div>
+          <div class="stat-sub">67,315 total · win rate 65.5%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Unsettling Turnover</div>
+          <div class="stat-value stat-white">$1,245,000</div>
+          <div class="stat-sub">9,230 wagers pending settlement</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">Alerts</div>
@@ -252,16 +369,95 @@
         </div>
       </div>
 
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div class="filter-row">
+          <span class="filter-group-label">Phase</span>
+          <div class="pill-tabs" id="phase-tabs">
+            <button class="pill-tab active" data-phase="all">All</button>
+            <button class="pill-tab" data-phase="live">● Live</button>
+            <button class="pill-tab" data-phase="pre">Pre-Match</button>
+          </div>
+
+          <span class="filter-group-label" style="margin-left: 8px;">Sport</span>
+          <div class="chip-group" id="sport-chips">
+            <button class="chip active" data-sport="all">All</button>
+            <button class="chip" data-sport="football">⚽ Football</button>
+            <button class="chip" data-sport="basketball">🏀 Basketball</button>
+            <button class="chip" data-sport="tennis">🎾 Tennis</button>
+          </div>
+
+          <span class="filter-group-label" style="margin-left: 8px;">Assign</span>
+          <div class="chip-group" id="assign-chips">
+            <button class="chip" data-assign="mine">Mine</button>
+            <button class="chip" data-assign="unassigned">Unassigned</button>
+          </div>
+
+          <button class="more-filters-btn" id="more-filters-btn" onclick="toggleMoreFilters()">+ More filters</button>
+
+          <div class="filter-summary">
+            <span>Showing <span class="count-badge" id="filter-count">5 of 5</span></span>
+            <button class="clear-all-btn" id="clear-all-btn" onclick="clearAllFilters()" style="display: none;">Clear all</button>
+          </div>
+        </div>
+
+        <div class="filter-row filter-advanced" id="filter-advanced">
+          <span class="filter-group-label">Risk</span>
+          <div class="chip-group" id="risk-chips">
+            <button class="chip risk-high" data-risk="high">High</button>
+            <button class="chip risk-med" data-risk="med">Medium</button>
+            <button class="chip risk-low" data-risk="low">Low</button>
+          </div>
+
+          <span class="filter-group-label" style="margin-left: 8px;">Status</span>
+          <div class="chip-group" id="status-chips">
+            <button class="chip status-open" data-status="open">Open</button>
+            <button class="chip status-susp" data-status="suspended">Suspended</button>
+            <button class="chip status-closed" data-status="closed">Closed</button>
+          </div>
+
+          <span class="filter-group-label" style="margin-left: 8px;">Kickoff</span>
+          <div class="chip-group" id="time-chips">
+            <button class="chip" data-time="1h">Next 1h</button>
+            <button class="chip" data-time="6h">Next 6h</button>
+            <button class="chip" data-time="today">Today</button>
+            <button class="chip" data-time="tomorrow">Tomorrow</button>
+          </div>
+
+          <span class="filter-group-label" style="margin-left: 8px;">PIC</span>
+          <select class="filter-select" id="pic-select">
+            <option value="all">All PICs</option>
+            <option value="hugo">Hugo</option>
+            <option value="zoey">Zoey</option>
+            <option value="rico">Rico</option>
+            <option value="henry">Henry</option>
+            <option value="lena">Lena</option>
+          </select>
+
+          <span class="filter-group-label" style="margin-left: 8px;">League</span>
+          <select class="filter-select" id="league-select">
+            <option value="all">All Leagues</option>
+            <option value="premier-league">Premier League</option>
+            <option value="la-liga">La Liga</option>
+            <option value="serie-a">Serie A</option>
+            <option value="bundesliga">Bundesliga</option>
+            <option value="ligue-1">Ligue 1</option>
+            <option value="nba">NBA</option>
+          </select>
+        </div>
+      </div>
+
       <table class="match-table">
         <thead>
           <tr>
             <th>Match</th>
-            <th>Trader</th>
-            <th>Super Trader</th>
-            <th>Start Time</th>
-            <th>Phase</th>
-            <th>Score / Timer</th>
+            <th>PIC</th>
+            <th>−4 Start Time</th>
+            <th>+8 Start Time</th>
+            <th>Score / Starts In</th>
             <th>Markets</th>
+            <th>Wagers</th>
+            <th>Wagers (W / L)</th>
             <th>Turnover</th>
             <th>Risk</th>
             <th>Status</th>
@@ -269,7 +465,7 @@
         </thead>
         <tbody>
           <!-- LIVE matches first -->
-          <tr class="row-live" onclick="">
+          <tr class="row-live match-row" onclick="" data-sport="football" data-league="premier-league" data-phase="live" data-risk="high" data-status="open" data-pic="hugo" data-kickoff="2026-04-12T20:00:00+08:00">
             <td>
               <div style="font-weight: 600;">Arsenal vs Chelsea</div>
               <div style="font-size: 10px; color: #8b949e;">Premier League · MK-3A1F82</div>
@@ -285,31 +481,26 @@
               </div>
             </td>
             <td>
-              <div class="trader-assign" data-assigned="hugo">
-                <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
-                  <span class="trader-avatar-sm hugo">H</span>
-                  <span class="assign-name">Hugo</span>
-                  <span class="chevron">▾</span>
-                </button>
-                <div class="dropdown-panel"></div>
-              </div>
+              <div class="tz-time-single">08:00</div>
+              <div class="tz-date-single">Apr 12</div>
             </td>
             <td>
-              <div>Apr 12</div>
-              <div style="font-size: 10px; color: #8b949e;">20:00</div>
+              <div class="tz-time-single">20:00</div>
+              <div class="tz-date-single">Apr 12</div>
             </td>
-            <td><span class="phase-badge phase-live">● Live</span></td>
             <td>
               <div class="score">1 — 0</div>
-              <div class="live-timer">45:22</div>
+              <div class="timer-row"><span class="period-badge h1">H1</span><span class="live-timer">45:22</span></div>
             </td>
             <td class="num">8</td>
-            <td class="num" style="font-weight: 600;">$125,000</td>
+            <td class="num" style="font-weight: 600;">12,450</td>
+            <td class="num"><span class="wl-split"><span class="win">7,280</span><span class="sep">/</span><span class="lose">3,540</span></span></td>
+            <td class="num" style="font-weight: 600;">$1,425,000</td>
             <td><span class="risk-badge risk-high">High</span></td>
             <td><span class="status-badge status-open">Open</span></td>
           </tr>
 
-          <tr class="row-live" onclick="">
+          <tr class="row-live match-row" onclick="" data-sport="football" data-league="la-liga" data-phase="live" data-risk="high" data-status="open" data-pic="zoey" data-kickoff="2026-04-12T19:00:00+08:00">
             <td>
               <div style="font-weight: 600;">R. Madrid vs Barcelona</div>
               <div style="font-size: 10px; color: #8b949e;">La Liga · MK-7B2E91</div>
@@ -325,32 +516,62 @@
               </div>
             </td>
             <td>
-              <div class="trader-assign" data-assigned="hugo">
+              <div class="tz-time-single">07:00</div>
+              <div class="tz-date-single">Apr 12</div>
+            </td>
+            <td>
+              <div class="tz-time-single">19:00</div>
+              <div class="tz-date-single">Apr 12</div>
+            </td>
+            <td>
+              <div class="score">2 — 2</div>
+              <div class="timer-row"><span class="period-badge h2">H2</span><span class="live-timer">68:05</span></div>
+            </td>
+            <td class="num">10</td>
+            <td class="num" style="font-weight: 600;">24,180</td>
+            <td class="num"><span class="wl-split"><span class="win">13,920</span><span class="sep">/</span><span class="lose">7,560</span></span></td>
+            <td class="num" style="font-weight: 600;">$2,340,000</td>
+            <td><span class="risk-badge risk-high">High</span></td>
+            <td><span class="status-badge status-open">Open</span></td>
+          </tr>
+
+          <tr class="row-live match-row" onclick="" data-sport="football" data-league="bundesliga" data-phase="live" data-risk="high" data-status="open" data-pic="zoey" data-kickoff="2026-04-12T19:30:00+08:00">
+            <td>
+              <div style="font-weight: 600;">Bayern vs Dortmund</div>
+              <div style="font-size: 10px; color: #8b949e;">Bundesliga · MK-F28C04</div>
+            </td>
+            <td>
+              <div class="trader-assign" data-multi="1" data-assigned="zoey">
                 <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
-                  <span class="trader-avatar-sm hugo">H</span>
-                  <span class="assign-name">Hugo</span>
+                  <span class="trader-avatar-sm zoey">Z</span>
+                  <span class="assign-name">Zoey</span>
                   <span class="chevron">▾</span>
                 </button>
                 <div class="dropdown-panel"></div>
               </div>
             </td>
             <td>
-              <div>Apr 12</div>
-              <div style="font-size: 10px; color: #8b949e;">19:00</div>
+              <div class="tz-time-single">07:30</div>
+              <div class="tz-date-single">Apr 12</div>
             </td>
-            <td><span class="phase-badge phase-live">● Live</span></td>
             <td>
-              <div class="score">2 — 2</div>
-              <div class="live-timer">68:05</div>
+              <div class="tz-time-single">19:30</div>
+              <div class="tz-date-single">Apr 12</div>
             </td>
-            <td class="num">10</td>
-            <td class="num" style="font-weight: 600;">$203,000</td>
+            <td>
+              <div class="score">2 — 1</div>
+              <div class="timer-row"><span class="period-badge h2">H2</span><span class="live-timer">75:30</span></div>
+            </td>
+            <td class="num">12</td>
+            <td class="num" style="font-weight: 600;">18,650</td>
+            <td class="num"><span class="wl-split"><span class="win">10,840</span><span class="sep">/</span><span class="lose">5,920</span></span></td>
+            <td class="num" style="font-weight: 600;">$1,860,000</td>
             <td><span class="risk-badge risk-high">High</span></td>
             <td><span class="status-badge status-open">Open</span></td>
           </tr>
 
           <!-- PRE-MATCH -->
-          <tr onclick="">
+          <tr class="match-row" onclick="" data-sport="football" data-league="serie-a" data-phase="pre" data-risk="med" data-status="open" data-pic="rico" data-kickoff="2026-04-12T22:00:00+08:00">
             <td>
               <div style="font-weight: 600;">Inter vs AC Milan</div>
               <div style="font-size: 10px; color: #8b949e;">Serie A · MK-C93D12</div>
@@ -366,30 +587,25 @@
               </div>
             </td>
             <td>
-              <div class="trader-assign" data-assigned="zoey">
-                <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
-                  <span class="trader-avatar-sm zoey">Z</span>
-                  <span class="assign-name">Zoey</span>
-                  <span class="chevron">▾</span>
-                </button>
-                <div class="dropdown-panel"></div>
-              </div>
+              <div class="tz-time-single">10:00</div>
+              <div class="tz-date-single">Apr 12</div>
             </td>
             <td>
-              <div>Apr 12</div>
-              <div style="font-size: 10px; color: #8b949e;">22:00</div>
+              <div class="tz-time-single">22:00</div>
+              <div class="tz-date-single">Apr 12</div>
             </td>
-            <td><span class="phase-badge phase-pre">Pre-Match</span></td>
             <td>
-              <div class="countdown">Starts in 1h 15m</div>
+              <div class="countdown" data-start="2026-04-12T22:00:00+08:00">Starts in 1h 15m</div>
             </td>
             <td class="num">6</td>
-            <td class="num" style="font-weight: 600;">$78,000</td>
+            <td class="num" style="font-weight: 600;">8,420</td>
+            <td class="num"><span class="wl-split"><span class="win">4,780</span><span class="sep">/</span><span class="lose">2,450</span></span></td>
+            <td class="num" style="font-weight: 600;">$780,000</td>
             <td><span class="risk-badge risk-med">Medium</span></td>
             <td><span class="status-badge status-open">Open</span></td>
           </tr>
 
-          <tr onclick="">
+          <tr class="match-row" onclick="" data-sport="basketball" data-league="nba" data-phase="pre" data-risk="low" data-status="open" data-pic="hugo" data-kickoff="2026-04-13T09:30:00+08:00">
             <td>
               <div style="font-weight: 600;">Lakers vs Celtics</div>
               <div style="font-size: 10px; color: #8b949e;">NBA · MK-D04A77</div>
@@ -405,30 +621,25 @@
               </div>
             </td>
             <td>
-              <div class="trader-assign" data-assigned="hugo">
-                <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
-                  <span class="trader-avatar-sm hugo">H</span>
-                  <span class="assign-name">Hugo</span>
-                  <span class="chevron">▾</span>
-                </button>
-                <div class="dropdown-panel"></div>
-              </div>
+              <div class="tz-time-single">21:30</div>
+              <div class="tz-date-single">Apr 12</div>
             </td>
             <td>
-              <div>Apr 13</div>
-              <div style="font-size: 10px; color: #8b949e;">09:30</div>
+              <div class="tz-time-single">09:30</div>
+              <div class="tz-date-single">Apr 13</div>
             </td>
-            <td><span class="phase-badge phase-pre">Pre-Match</span></td>
             <td>
-              <div class="countdown">Starts in 12h 45m</div>
+              <div class="countdown" data-start="2026-04-13T09:30:00+08:00">Starts in 12h 45m</div>
             </td>
             <td class="num">4</td>
-            <td class="num" style="font-weight: 600;">$22,000</td>
+            <td class="num" style="font-weight: 600;">3,185</td>
+            <td class="num"><span class="wl-split"><span class="win">1,820</span><span class="sep">/</span><span class="lose">940</span></span></td>
+            <td class="num" style="font-weight: 600;">$245,000</td>
             <td><span class="risk-badge risk-low">Low</span></td>
             <td><span class="status-badge status-open">Open</span></td>
           </tr>
 
-          <tr onclick="">
+          <tr class="match-row" onclick="" data-sport="football" data-league="premier-league" data-phase="pre" data-risk="med" data-status="open" data-pic="" data-kickoff="2026-04-13T00:30:00+08:00">
             <td>
               <div style="font-weight: 600;">Man City vs Liverpool</div>
               <div style="font-size: 10px; color: #8b949e;">Premier League · MK-E15B66</div>
@@ -444,25 +655,122 @@
               </div>
             </td>
             <td>
-              <div class="trader-assign" data-assigned="">
-                <button class="trader-assign-btn unassigned" onclick="event.stopPropagation(); toggleDropdown(this);">
-                  <span class="trader-avatar-sm empty"></span>
-                  <span class="assign-name">+ Assign</span>
+              <div class="tz-time-single">12:30</div>
+              <div class="tz-date-single">Apr 12</div>
+            </td>
+            <td>
+              <div class="tz-time-single">00:30</div>
+              <div class="tz-date-single">Apr 13</div>
+            </td>
+            <td>
+              <div class="countdown" data-start="2026-04-13T00:30:00+08:00">Starts in 3h 45m</div>
+            </td>
+            <td class="num">8</td>
+            <td class="num" style="font-weight: 600;">6,720</td>
+            <td class="num"><span class="wl-split"><span class="win">3,810</span><span class="sep">/</span><span class="lose">1,960</span></span></td>
+            <td class="num" style="font-weight: 600;">$572,000</td>
+            <td><span class="risk-badge risk-med">Medium</span></td>
+            <td><span class="status-badge status-open">Open</span></td>
+          </tr>
+
+          <tr class="match-row" onclick="" data-sport="football" data-league="serie-a" data-phase="pre" data-risk="med" data-status="open" data-pic="henry" data-kickoff="2026-04-14T20:00:00+08:00">
+            <td>
+              <div style="font-weight: 600;">Juventus vs Roma</div>
+              <div style="font-size: 10px; color: #8b949e;">Serie A · MK-G31A55</div>
+            </td>
+            <td>
+              <div class="trader-assign" data-multi="1" data-assigned="henry">
+                <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
+                  <span class="trader-avatar-sm" style="background:#d2992233;color:#d29922">H</span>
+                  <span class="assign-name">Henry</span>
                   <span class="chevron">▾</span>
                 </button>
                 <div class="dropdown-panel"></div>
               </div>
             </td>
             <td>
-              <div>Apr 13</div>
-              <div style="font-size: 10px; color: #8b949e;">00:30</div>
+              <div class="tz-time-single">08:00</div>
+              <div class="tz-date-single">Apr 14</div>
             </td>
-            <td><span class="phase-badge phase-pre">Pre-Match</span></td>
             <td>
-              <div class="countdown">Starts in 3h 45m</div>
+              <div class="tz-time-single">20:00</div>
+              <div class="tz-date-single">Apr 14</div>
             </td>
-            <td class="num">8</td>
-            <td class="num" style="font-weight: 600;">$57,000</td>
+            <td>
+              <div class="countdown" data-start="2026-04-14T20:00:00+08:00">Starts in 1d 23h 15m</div>
+            </td>
+            <td class="num">5</td>
+            <td class="num" style="font-weight: 600;">1,840</td>
+            <td class="num"><span class="wl-split"><span class="win">1,050</span><span class="sep">/</span><span class="lose">520</span></span></td>
+            <td class="num" style="font-weight: 600;">$145,000</td>
+            <td><span class="risk-badge risk-med">Medium</span></td>
+            <td><span class="status-badge status-open">Open</span></td>
+          </tr>
+
+          <tr class="match-row" onclick="" data-sport="football" data-league="la-liga" data-phase="pre" data-risk="low" data-status="open" data-pic="lena" data-kickoff="2026-04-16T22:30:00+08:00">
+            <td>
+              <div style="font-weight: 600;">Atletico vs Sevilla</div>
+              <div style="font-size: 10px; color: #8b949e;">La Liga · MK-H42B68</div>
+            </td>
+            <td>
+              <div class="trader-assign" data-multi="1" data-assigned="lena">
+                <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
+                  <span class="trader-avatar-sm" style="background:#f7816633;color:#f78166">L</span>
+                  <span class="assign-name">Lena</span>
+                  <span class="chevron">▾</span>
+                </button>
+                <div class="dropdown-panel"></div>
+              </div>
+            </td>
+            <td>
+              <div class="tz-time-single">10:30</div>
+              <div class="tz-date-single">Apr 16</div>
+            </td>
+            <td>
+              <div class="tz-time-single">22:30</div>
+              <div class="tz-date-single">Apr 16</div>
+            </td>
+            <td>
+              <div class="countdown" data-start="2026-04-16T22:30:00+08:00">Starts in 4d 1h 45m</div>
+            </td>
+            <td class="num">3</td>
+            <td class="num" style="font-weight: 600;">680</td>
+            <td class="num"><span class="wl-split"><span class="win">385</span><span class="sep">/</span><span class="lose">190</span></span></td>
+            <td class="num" style="font-weight: 600;">$42,000</td>
+            <td><span class="risk-badge risk-low">Low</span></td>
+            <td><span class="status-badge status-open">Open</span></td>
+          </tr>
+
+          <tr class="match-row" onclick="" data-sport="football" data-league="ligue-1" data-phase="pre" data-risk="med" data-status="open" data-pic="zoey" data-kickoff="2026-04-20T23:00:00+08:00">
+            <td>
+              <div style="font-weight: 600;">PSG vs Marseille</div>
+              <div style="font-size: 10px; color: #8b949e;">Ligue 1 · MK-J53C71</div>
+            </td>
+            <td>
+              <div class="trader-assign" data-multi="1" data-assigned="zoey">
+                <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
+                  <span class="trader-avatar-sm zoey">Z</span>
+                  <span class="assign-name">Zoey</span>
+                  <span class="chevron">▾</span>
+                </button>
+                <div class="dropdown-panel"></div>
+              </div>
+            </td>
+            <td>
+              <div class="tz-time-single">11:00</div>
+              <div class="tz-date-single">Apr 20</div>
+            </td>
+            <td>
+              <div class="tz-time-single">23:00</div>
+              <div class="tz-date-single">Apr 20</div>
+            </td>
+            <td>
+              <div class="countdown" data-start="2026-04-20T23:00:00+08:00">Starts in 8d 2h 15m</div>
+            </td>
+            <td class="num">4</td>
+            <td class="num" style="font-weight: 600;">420</td>
+            <td class="num"><span class="wl-split"><span class="win">235</span><span class="sep">/</span><span class="lose">115</span></span></td>
+            <td class="num" style="font-weight: 600;">$28,000</td>
             <td><span class="risk-badge risk-med">Medium</span></td>
             <td><span class="status-badge status-open">Open</span></td>
           </tr>
@@ -506,11 +814,11 @@
 <script>
 // === Trader data ===
 const TRADERS = [
-  { id: 'hugo',  name: 'Hugo',  cls: 'hugo',  matches: 2 },
-  { id: 'zoey',  name: 'Zoey',  cls: 'zoey',  matches: 3 },
-  { id: 'rico',  name: 'Rico',  cls: 'rico',  matches: 1 },
-  { id: 'henry', name: 'Henry', cls: '',       color: '#d29922', matches: 1 },
-  { id: 'lena',  name: 'Lena',  cls: '',       color: '#f78166', matches: 0 },
+  { id: 'hugo',  name: 'Hugo',  cls: 'hugo',  matches: 2, role: 'super'  },
+  { id: 'zoey',  name: 'Zoey',  cls: 'zoey',  matches: 3, role: 'senior' },
+  { id: 'rico',  name: 'Rico',  cls: 'rico',  matches: 1, role: 'senior' },
+  { id: 'henry', name: 'Henry', cls: '',       color: '#d29922', matches: 1, role: 'trader' },
+  { id: 'lena',  name: 'Lena',  cls: '',       color: '#f78166', matches: 0, role: 'junior' },
 ];
 
 let activePanel = null; // currently open panel
@@ -589,8 +897,10 @@ function renderDropdown(panel, wrapper, query) {
     if (multi) {
       html += '  <span class="check-box">' + (isSelected ? '☑' : '☐') + '</span>';
     }
+    const role = t.role || 'trader';
     html += '  ' + avatarHtml(t);
     html += '  <span class="trader-name">' + displayName + '</span>';
+    html += '  <span class="role-badge role-' + role + '">' + role + '</span>';
     html += '  <span class="trader-load">' + loadText + '</span>';
     if (!multi && isSelected) html += '  <span class="check">✓</span>';
     html += '</div>';
@@ -624,7 +934,7 @@ function onSearchInput(input) {
   }
 }
 
-// === Update the trigger button to reflect current selection ===
+// === Update the trigger button + external name chips ===
 function updateButton(wrapper) {
   const btn = wrapper.querySelector('.trader-assign-btn');
   const ids = assignedList(wrapper);
@@ -632,32 +942,44 @@ function updateButton(wrapper) {
 
   btn.setAttribute('onclick', 'event.stopPropagation(); toggleDropdown(this);');
 
+  // --- Button: unassigned state keeps "+ Assign"; assigned state is compact (avatars + chevron only) ---
   if (traders.length === 0) {
     btn.className = 'trader-assign-btn unassigned';
     btn.innerHTML = '<span class="trader-avatar-sm empty">+</span>'
       + '<span class="assign-name">Assign</span>'
       + '<span class="chevron">▾</span>';
-    return;
-  }
-
-  btn.className = 'trader-assign-btn';
-
-  if (traders.length === 1) {
-    const t = traders[0];
-    btn.innerHTML = avatarHtml(t)
-      + '<span class="assign-name">' + escHtml(t.name) + '</span>'
+  } else {
+    btn.className = 'trader-assign-btn compact';
+    const avatars = traders.slice(0, 3).map(t => avatarHtml(t)).join('');
+    btn.innerHTML = (traders.length > 1
+        ? '<span class="stacked-avatars">' + avatars + '</span>'
+        : avatars)
       + '<span class="chevron">▾</span>';
+  }
+
+  // --- Names container (outside button, role-colored chips) ---
+  let namesEl = wrapper.querySelector('.assigned-names');
+  if (!namesEl) {
+    namesEl = document.createElement('div');
+    namesEl.className = 'assigned-names';
+    const panel = wrapper.querySelector('.dropdown-panel');
+    wrapper.insertBefore(namesEl, panel);
+  }
+
+  if (traders.length === 0) {
+    namesEl.innerHTML = '';
     return;
   }
 
-  // 2+ — stacked avatars + count
-  const avatars = traders.slice(0, 3).map(t => avatarHtml(t)).join('');
-  const label = traders.length === 2
-    ? escHtml(traders[0].name) + ', ' + escHtml(traders[1].name)
-    : traders.length + ' traders';
-  btn.innerHTML = '<span class="stacked-avatars">' + avatars + '</span>'
-    + '<span class="assign-name">' + label + '</span>'
-    + '<span class="chevron">▾</span>';
+  const visible = traders.slice(0, 3);
+  let chips = visible.map(function(t) {
+    const role = t.role || 'trader';
+    return '<span class="name-chip role-' + role + '">' + escHtml(t.name) + '</span>';
+  }).join('');
+  if (traders.length > 3) {
+    chips += '<span class="name-chip more">+' + (traders.length - 3) + '</span>';
+  }
+  namesEl.innerHTML = chips;
 }
 
 // === Select a trader (single mode) ===
@@ -718,6 +1040,308 @@ document.addEventListener('click', function(e) {
 // === Close on Escape ===
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeDropdown();
+});
+
+// === Init: render button + name chips for every row on load ===
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.trader-assign').forEach(function(w) {
+    updateButton(w);
+  });
+});
+
+// === Live countdown for .countdown[data-start] cells ===
+// Demo "now" is fixed at 2026-04-12 20:45:00 (UTC+8) — it ticks forward in real time from page load
+const DEMO_NOW_START = new Date('2026-04-12T20:45:00+08:00').getTime();
+const PAGE_LOAD_TS   = Date.now();
+
+function demoNow() {
+  return DEMO_NOW_START + (Date.now() - PAGE_LOAD_TS);
+}
+
+function startOfDayLocal(ts) {
+  const d = new Date(ts);
+  d.setHours(0, 0, 0, 0);
+  return d.getTime();
+}
+
+function formatCountdown(diffMs, targetTs, nowTs) {
+  if (diffMs <= 0) {
+    const elapsed = -diffMs;
+    const m = Math.floor(elapsed / 60000);
+    if (m < 1)  return 'Starting now';
+    if (m < 60) return 'Started ' + m + 'm ago';
+    const h = Math.floor(m / 60);
+    return 'Started ' + h + 'h ' + (m % 60) + 'm ago';
+  }
+  const sec  = Math.floor(diffMs / 1000);
+  const days = Math.floor(sec / 86400);
+  const h    = Math.floor((sec % 86400) / 3600);
+  const m    = Math.floor((sec % 3600) / 60);
+  const s    = sec % 60;
+  const pad  = function(n) { return (n < 10 ? '0' : '') + n; };
+
+  // Colored relative-day label
+  let label = '';
+  if (targetTs != null && nowTs != null) {
+    const dayDiff = Math.round((startOfDayLocal(targetTs) - startOfDayLocal(nowTs)) / 86400000);
+    if (dayDiff === 0) {
+      label = ' <span class="cd-label today">Today</span>';
+    } else if (dayDiff === 1) {
+      label = ' <span class="cd-label tomorrow">Tomorrow</span>';
+    } else if (dayDiff >= 2) {
+      const d = new Date(targetTs);
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const dateStr = months[d.getMonth()] + ' ' + d.getDate();
+      label = ' <span class="cd-label later">' + dateStr + '</span>';
+    }
+  }
+
+  let core;
+  if (days > 0)      core = 'Starts in ' + days + 'd ' + h + 'h ' + pad(m) + 'm';
+  else if (h > 0)    core = 'Starts in ' + h + 'h ' + pad(m) + 'm ' + pad(s) + 's';
+  else if (m > 0)    core = 'Starts in ' + m + 'm ' + pad(s) + 's';
+  else               core = 'Starts in ' + s + 's';
+
+  return core + label;
+}
+
+function tickCountdowns() {
+  const now = demoNow();
+  document.querySelectorAll('.countdown[data-start]').forEach(function(el) {
+    const target = new Date(el.dataset.start).getTime();
+    const diff = target - now;
+    el.innerHTML = formatCountdown(diff, target, now);
+
+    el.classList.remove('countdown-soon', 'countdown-imminent', 'countdown-live');
+    if (diff <= 0)                       el.classList.add('countdown-live');
+    else if (diff < 5 * 60 * 1000)       el.classList.add('countdown-imminent'); // < 5m
+    else if (diff < 60 * 60 * 1000)      el.classList.add('countdown-soon');     // < 1h
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  tickCountdowns();
+  setInterval(tickCountdowns, 1000);
+});
+
+// ===== Filter Bar =====
+const CURRENT_USER = 'hugo';
+
+const filters = {
+  phase: 'all',       // 'all' | 'live' | 'pre'
+  sport: 'all',       // 'all' | 'football' | 'basketball' | 'tennis'
+  assignment: null,   // null | 'mine' | 'unassigned'
+  risk: [],           // ['high','med','low']
+  status: [],         // ['open','suspended','closed']
+  time: null,         // null | '1h' | '6h' | 'today' | 'tomorrow'
+  pic: 'all',
+  league: 'all'
+};
+
+function countActiveFilters() {
+  let n = 0;
+  if (filters.phase !== 'all') n++;
+  if (filters.sport !== 'all') n++;
+  if (filters.assignment) n++;
+  n += filters.risk.length;
+  n += filters.status.length;
+  if (filters.time) n++;
+  if (filters.pic !== 'all') n++;
+  if (filters.league !== 'all') n++;
+  return n;
+}
+
+function startOfDay(ts) {
+  const d = new Date(ts);
+  d.setHours(0, 0, 0, 0);
+  return d.getTime();
+}
+
+function matchesTimeWindow(kickoffTs, now, win) {
+  if (!win) return true;
+  const diff = kickoffTs - now;
+  if (win === '1h')  return diff >= 0 && diff <= 60 * 60 * 1000;
+  if (win === '6h')  return diff >= 0 && diff <= 6 * 60 * 60 * 1000;
+  if (win === 'today')    return startOfDay(kickoffTs) === startOfDay(now);
+  if (win === 'tomorrow') return startOfDay(kickoffTs) === startOfDay(now) + 24 * 60 * 60 * 1000;
+  return true;
+}
+
+function applyFilters() {
+  const rows = document.querySelectorAll('.match-row');
+  const now = demoNow();
+  let visible = 0;
+
+  rows.forEach(function(row) {
+    const sport   = row.dataset.sport   || '';
+    const league  = row.dataset.league  || '';
+    const phase   = row.dataset.phase   || '';
+    const risk    = row.dataset.risk    || '';
+    const status  = row.dataset.status  || '';
+    const pic     = row.dataset.pic     || '';
+    const kickoff = row.dataset.kickoff ? new Date(row.dataset.kickoff).getTime() : 0;
+
+    let show = true;
+
+    if (filters.phase !== 'all' && phase !== filters.phase) show = false;
+    if (show && filters.sport !== 'all' && sport !== filters.sport) show = false;
+
+    if (show && filters.assignment === 'mine') {
+      const pics = pic ? pic.split(',').map(function(s){ return s.trim(); }) : [];
+      if (pics.indexOf(CURRENT_USER) === -1) show = false;
+    }
+    if (show && filters.assignment === 'unassigned') {
+      if (pic !== '') show = false;
+    }
+
+    if (show && filters.risk.length > 0 && filters.risk.indexOf(risk) === -1) show = false;
+    if (show && filters.status.length > 0 && filters.status.indexOf(status) === -1) show = false;
+    if (show && filters.time && !matchesTimeWindow(kickoff, now, filters.time)) show = false;
+
+    if (show && filters.pic !== 'all') {
+      const pics = pic ? pic.split(',').map(function(s){ return s.trim(); }) : [];
+      if (pics.indexOf(filters.pic) === -1) show = false;
+    }
+    if (show && filters.league !== 'all' && league !== filters.league) show = false;
+
+    row.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+
+  // update summary
+  const countEl = document.getElementById('filter-count');
+  if (countEl) countEl.textContent = visible + ' of ' + rows.length;
+
+  const clearBtn = document.getElementById('clear-all-btn');
+  if (clearBtn) clearBtn.style.display = countActiveFilters() > 0 ? '' : 'none';
+
+  const moreBtn = document.getElementById('more-filters-btn');
+  if (moreBtn) {
+    const advCount = filters.risk.length + filters.status.length +
+      (filters.time ? 1 : 0) + (filters.pic !== 'all' ? 1 : 0) + (filters.league !== 'all' ? 1 : 0);
+    moreBtn.textContent = advCount > 0 ? '+ More filters (' + advCount + ')' : '+ More filters';
+  }
+}
+
+function toggleMoreFilters() {
+  const panel = document.getElementById('filter-advanced');
+  const btn   = document.getElementById('more-filters-btn');
+  if (!panel) return;
+  panel.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+
+function clearAllFilters() {
+  filters.phase = 'all';
+  filters.sport = 'all';
+  filters.assignment = null;
+  filters.risk = [];
+  filters.status = [];
+  filters.time = null;
+  filters.pic = 'all';
+  filters.league = 'all';
+
+  document.querySelectorAll('#phase-tabs .pill-tab').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.phase === 'all');
+  });
+  document.querySelectorAll('#sport-chips .chip').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.sport === 'all');
+  });
+  document.querySelectorAll('#assign-chips .chip').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('#risk-chips .chip').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('#status-chips .chip').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('#time-chips .chip').forEach(function(b) { b.classList.remove('active'); });
+
+  const picSel = document.getElementById('pic-select');
+  if (picSel) picSel.value = 'all';
+  const leagueSel = document.getElementById('league-select');
+  if (leagueSel) leagueSel.value = 'all';
+
+  applyFilters();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Phase (single-select pill)
+  document.querySelectorAll('#phase-tabs .pill-tab').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('#phase-tabs .pill-tab').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      filters.phase = btn.dataset.phase;
+      applyFilters();
+    });
+  });
+
+  // Sport (single-select chip)
+  document.querySelectorAll('#sport-chips .chip').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('#sport-chips .chip').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      filters.sport = btn.dataset.sport;
+      applyFilters();
+    });
+  });
+
+  // Assignment (toggle, exclusive)
+  document.querySelectorAll('#assign-chips .chip').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const val = btn.dataset.assign;
+      if (filters.assignment === val) {
+        filters.assignment = null;
+        btn.classList.remove('active');
+      } else {
+        document.querySelectorAll('#assign-chips .chip').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        filters.assignment = val;
+      }
+      applyFilters();
+    });
+  });
+
+  // Risk (multi-select)
+  document.querySelectorAll('#risk-chips .chip').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const val = btn.dataset.risk;
+      const idx = filters.risk.indexOf(val);
+      if (idx >= 0) { filters.risk.splice(idx, 1); btn.classList.remove('active'); }
+      else          { filters.risk.push(val);     btn.classList.add('active'); }
+      applyFilters();
+    });
+  });
+
+  // Status (multi-select)
+  document.querySelectorAll('#status-chips .chip').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const val = btn.dataset.status;
+      const idx = filters.status.indexOf(val);
+      if (idx >= 0) { filters.status.splice(idx, 1); btn.classList.remove('active'); }
+      else          { filters.status.push(val);     btn.classList.add('active'); }
+      applyFilters();
+    });
+  });
+
+  // Time window (single-select, toggle-off)
+  document.querySelectorAll('#time-chips .chip').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const val = btn.dataset.time;
+      if (filters.time === val) {
+        filters.time = null;
+        btn.classList.remove('active');
+      } else {
+        document.querySelectorAll('#time-chips .chip').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        filters.time = val;
+      }
+      applyFilters();
+    });
+  });
+
+  // PIC & League selects
+  const picSel = document.getElementById('pic-select');
+  if (picSel) picSel.addEventListener('change', function() { filters.pic = picSel.value; applyFilters(); });
+  const leagueSel = document.getElementById('league-select');
+  if (leagueSel) leagueSel.addEventListener('change', function() { filters.league = leagueSel.value; applyFilters(); });
+
+  applyFilters();
 });
 </script>
 </body>
