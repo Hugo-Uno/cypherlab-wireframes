@@ -45,6 +45,12 @@
   .duty-off { background: #b6222233; color: #f85149; border: 1px solid #f8514966; }
   .shift-info { font-size: 12px; color: #8b949e; text-align: right; }
   .shift-info strong { color: #e6edf3; }
+  .view-as-seg { display: inline-flex; align-items: center; gap: 0; margin-top: 6px; border: 1px solid #30363d; border-radius: 6px; overflow: hidden; }
+  .view-as-seg button { background: transparent; border: none; color: #8b949e; font-size: 11px; padding: 3px 12px; cursor: pointer; font-weight: 600; transition: all 0.15s; }
+  .view-as-seg button.active { background: #8957e5; color: #fff; }
+  .view-as-seg button.active.trader-mode { background: #238636; }
+  .view-as-seg button:not(.active):hover { color: #e6edf3; background: #30363d; }
+  .trader-assign-btn.readonly { pointer-events: none; opacity: 0.5; border-style: solid; cursor: default; }
 
   /* Role toggle */
   .role-toggle { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; padding: 8px 12px; background: #161b22; border: 1px solid #30363d; border-radius: 8px; width: fit-content; }
@@ -320,6 +326,10 @@
         <div class="shift-info">
           Shift: <strong>20:00 – 04:00 (UTC+8)</strong><br>
           Role: <strong style="color: #d2a8ff;">Supervisor</strong>
+          <div class="view-as-seg" id="viewAsSeg">
+            <button class="active" onclick="switchViewAs('supervisor')">Supervisor</button>
+            <button onclick="switchViewAs('trader')">Trader</button>
+          </div>
         </div>
       </div>
 
@@ -358,14 +368,6 @@
           <div class="stat-label">Alerts</div>
           <div class="stat-value stat-red">3</div>
           <div class="stat-sub">2 high · 1 medium</div>
-        </div>
-      </div>
-
-      <!-- Match List -->
-      <div class="section-header">
-        <div>
-          <div class="section-title">Match List</div>
-          <div class="section-subtitle">Click a row to enter Match Markets</div>
         </div>
       </div>
 
@@ -812,6 +814,32 @@
   </div>
 </div>
 <script>
+// === View-as segmented control ===
+function switchViewAs(role) {
+  var seg = document.getElementById('viewAsSeg');
+  var btns = seg.querySelectorAll('button');
+  btns.forEach(function(b) {
+    b.classList.remove('active', 'trader-mode');
+  });
+  var isTrader = (role === 'trader');
+  btns[isTrader ? 1 : 0].classList.add('active');
+  if (isTrader) btns[1].classList.add('trader-mode');
+
+  // PIC columns: readonly when viewing as Trader
+  document.querySelectorAll('.trader-assign-btn').forEach(function(btn) {
+    if (isTrader) {
+      btn.classList.add('readonly');
+      btn.querySelector('.chevron').style.display = 'none';
+    } else {
+      btn.classList.remove('readonly');
+      btn.querySelector('.chevron').style.display = '';
+    }
+  });
+
+  // Close any open dropdown
+  closeDropdown();
+}
+
 // === Trader data ===
 const TRADERS = [
   { id: 'hugo',  name: 'Hugo',  cls: 'hugo',  matches: 2, role: 'super'  },
