@@ -155,16 +155,16 @@
   .match-table tr { cursor: pointer; }
   .match-table tr:hover td { background: #1c2129; }
 
-  /* Live row highlight */
-  .row-live td { background: #da363308; }
-  .row-live:hover td { background: #da363312; }
+  /* In-play row highlight */
+  .row-inplay td { background: #da363308; }
+  .row-inplay:hover td { background: #da363312; }
 
   /* Phase badge */
   .phase-badge { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px; }
-  .phase-live { background: #da363333; color: #f85149; border: 1px solid #f8514966; }
+  .phase-inplay { background: #da363333; color: #f85149; border: 1px solid #f8514966; }
   .phase-pre { background: #1f6feb22; color: #58a6ff; border: 1px solid #58a6ff66; }
 
-  /* Live timer */
+  /* In-play timer */
   .live-timer { font-family: 'SF Mono', monospace; font-size: 13px; font-weight: 700; color: #f85149; }
   .countdown { font-size: 11px; color: #8b949e; }
 
@@ -229,6 +229,8 @@
   .trader-avatar-sm.zoey { background: #8957e533; color: #d2a8ff; }
   .trader-avatar-sm.rico { background: #23863633; color: #3fb950; }
   .trader-avatar-sm.empty { background: transparent; border: 1px dashed #30363d; }
+  .trader-code { font-size: 10px; font-weight: 600; color: #58a6ff; font-family: monospace; }
+  .trader-code-sm { font-size: 10px; font-weight: 600; color: #8b949e; font-family: monospace; min-width: 36px; }
 
   /* Dropdown panel (shown for one row as example) */
   .dropdown-panel { position: absolute; top: 100%; left: 0; margin-top: 4px; background: #161b22; border: 1px solid #30363d; border-radius: 8px; width: 220px; z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,0.4); display: none; }
@@ -338,7 +340,7 @@
         <div class="stat-card">
           <div class="stat-label">My Matches</div>
           <div class="stat-value stat-white">5</div>
-          <div class="stat-sub"><span style="color: #f85149;">2 Live</span> · 3 Pre-Match</div>
+          <div class="stat-sub"><span style="color: #f85149;">2 In-play</span> · 3 Pre-Match</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">Open Markets</div>
@@ -387,7 +389,7 @@
           <span class="filter-group-label">Phase</span>
           <div class="pill-tabs" id="phase-tabs">
             <button class="pill-tab active" data-phase="all">All</button>
-            <button class="pill-tab" data-phase="live">● Live</button>
+            <button class="pill-tab" data-phase="inplay">● In-play</button>
             <button class="pill-tab" data-phase="pre">Pre-Match</button>
           </div>
 
@@ -477,7 +479,7 @@
         </thead>
         <tbody>
           <!-- LIVE matches first -->
-          <tr class="row-live match-row" onclick="" data-sport="football" data-league="premier-league" data-phase="live" data-risk="high" data-status="open" data-pic="hugo" data-kickoff="2026-04-12T20:00:00+08:00">
+          <tr class="row-inplay match-row" onclick="" data-sport="football" data-league="premier-league" data-phase="inplay" data-risk="high" data-status="open" data-pic="hugo" data-kickoff="2026-04-12T20:00:00+08:00">
             <td>
               <div style="font-weight: 600;">Arsenal vs Chelsea</div>
               <div style="font-size: 10px; color: #8b949e;">Premier League · MK-3A1F82</div>
@@ -485,7 +487,7 @@
             <td>
               <div class="trader-assign" data-multi="1" data-assigned="hugo">
                 <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
-                  <span class="trader-avatar-sm hugo">H</span>
+                  <span class="trader-code">T-001</span>
                   <span class="assign-name">Hugo</span>
                   <span class="chevron">▾</span>
                 </button>
@@ -512,7 +514,7 @@
             <td><span class="status-badge status-open">Open</span></td>
           </tr>
 
-          <tr class="row-live match-row" onclick="" data-sport="football" data-league="la-liga" data-phase="live" data-risk="high" data-status="open" data-pic="zoey" data-kickoff="2026-04-12T19:00:00+08:00">
+          <tr class="row-inplay match-row" onclick="" data-sport="football" data-league="la-liga" data-phase="inplay" data-risk="high" data-status="open" data-pic="zoey" data-kickoff="2026-04-12T19:00:00+08:00">
             <td>
               <div style="font-weight: 600;">R. Madrid vs Barcelona</div>
               <div style="font-size: 10px; color: #8b949e;">La Liga · MK-7B2E91</div>
@@ -520,7 +522,7 @@
             <td>
               <div class="trader-assign" data-multi="1" data-assigned="zoey">
                 <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
-                  <span class="trader-avatar-sm zoey">Z</span>
+                  <span class="trader-code" style="color:#d2a8ff;">T-002</span>
                   <span class="assign-name">Zoey</span>
                   <span class="chevron">▾</span>
                 </button>
@@ -547,7 +549,7 @@
             <td><span class="status-badge status-open">Open</span></td>
           </tr>
 
-          <tr class="row-live match-row" onclick="" data-sport="football" data-league="bundesliga" data-phase="live" data-risk="high" data-status="open" data-pic="zoey" data-kickoff="2026-04-12T19:30:00+08:00">
+          <tr class="row-inplay match-row" onclick="" data-sport="football" data-league="bundesliga" data-phase="inplay" data-risk="high" data-status="open" data-pic="zoey" data-kickoff="2026-04-12T19:30:00+08:00">
             <td>
               <div style="font-weight: 600;">Bayern vs Dortmund</div>
               <div style="font-size: 10px; color: #8b949e;">Bundesliga · MK-F28C04</div>
@@ -555,7 +557,7 @@
             <td>
               <div class="trader-assign" data-multi="1" data-assigned="zoey">
                 <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
-                  <span class="trader-avatar-sm zoey">Z</span>
+                  <span class="trader-code" style="color:#d2a8ff;">T-002</span>
                   <span class="assign-name">Zoey</span>
                   <span class="chevron">▾</span>
                 </button>
@@ -591,7 +593,7 @@
             <td>
               <div class="trader-assign" data-multi="1" data-assigned="rico">
                 <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
-                  <span class="trader-avatar-sm rico">R</span>
+                  <span class="trader-code" style="color:#3fb950;">T-003</span>
                   <span class="assign-name">Rico</span>
                   <span class="chevron">▾</span>
                 </button>
@@ -625,7 +627,7 @@
             <td>
               <div class="trader-assign" data-multi="1" data-assigned="hugo">
                 <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
-                  <span class="trader-avatar-sm hugo">H</span>
+                  <span class="trader-code">T-001</span>
                   <span class="assign-name">Hugo</span>
                   <span class="chevron">▾</span>
                 </button>
@@ -659,7 +661,6 @@
             <td>
               <div class="trader-assign" data-multi="1" data-assigned="">
                 <button class="trader-assign-btn unassigned" onclick="event.stopPropagation(); toggleDropdown(this);">
-                  <span class="trader-avatar-sm empty"></span>
                   <span class="assign-name">+ Assign</span>
                   <span class="chevron">▾</span>
                 </button>
@@ -693,7 +694,7 @@
             <td>
               <div class="trader-assign" data-multi="1" data-assigned="henry">
                 <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
-                  <span class="trader-avatar-sm" style="background:#d2992233;color:#d29922">H</span>
+                  <span class="trader-code" style="color:#d29922;">T-004</span>
                   <span class="assign-name">Henry</span>
                   <span class="chevron">▾</span>
                 </button>
@@ -727,7 +728,7 @@
             <td>
               <div class="trader-assign" data-multi="1" data-assigned="lena">
                 <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
-                  <span class="trader-avatar-sm" style="background:#f7816633;color:#f78166">L</span>
+                  <span class="trader-code" style="color:#f78166;">T-005</span>
                   <span class="assign-name">Lena</span>
                   <span class="chevron">▾</span>
                 </button>
@@ -761,7 +762,7 @@
             <td>
               <div class="trader-assign" data-multi="1" data-assigned="zoey">
                 <button class="trader-assign-btn" onclick="event.stopPropagation(); toggleDropdown(this);">
-                  <span class="trader-avatar-sm zoey">Z</span>
+                  <span class="trader-code" style="color:#d2a8ff;">T-002</span>
                   <span class="assign-name">Zoey</span>
                   <span class="chevron">▾</span>
                 </button>
@@ -852,11 +853,11 @@ function switchViewAs(role) {
 
 // === Trader data ===
 const TRADERS = [
-  { id: 'hugo',  name: 'Hugo',  cls: 'hugo',  matches: 2, role: 'super'  },
-  { id: 'zoey',  name: 'Zoey',  cls: 'zoey',  matches: 3, role: 'senior' },
-  { id: 'rico',  name: 'Rico',  cls: 'rico',  matches: 1, role: 'senior' },
-  { id: 'henry', name: 'Henry', cls: '',       color: '#d29922', matches: 1, role: 'trader' },
-  { id: 'lena',  name: 'Lena',  cls: '',       color: '#f78166', matches: 0, role: 'junior' },
+  { id: 'hugo',  name: 'Hugo',  code: 'T-001', cls: 'hugo',  matches: 2, role: 'super'  },
+  { id: 'zoey',  name: 'Zoey',  code: 'T-002', cls: 'zoey',  matches: 3, role: 'senior' },
+  { id: 'rico',  name: 'Rico',  code: 'T-003', cls: 'rico',  matches: 1, role: 'senior' },
+  { id: 'henry', name: 'Henry', code: 'T-004', cls: '',       color: '#d29922', matches: 1, role: 'trader' },
+  { id: 'lena',  name: 'Lena',  code: 'T-005', cls: '',       color: '#f78166', matches: 0, role: 'junior' },
 ];
 
 let activePanel = null; // currently open panel
@@ -903,20 +904,19 @@ function assignedList(wrapper) {
 function setAssigned(wrapper, ids) {
   wrapper.dataset.assigned = ids.join(',');
 }
-function avatarHtml(t, extraCls) {
-  const style = t.cls ? '' : ' style="background: ' + t.color + '33; color: ' + t.color + ';"';
-  const cls = 'trader-avatar-sm' + (t.cls ? ' ' + t.cls : '') + (extraCls ? ' ' + extraCls : '');
-  return '<span class="' + cls + '"' + style + '>' + t.name.charAt(0) + '</span>';
+function codeHtml(t) {
+  const style = t.cls ? '' : ' style="color: ' + t.color + ';"';
+  return '<span class="trader-code"' + style + '>' + (t.code || t.id) + '</span>';
 }
 
 // === Render dropdown contents ===
 function renderDropdown(panel, wrapper, query) {
   const q = query.toLowerCase();
-  const filtered = TRADERS.filter(t => !q || t.name.toLowerCase().includes(q));
+  const filtered = TRADERS.filter(t => !q || t.code.toLowerCase().includes(q) || t.name.toLowerCase().includes(q));
   const multi = isMulti(wrapper);
   const selected = assignedList(wrapper);
 
-  let html = '<input class="dropdown-search" placeholder="Search trader..." value="' + escHtml(query) + '" oninput="onSearchInput(this)" onclick="event.stopPropagation();" />';
+  let html = '<input class="dropdown-search" placeholder="Search by code..." value="' + escHtml(query) + '" oninput="onSearchInput(this)" onclick="event.stopPropagation();" />';
   html += '<div class="dropdown-list">';
 
   if (filtered.length === 0) {
@@ -926,6 +926,7 @@ function renderDropdown(panel, wrapper, query) {
   filtered.forEach(t => {
     const isSelected = selected.indexOf(t.id) !== -1;
     const displayName = q ? highlightMatch(t.name, q) : escHtml(t.name);
+    const displayCode = q ? highlightMatch(t.code, q) : escHtml(t.code);
     const loadText = t.matches === 1 ? '1 match' : t.matches + ' matches';
     const handler = multi
       ? "event.stopPropagation(); toggleTrader(this, '" + t.id + "');"
@@ -936,7 +937,7 @@ function renderDropdown(panel, wrapper, query) {
       html += '  <span class="check-box">' + (isSelected ? '☑' : '☐') + '</span>';
     }
     const role = t.role || 'trader';
-    html += '  ' + avatarHtml(t);
+    html += '  <span class="trader-code-sm">' + displayCode + '</span>';
     html += '  <span class="trader-name">' + displayName + '</span>';
     html += '  <span class="role-badge role-' + role + '">' + role + '</span>';
     html += '  <span class="trader-load">' + loadText + '</span>';
@@ -983,15 +984,13 @@ function updateButton(wrapper) {
   // --- Button: unassigned state keeps "+ Assign"; assigned state is compact (avatars + chevron only) ---
   if (traders.length === 0) {
     btn.className = 'trader-assign-btn unassigned';
-    btn.innerHTML = '<span class="trader-avatar-sm empty">+</span>'
-      + '<span class="assign-name">Assign</span>'
+    btn.innerHTML = '<span class="assign-name">+ Assign</span>'
       + '<span class="chevron">▾</span>';
   } else {
     btn.className = 'trader-assign-btn compact';
-    const avatars = traders.slice(0, 3).map(t => avatarHtml(t)).join('');
-    btn.innerHTML = (traders.length > 1
-        ? '<span class="stacked-avatars">' + avatars + '</span>'
-        : avatars)
+    const codes = traders.slice(0, 3).map(t => codeHtml(t)).join(' ');
+    btn.innerHTML = codes
+      + '<span class="assign-name" style="margin-left:4px;">' + traders.map(t => t.name).join(', ') + '</span>'
       + '<span class="chevron">▾</span>';
   }
 
@@ -1087,7 +1086,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-// === Live countdown for .countdown[data-start] cells ===
+// === In-play countdown for .countdown[data-start] cells ===
 // Demo "now" is fixed at 2026-04-12 20:45:00 (UTC+8) — it ticks forward in real time from page load
 const DEMO_NOW_START = new Date('2026-04-12T20:45:00+08:00').getTime();
 const PAGE_LOAD_TS   = Date.now();
@@ -1163,7 +1162,7 @@ document.addEventListener('DOMContentLoaded', function() {
 const CURRENT_USER = 'hugo';
 
 const filters = {
-  phase: 'all',       // 'all' | 'live' | 'pre'
+  phase: 'all',       // 'all' | 'inplay' | 'pre'
   sport: 'all',       // 'all' | 'football' | 'basketball' | 'tennis'
   assignment: null,   // null | 'mine' | 'unassigned'
   risk: [],           // ['high','med','low']

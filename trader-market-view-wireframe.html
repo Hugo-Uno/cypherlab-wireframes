@@ -41,16 +41,17 @@
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 
   /* Match Header (NEW — single match) */
-  .match-header { display: flex; align-items: center; gap: 16px; padding: 14px 20px; border-bottom: 1px solid #30363d; background: #0d1117; }
-  .back-link { color: #8b949e; font-size: 12px; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 4px; }
-  .back-link:hover { color: #e6edf3; }
+  .match-header { display: flex; align-items: center; gap: 16px; padding: 14px 20px; border-bottom: 1px solid #30363d; background: #0d1117; position: relative; }
+  .back-icon { width: 28px; height: 28px; border-radius: 6px; border: 1px solid #30363d; background: #161b22; color: #8b949e; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .back-icon:hover { border-color: #58a6ff; color: #58a6ff; background: #1f6feb22; }
   .match-title-block { }
   .match-title { font-size: 18px; font-weight: 700; }
   .match-subtitle { font-size: 11px; color: #8b949e; margin-top: 2px; }
-  .live-status { display: flex; align-items: center; gap: 8px; margin-left: 16px; }
+  .live-score-center { display: flex; align-items: center; gap: 12px; position: absolute; left: 50%; transform: translateX(-50%); }
+  .live-status { display: flex; align-items: center; gap: 8px; }
   .live-badge-header { background: #da3633; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; animation: livePulse 1.5s infinite; }
   .live-text { font-size: 12px; color: #e6edf3; font-weight: 600; }
-  .score-display { font-size: 20px; font-weight: 800; color: #e6edf3; margin-left: 12px; letter-spacing: 2px; }
+  .score-display { font-size: 20px; font-weight: 800; color: #e6edf3; letter-spacing: 2px; }
   .match-actions { display: flex; gap: 8px; margin-left: auto; }
   .btn-action { padding: 6px 14px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 600; border: 1px solid; display: flex; align-items: center; gap: 6px; }
   .btn-safe { background: #1f6feb22; border-color: #58a6ff; color: #58a6ff; }
@@ -323,27 +324,27 @@
 </div>
 <!-- Match Header (single match) -->
 <div class="match-header">
-<a class="back-link" href="#">← Back to Match List</a>
+<a class="back-icon" href="#" title="Back to Dashboard">←</a>
 <div class="match-title-block">
-<div class="match-title">Arsenal vs Chelsea</div>
-<div class="match-subtitle">English Premier League · Kick-off: 2026-04-10 20:00 (UTC+8)</div>
-<div class="match-subtitle">Match ID: MK-20260410-001 · Trader: Hugo <span class="trader-badge">Assigned</span></div>
+<div class="match-title">Arsenal vs Chelsea · <span style="font-weight:400; font-size:14px; color:#8b949e;">English Premier League · 2026-04-10 20:00 (UTC+8)</span></div>
+<div class="match-subtitle">MK-20260410-001</div>
 </div>
+<div class="live-score-center">
 <div class="live-status">
-<span class="live-badge-header">LIVE</span>
+<span class="live-badge-header">IN-PLAY</span>
 <span class="live-text">58'</span>
 </div>
 <div class="score-display">1 — 0</div>
+</div>
 <div class="match-actions">
-<!-- Manual Takeover slot (swaps button/chip based on state) -->
-
-<button class="btn-action btn-activity">📈 Activity</button>
-<button class="btn-action btn-safe">🔒 Safe Mode</button>
-<button class="btn-action btn-suspend-lg">⚠ Suspend All</button>
-<button class="btn-action btn-close-lg">✖ Close All Markets</button>
-<button class="btn-action btn-override">✎ Setting</button>
+<button class="btn-action btn-suspend-lg" id="suspend-all-btn">⚠ Suspend All</button>
 </div>
 <div class="updated-text">Last update<br/>12:40:01.234</div>
+<div style="display:flex; align-items:center; gap:6px; border-left:1px solid #30363d; padding-left:12px;">
+<span style="font-size:11px; color:#8b949e;">Trader:</span>
+<span style="font-size:12px; font-weight:600; color:#e6edf3;">Hugo</span>
+<span class="trader-badge">Assigned</span>
+</div>
 </div>
 <!-- Alert Banner (P0) -->
 <div class="alert-banner">
@@ -377,7 +378,7 @@
 <select class="filter-select">
 <option selected="">All Periods</option>
 <option>Pre-match</option>
-<option>Live</option>
+<option>In-play</option>
 </select>
 </div>
 <div class="filter-group">
@@ -437,11 +438,11 @@
 </thead>
 <tbody>
 <!-- ====== LIVE MARKETS (pinned top) ====== -->
-<tr class="section-row live"><td colspan="20">🔴 LIVE — In-Play Markets (58')</td></tr>
-<!-- 1X2 -->
+<tr class="section-row live"><td colspan="20">🔴 IN-PLAY — In-Play Markets (58')</td></tr>
+<!-- 1X2 FT -->
 <tr class="live-section">
 <td class="left type-cell">1X2</td>
-<td class="left item-cell">—</td>
+<td class="left item-cell">FT</td>
 <td class="value-cell">—</td>
 <td class="center"><span class="status-badge status-open">Open</span></td>
 <td class="bet-count"><span class="bet-count-num">342</span></td>
@@ -630,10 +631,10 @@
 </tr>
 <!-- ====== PRE-MATCH MARKETS (same match, below live) ====== -->
 <tr class="section-row"><td colspan="20">⏳ PRE-MATCH — Markets opened before kick-off</td></tr>
-<!-- PM 1X2 -->
+<!-- PM 1X2 FT -->
 <tr>
 <td class="left type-cell">1X2</td>
-<td class="left item-cell">—</td>
+<td class="left item-cell">FT</td>
 <td class="value-cell">—</td>
 <td class="center"><span class="status-badge status-closed">Closed</span></td>
 <td class="bet-count"><span class="bet-count-num">1,203</span></td>
