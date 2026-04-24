@@ -371,6 +371,8 @@
 <option>Asian Handicap</option>
 <option>Over/Under</option>
 <option>Correct Score</option>
+<option>Odd/Even</option>
+<option>Next Goal</option>
 </select>
 </div>
 <div class="filter-group">
@@ -567,6 +569,63 @@
 </div>
 </td>
 </tr>
+<!-- Odd/Even FT -->
+<tr class="live-section">
+<td class="left type-cell">OE</td>
+<td class="left item-cell">FT</td>
+<td class="value-cell">—</td>
+<td class="center"><span class="status-badge status-open">Open</span></td>
+<td class="bet-count"><span class="bet-count-num">156</span></td>
+<!-- HOME (Odd) -->
+<td class="right"><span class="odds odds-home">1.85</span></td>
+<td class="right turnover">89,012,345</td>
+<td class="right expo">89,012</td>
+<td class="alert-cell"></td>
+<!-- AWAY (Even) -->
+<td class="right"><span class="odds odds-away">1.95</span></td>
+<td class="right turnover">76,543,210</td>
+<td class="right expo">76,543</td>
+<td class="alert-cell"></td>
+<!-- DRAW (N/A) -->
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
+<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">H</span> 1.4%</td>
+<td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">165,555,555</td>
+<td class="action-cell">
+<div class="action-group"><span class="row-takeover-slot" data-row="3" id="rts-3"><button class="btn-sm btn-request-row" onclick="requestRowTakeover(3)">🔓 Request</button></span><button class="btn-sm btn-suspend" title="Suspend this market">Suspend</button>
+<button class="btn-sm btn-bets">Wagers</button>
+</div>
+</td>
+</tr>
+<!-- Next Goal -->
+<tr class="live-section">
+<td class="left type-cell">NG</td>
+<td class="left item-cell">Live</td>
+<td class="value-cell">—</td>
+<td class="center"><span class="status-badge status-open">Open</span></td>
+<td class="bet-count"><span class="bet-count-num">73</span></td>
+<!-- HOME (Home scores next) -->
+<td class="right"><span class="odds odds-home">2.10</span></td>
+<td class="right turnover">45,678,901</td>
+<td class="right expo">45,678</td>
+<td class="alert-cell"></td>
+<!-- AWAY (Away scores next) -->
+<td class="right"><span class="odds odds-away">3.50</span></td>
+<td class="right turnover">23,456,789</td>
+<td class="right expo">23,456</td>
+<td class="alert-cell"></td>
+<!-- DRAW (No Goal) -->
+<td class="right"><span class="odds odds-draw">4.20</span></td>
+<td class="right turnover">12,345,678</td>
+<td class="right expo">12,345</td>
+<td class="alert-cell"></td>
+<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">H</span> 1.2%</td>
+<td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">81,481,368</td>
+<td class="action-cell">
+<div class="action-group"><span class="row-takeover-slot" data-row="4" id="rts-4"><button class="btn-sm btn-request-row" onclick="requestRowTakeover(4)">🔓 Request</button></span><button class="btn-sm btn-suspend" title="Suspend this market">Suspend</button>
+<button class="btn-sm btn-bets">Wagers</button>
+</div>
+</td>
+</tr>
 <!-- Correct Score 1:0 -->
 <tr class="live-section">
 <td class="left type-cell">PM-OR</td>
@@ -734,6 +793,33 @@
 </div>
 </td>
 </tr>
+<!-- PM Odd/Even FT -->
+<tr>
+<td class="left type-cell">PM-OE</td>
+<td class="left item-cell">FT</td>
+<td class="value-cell">—</td>
+<td class="center"><span class="status-badge status-closed">Closed</span></td>
+<td class="bet-count"><span class="bet-count-num">234</span></td>
+<!-- HOME (Odd) -->
+<td class="right"><span class="odds odds-home">1.82</span></td>
+<td class="right turnover">112,345,678</td>
+<td class="right expo">112,345</td>
+<td class="alert-cell"></td>
+<!-- AWAY (Even) -->
+<td class="right"><span class="odds odds-away">1.98</span></td>
+<td class="right turnover">98,765,432</td>
+<td class="right expo">98,765</td>
+<td class="alert-cell"></td>
+<!-- DRAW (N/A) -->
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
+<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">H</span> 1.5%</td>
+<td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">211,111,110</td>
+<td class="action-cell">
+<div class="action-group">
+<button class="btn-sm btn-bets">Wagers</button>
+</div>
+</td>
+</tr>
 <!-- PM Correct Score 1:0 -->
 <tr>
 <td class="left type-cell">PM-OR</td>
@@ -760,7 +846,7 @@
 </div>
 <!-- Footer -->
 <div class="footer">
-<span>Arsenal vs Chelsea · 13 markets (8 live, 5 pre-match) · Total Turnover = HOME+AWAY+DRAW · Turnover: integers · Odds/LE%: 2 decimals</span>
+<span>Arsenal vs Chelsea · 16 markets (10 live, 6 pre-match) · Total Turnover = HOME+AWAY+DRAW · Turnover: integers · Odds/LE%: 2 decimals</span>
 <span>⚙ Column order configurable by Admin · Delay settings per market/player available</span>
 </div>
 </div>
