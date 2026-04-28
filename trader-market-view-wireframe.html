@@ -122,6 +122,11 @@
   /* Exposure */
   .expo { color: #ffa657; font-variant-numeric: tabular-nums; }
 
+  /* Wagers/Players per selection */
+  .wagers-players { color: #8b949e; font-variant-numeric: tabular-nums; font-size: 11px; }
+  /* Total Wagers/Players (right-side summary) */
+  .total-wp { color: #ffa657; font-weight: 700; font-variant-numeric: tabular-nums; }
+
   /* LE% */
   .le-pct { font-variant-numeric: tabular-nums; }
   .le-low { color: #3fb950; }
@@ -400,10 +405,12 @@
 <thead>
 <!-- Column Group Headers -->
 <tr class="col-group-header">
-<th colspan="5" style="text-align:left; color:#8b949e; border-bottom:2px solid #30363d;">Market Info</th>
-<th class="col-group-home" colspan="4">HOME</th>
-<th class="col-group-away" colspan="4">AWAY</th>
-<th class="col-group-draw" colspan="4">DRAW</th>
+<th colspan="4" style="text-align:left; color:#8b949e; border-bottom:2px solid #30363d;">Market Info</th>
+<th class="col-group-home" colspan="5">HOME</th>
+<th class="col-group-away" colspan="5">AWAY</th>
+<th class="col-group-draw" colspan="5">DRAW</th>
+<th style="border-bottom:2px solid #30363d;"></th>
+<th style="border-bottom:2px solid #30363d;"></th>
 <th style="border-bottom:2px solid #30363d;"></th>
 <th style="border-bottom:2px solid #30363d;"></th>
 <th style="border-bottom:2px solid #30363d;"></th>
@@ -414,57 +421,67 @@
 <th class="left">Item</th>
 <th style="text-align:center;">Value</th>
 <th class="info-hint" data-hint="Market status: Open / Suspended / Closed" style="text-align:center;">Status</th>
-<th class="info-hint" data-hint="Total wagers on this line" style="text-align:center;">Wagers</th>
 <!-- HOME -->
 <th class="info-hint" data-hint="Weighted Average Odds">WAO</th>
 <th class="info-hint" data-hint="Turnover (integer)">Turnover</th>
-<th class="info-hint" data-hint="Lose Exposure">Lose Expo.</th>
+<th class="info-hint" data-hint="Wager count">Wagers</th>
+<th class="info-hint" data-hint="Unique player count">Players</th>
 <th>Alert</th>
 <!-- AWAY -->
 <th class="info-hint" data-hint="Weighted Average Odds">WAO</th>
 <th class="info-hint" data-hint="Turnover (integer)">Turnover</th>
-<th class="info-hint" data-hint="Lose Exposure">Lose Expo.</th>
+<th class="info-hint" data-hint="Wager count">Wagers</th>
+<th class="info-hint" data-hint="Unique player count">Players</th>
 <th>Alert</th>
 <!-- DRAW -->
 <th class="info-hint" data-hint="Weighted Average Odds">WAO</th>
 <th class="info-hint" data-hint="Turnover (integer)">Turnover</th>
-<th class="info-hint" data-hint="Lose Exposure">Lose Expo.</th>
+<th class="info-hint" data-hint="Wager count">Wagers</th>
+<th class="info-hint" data-hint="Unique player count">Players</th>
 <th>Alert</th>
-<!-- LE% (combined) -->
+<!-- LE% -->
 <th class="info-hint" data-hint="Highest Lose Exposure % (H=Home A=Away D=Draw)" style="color:#ffa657;">LE%</th>
-<!-- Total Turnover -->
-<th class="info-hint" data-hint="HOME + AWAY + DRAW Turnover" style="color:#3fb950;">Total Turnover</th>
+<!-- Wagers -->
+<th class="info-hint" data-hint="Total wagers across all selections" style="color:#ffa657;">Wagers</th>
+<!-- Players -->
+<th class="info-hint" data-hint="Total unique players" style="color:#ffa657;">Players</th>
+<!-- Turnover -->
+<th class="info-hint" data-hint="HOME + AWAY + DRAW Turnover" style="color:#3fb950;">Turnover</th>
 <!-- Actions -->
 <th>Actions</th>
 </tr>
 </thead>
 <tbody>
 <!-- ====== LIVE MARKETS (pinned top) ====== -->
-<tr class="section-row live"><td colspan="20">🔴 IN-PLAY — In-Play Markets (58')</td></tr>
+<tr class="section-row live"><td colspan="24">🔴 IN-PLAY — In-Play Markets (58')</td></tr>
 <!-- 1X2 FT -->
 <tr class="live-section">
 <td class="left type-cell">1X2</td>
 <td class="left item-cell">FT</td>
 <td class="value-cell">—</td>
 <td class="center"><span class="status-badge status-open">Open</span></td>
-<td class="bet-count"><span class="bet-count-num">342</span></td>
 <!-- HOME -->
 <td class="right"><span class="odds odds-home">1.28</span></td>
 <td class="right turnover">123,456,789</td>
-<td class="right expo">123,456</td>
+<td class="right wagers-players">128</td>
+<td class="right wagers-players">89</td>
 <td class="alert-cell"><span class="alert-dot alert-warning" title="LE% approaching threshold"></span></td>
 <!-- AWAY -->
 <td class="right"><span class="odds odds-away">2.38</span></td>
 <td class="right turnover">123,456,789</td>
-<td class="right expo">123,456</td>
+<td class="right wagers-players">95</td>
+<td class="right wagers-players">72</td>
 <td class="alert-cell"></td>
 <!-- DRAW -->
 <td class="right"><span class="odds odds-draw">3.82</span></td>
 <td class="right turnover">123,456,789</td>
-<td class="right expo">123,456</td>
+<td class="right wagers-players">119</td>
+<td class="right wagers-players">84</td>
 <td class="alert-cell"></td>
 <!-- Actions -->
 <td class="right le-pct le-mid" style="font-weight:700;"><span style="color:#8b949e;">H</span> 2.8%</td>
+<td class="right total-wp">342</td>
+<td class="right total-wp">198</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">370,370,367</td>
 <td class="action-cell">
 <div class="action-group"><span class="row-takeover-slot" data-row="0" id="rts-0"><button class="btn-sm btn-request-row" onclick="requestRowTakeover(0)">🔓 Request</button></span>
@@ -479,17 +496,20 @@
 <td class="left item-cell">FT-Goal</td>
 <td class="value-cell" style="color:#d2a8ff;">-0.5</td>
 <td class="center"><span class="status-badge status-open">Open</span></td>
-<td class="bet-count"><span class="bet-count-num">87</span></td>
 <td class="right"><span class="odds odds-home">1.28</span></td>
 <td class="right turnover">123,456,789</td>
-<td class="right expo">123,456</td>
+<td class="right wagers-players">45</td>
+<td class="right wagers-players">32</td>
 <td class="alert-cell"></td>
 <td class="right"><span class="odds odds-away">2.38</span></td>
 <td class="right turnover">123,456,789</td>
-<td class="right expo">123,456</td>
+<td class="right wagers-players">42</td>
+<td class="right wagers-players">31</td>
 <td class="alert-cell"></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
 <td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">A</span> 1.6%</td>
+<td class="right total-wp">87</td>
+<td class="right total-wp">56</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">246,913,578</td>
 <td class="action-cell">
 <div class="action-group"><span class="row-takeover-slot" data-row="1" id="rts-1"><button class="btn-sm btn-request-row" onclick="requestRowTakeover(1)">🔓 Request</button></span><button class="btn-sm btn-suspend" title="Suspend this market">Suspend</button>
@@ -503,17 +523,20 @@
 <td class="left item-cell"></td>
 <td class="value-cell" style="color:#d2a8ff;">-0.75</td>
 <td class="center"><span class="status-badge status-open">Open</span></td>
-<td class="bet-count"><span class="bet-count-num">65</span></td>
 <td class="right"><span class="odds odds-home">1.68</span></td>
 <td class="right turnover">123,456,789</td>
-<td class="right expo">123,456</td>
+<td class="right wagers-players">34</td>
+<td class="right wagers-players">25</td>
 <td class="alert-cell"></td>
 <td class="right"><span class="odds odds-away">2.08</span></td>
 <td class="right turnover">123,456,789</td>
-<td class="right expo">123,456</td>
+<td class="right wagers-players">31</td>
+<td class="right wagers-players">22</td>
 <td class="alert-cell"></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
 <td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">A</span> 1.3%</td>
+<td class="right total-wp">65</td>
+<td class="right total-wp">41</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">246,913,578</td>
 <td class="action-cell">
 <div class="action-group"><span class="row-takeover-slot" data-row="2" id="rts-2"><button class="btn-sm btn-request-row" onclick="requestRowTakeover(2)">🔓 Request</button></span><button class="btn-sm btn-suspend" title="Suspend this market">Suspend</button>
@@ -527,17 +550,20 @@
 <td class="left item-cell"></td>
 <td class="value-cell" style="color:#d2a8ff;">-1</td>
 <td class="center"><span class="status-badge status-suspended">Suspended</span></td>
-<td class="bet-count"><span class="bet-count-num">41</span></td>
 <td class="right"><span class="odds odds-home">1.98</span></td>
 <td class="right turnover">123,456,789</td>
-<td class="right expo">123,456</td>
+<td class="right wagers-players">22</td>
+<td class="right wagers-players">18</td>
 <td class="alert-cell"></td>
 <td class="right"><span class="odds odds-away">1.88</span></td>
 <td class="right turnover">123,456,789</td>
-<td class="right expo">123,456</td>
+<td class="right wagers-players">19</td>
+<td class="right wagers-players">15</td>
 <td class="alert-cell"></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
 <td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">A</span> 1.0%</td>
+<td class="right total-wp">41</td>
+<td class="right total-wp">29</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">246,913,578</td>
 <td class="action-cell">
 <div class="action-group">
@@ -551,17 +577,20 @@
 <td class="left item-cell">HT-Corner</td>
 <td class="value-cell" style="color:#d2a8ff;">4.5</td>
 <td class="center"><span class="status-badge status-closed">Closed</span></td>
-<td class="bet-count"><span class="bet-count-num">28</span></td>
 <td class="right"><span class="odds odds-home">1.98</span></td>
 <td class="right turnover">123,456,789</td>
-<td class="right expo">123,456</td>
+<td class="right wagers-players">16</td>
+<td class="right wagers-players">14</td>
 <td class="alert-cell"></td>
 <td class="right"><span class="odds odds-away">1.88</span></td>
 <td class="right turnover">123,456,789</td>
-<td class="right expo">123,456</td>
+<td class="right wagers-players">12</td>
+<td class="right wagers-players">10</td>
 <td class="alert-cell"></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
 <td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">A</span> 0.8%</td>
+<td class="right total-wp">28</td>
+<td class="right total-wp">21</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">246,913,578</td>
 <td class="action-cell">
 <div class="action-group">
@@ -575,20 +604,23 @@
 <td class="left item-cell">FT</td>
 <td class="value-cell">—</td>
 <td class="center"><span class="status-badge status-open">Open</span></td>
-<td class="bet-count"><span class="bet-count-num">156</span></td>
 <!-- HOME (Odd) -->
 <td class="right"><span class="odds odds-home">1.85</span></td>
 <td class="right turnover">89,012,345</td>
-<td class="right expo">89,012</td>
+<td class="right wagers-players">82</td>
+<td class="right wagers-players">61</td>
 <td class="alert-cell"></td>
 <!-- AWAY (Even) -->
 <td class="right"><span class="odds odds-away">1.95</span></td>
 <td class="right turnover">76,543,210</td>
-<td class="right expo">76,543</td>
+<td class="right wagers-players">74</td>
+<td class="right wagers-players">55</td>
 <td class="alert-cell"></td>
 <!-- DRAW (N/A) -->
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
 <td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">H</span> 1.4%</td>
+<td class="right total-wp">156</td>
+<td class="right total-wp">98</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">165,555,555</td>
 <td class="action-cell">
 <div class="action-group"><span class="row-takeover-slot" data-row="3" id="rts-3"><button class="btn-sm btn-request-row" onclick="requestRowTakeover(3)">🔓 Request</button></span><button class="btn-sm btn-suspend" title="Suspend this market">Suspend</button>
@@ -602,23 +634,27 @@
 <td class="left item-cell">Live</td>
 <td class="value-cell">—</td>
 <td class="center"><span class="status-badge status-open">Open</span></td>
-<td class="bet-count"><span class="bet-count-num">73</span></td>
 <!-- HOME (Home scores next) -->
 <td class="right"><span class="odds odds-home">2.10</span></td>
 <td class="right turnover">45,678,901</td>
-<td class="right expo">45,678</td>
+<td class="right wagers-players">31</td>
+<td class="right wagers-players">24</td>
 <td class="alert-cell"></td>
 <!-- AWAY (Away scores next) -->
 <td class="right"><span class="odds odds-away">3.50</span></td>
 <td class="right turnover">23,456,789</td>
-<td class="right expo">23,456</td>
+<td class="right wagers-players">22</td>
+<td class="right wagers-players">18</td>
 <td class="alert-cell"></td>
 <!-- DRAW (No Goal) -->
 <td class="right"><span class="odds odds-draw">4.20</span></td>
 <td class="right turnover">12,345,678</td>
-<td class="right expo">12,345</td>
+<td class="right wagers-players">20</td>
+<td class="right wagers-players">16</td>
 <td class="alert-cell"></td>
 <td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">H</span> 1.2%</td>
+<td class="right total-wp">73</td>
+<td class="right total-wp">47</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">81,481,368</td>
 <td class="action-cell">
 <div class="action-group"><span class="row-takeover-slot" data-row="4" id="rts-4"><button class="btn-sm btn-request-row" onclick="requestRowTakeover(4)">🔓 Request</button></span><button class="btn-sm btn-suspend" title="Suspend this market">Suspend</button>
@@ -632,14 +668,16 @@
 <td class="left item-cell">FT-CS</td>
 <td class="value-cell" style="color:#d2a8ff;">1:0</td>
 <td class="center"><span class="status-badge status-suspended">Suspended</span></td>
-<td class="bet-count"><span class="bet-count-num">12</span></td>
 <td class="right"><span class="odds odds-home">7.00</span></td>
 <td class="right turnover">123,456,789</td>
-<td class="right expo">123,456</td>
+<td class="right wagers-players">12</td>
+<td class="right wagers-players">9</td>
 <td class="alert-cell"><span class="alert-dot alert-critical" title="High exposure on correct score"></span></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
 <td class="right le-pct le-high" style="font-weight:700;"><span style="color:#8b949e;">H</span> 5.2%</td>
+<td class="right total-wp">12</td>
+<td class="right total-wp">9</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">123,456,789</td>
 <td class="action-cell">
 <div class="action-group">
@@ -652,14 +690,16 @@
 <td class="left item-cell"></td>
 <td class="value-cell" style="color:#d2a8ff;">0:1</td>
 <td class="center"><span class="status-badge status-suspended">Suspended</span></td>
-<td class="bet-count"><span class="bet-count-num">8</span></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
 <td class="right"><span class="odds odds-away">7.00</span></td>
 <td class="right turnover">123,456,789</td>
-<td class="right expo">123,456</td>
+<td class="right wagers-players">8</td>
+<td class="right wagers-players">6</td>
 <td class="alert-cell"></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
 <td class="right le-pct le-mid" style="font-weight:700;"><span style="color:#8b949e;">H</span> 2.8%</td>
+<td class="right total-wp">8</td>
+<td class="right total-wp">6</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">123,456,789</td>
 <td class="action-cell">
 <div class="action-group">
@@ -673,14 +713,16 @@
 <td class="left item-cell"></td>
 <td class="value-cell" style="color:#d2a8ff;">0:0</td>
 <td class="center"><span class="status-badge status-suspended">Suspended</span></td>
-<td class="bet-count"><span class="bet-count-num">15</span></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
 <td class="right"><span class="odds odds-draw">7.00</span></td>
 <td class="right turnover">123,456,789</td>
-<td class="right expo">123,456</td>
+<td class="right wagers-players">15</td>
+<td class="right wagers-players">11</td>
 <td class="alert-cell"></td>
 <td class="right le-pct le-mid" style="font-weight:700;"><span style="color:#8b949e;">H</span> 2.8%</td>
+<td class="right total-wp">15</td>
+<td class="right total-wp">11</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">123,456,789</td>
 <td class="action-cell">
 <div class="action-group">
@@ -689,31 +731,35 @@
 </td>
 </tr>
 <!-- ====== PRE-MATCH MARKETS (same match, below live) ====== -->
-<tr class="section-row"><td colspan="20">⏳ PRE-MATCH — Markets opened before kick-off</td></tr>
+<tr class="section-row"><td colspan="24">⏳ PRE-MATCH — Markets opened before kick-off</td></tr>
 <!-- PM 1X2 FT -->
 <tr>
 <td class="left type-cell">1X2</td>
 <td class="left item-cell">FT</td>
 <td class="value-cell">—</td>
 <td class="center"><span class="status-badge status-closed">Closed</span></td>
-<td class="bet-count"><span class="bet-count-num">1,203</span></td>
 <!-- HOME -->
 <td class="right"><span class="odds odds-home">1.95</span></td>
 <td class="right turnover">234,567,890</td>
-<td class="right expo">234,567</td>
+<td class="right wagers-players">512</td>
+<td class="right wagers-players">341</td>
 <td class="alert-cell"></td>
 <!-- AWAY -->
 <td class="right"><span class="odds odds-away">3.20</span></td>
 <td class="right turnover">123,456,789</td>
-<td class="right expo">123,456</td>
+<td class="right wagers-players">389</td>
+<td class="right wagers-players">267</td>
 <td class="alert-cell"></td>
 <!-- DRAW -->
 <td class="right"><span class="odds odds-draw">3.60</span></td>
 <td class="right turnover">67,890,123</td>
-<td class="right expo">67,890</td>
+<td class="right wagers-players">302</td>
+<td class="right wagers-players">198</td>
 <td class="alert-cell"></td>
 <!-- Actions -->
 <td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">A</span> 1.8%</td>
+<td class="right total-wp">1,203</td>
+<td class="right total-wp">645</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">425,913,802</td>
 <td class="action-cell">
 <div class="action-group">
@@ -727,17 +773,20 @@
 <td class="left item-cell">FT-Goal</td>
 <td class="value-cell" style="color:#d2a8ff;">-0.5</td>
 <td class="center"><span class="status-badge status-closed">Closed</span></td>
-<td class="bet-count"><span class="bet-count-num">456</span></td>
 <td class="right"><span class="odds odds-home">1.85</span></td>
 <td class="right turnover">156,789,012</td>
-<td class="right expo">156,789</td>
+<td class="right wagers-players">241</td>
+<td class="right wagers-players">178</td>
 <td class="alert-cell"></td>
 <td class="right"><span class="odds odds-away">2.05</span></td>
 <td class="right turnover">134,567,890</td>
-<td class="right expo">134,567</td>
+<td class="right wagers-players">215</td>
+<td class="right wagers-players">156</td>
 <td class="alert-cell"></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
 <td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">A</span> 1.6%</td>
+<td class="right total-wp">456</td>
+<td class="right total-wp">289</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">291,356,902</td>
 <td class="action-cell">
 <div class="action-group">
@@ -751,17 +800,20 @@
 <td class="left item-cell"></td>
 <td class="value-cell" style="color:#d2a8ff;">-0.75</td>
 <td class="center"><span class="status-badge status-closed">Closed</span></td>
-<td class="bet-count"><span class="bet-count-num">312</span></td>
 <td class="right"><span class="odds odds-home">1.72</span></td>
 <td class="right turnover">98,765,432</td>
-<td class="right expo">98,765</td>
+<td class="right wagers-players">168</td>
+<td class="right wagers-players">124</td>
 <td class="alert-cell"></td>
 <td class="right"><span class="odds odds-away">2.18</span></td>
 <td class="right turnover">87,654,321</td>
-<td class="right expo">87,654</td>
+<td class="right wagers-players">144</td>
+<td class="right wagers-players">108</td>
 <td class="alert-cell"></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
 <td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">A</span> 1.3%</td>
+<td class="right total-wp">312</td>
+<td class="right total-wp">198</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">186,419,753</td>
 <td class="action-cell">
 <div class="action-group">
@@ -775,17 +827,20 @@
 <td class="left item-cell">FT-Goal</td>
 <td class="value-cell" style="color:#d2a8ff;">2.5</td>
 <td class="center"><span class="status-badge status-closed">Closed</span></td>
-<td class="bet-count"><span class="bet-count-num">678</span></td>
 <td class="right"><span class="odds odds-home">1.90</span></td>
 <td class="right turnover">145,678,901</td>
-<td class="right expo">145,678</td>
+<td class="right wagers-players">362</td>
+<td class="right wagers-players">245</td>
 <td class="alert-cell"></td>
 <td class="right"><span class="odds odds-away">1.95</span></td>
 <td class="right turnover">132,456,789</td>
-<td class="right expo">132,456</td>
+<td class="right wagers-players">316</td>
+<td class="right wagers-players">218</td>
 <td class="alert-cell"></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
 <td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">A</span> 1.5%</td>
+<td class="right total-wp">678</td>
+<td class="right total-wp">387</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">278,135,690</td>
 <td class="action-cell">
 <div class="action-group">
@@ -799,20 +854,23 @@
 <td class="left item-cell">FT</td>
 <td class="value-cell">—</td>
 <td class="center"><span class="status-badge status-closed">Closed</span></td>
-<td class="bet-count"><span class="bet-count-num">234</span></td>
 <!-- HOME (Odd) -->
 <td class="right"><span class="odds odds-home">1.82</span></td>
 <td class="right turnover">112,345,678</td>
-<td class="right expo">112,345</td>
+<td class="right wagers-players">127</td>
+<td class="right wagers-players">94</td>
 <td class="alert-cell"></td>
 <!-- AWAY (Even) -->
 <td class="right"><span class="odds odds-away">1.98</span></td>
 <td class="right turnover">98,765,432</td>
-<td class="right expo">98,765</td>
+<td class="right wagers-players">107</td>
+<td class="right wagers-players">82</td>
 <td class="alert-cell"></td>
 <!-- DRAW (N/A) -->
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">H</span> 1.5%</td>
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
+<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">H</span> 1.1%</td>
+<td class="right total-wp">234</td>
+<td class="right total-wp">152</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">211,111,110</td>
 <td class="action-cell">
 <div class="action-group">
@@ -826,14 +884,16 @@
 <td class="left item-cell">FT-CS</td>
 <td class="value-cell" style="color:#d2a8ff;">1:0</td>
 <td class="center"><span class="status-badge status-closed">Closed</span></td>
-<td class="bet-count"><span class="bet-count-num">89</span></td>
 <td class="right"><span class="odds odds-home">6.50</span></td>
 <td class="right turnover">23,456,789</td>
-<td class="right expo">23,456</td>
+<td class="right wagers-players">89</td>
+<td class="right wagers-players">67</td>
 <td class="alert-cell"><span class="alert-dot alert-info" title="High pre-match volume"></span></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right le-pct le-mid" style="font-weight:700;"><span style="color:#8b949e;">H</span> 3.1%</td>
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
+<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">H</span> 1.0%</td>
+<td class="right total-wp">89</td>
+<td class="right total-wp">67</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">23,456,789</td>
 <td class="action-cell">
 <div class="action-group">

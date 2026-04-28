@@ -243,6 +243,27 @@
   /* WAO */
   .wao { font-weight: 700; font-variant-numeric: tabular-nums; }
 
+  /* Item cell */
+  .item-cell { color: #f0883e; font-weight: 600; font-size: 12px; white-space: nowrap; }
+
+  /* Extra line rows (sub-lines for same event) */
+  .extra-line { background: #0a0e14; }
+  .extra-line td { border-top: 1px solid #21262d; }
+
+  /* Row selection highlight */
+  .act-table tbody tr { cursor: pointer; }
+  .act-table tbody tr:hover { background: #1c2129; }
+  .act-table tbody tr.active-row { background: #1f6feb33; outline: 1px solid #1f6feb; outline-offset: -1px; }
+  .act-table tbody tr.active-row td { color: #e6edf3; }
+
+  /* Line indicator on right panel */
+  .line-indicator { display: inline-block; background: #f0883e; color: #0d1117; font-weight: 700; font-size: 12px; padding: 2px 10px; border-radius: 4px; margin-left: 8px; }
+
+  /* Line table rows (right panel) */
+  .line-table tbody tr { border-bottom: 1px solid #21262d; }
+  .line-table tbody tr:hover { background: #1c2129; }
+  .line-table tbody tr.active-line { background: #1f6feb33; outline: 1px solid #1f6feb; outline-offset: -1px; }
+
   /* Time columns */
   .kickoff-cell { color: #8b949e; font-variant-numeric: tabular-nums; font-size: 11px; }
   .elapsed-cell { color: #e6edf3; font-variant-numeric: tabular-nums; font-weight: 600; }
@@ -483,270 +504,455 @@
 <div class="activity-scroll">
 <table class="act-table">
 <thead>
+<tr class="col-group-header" style="background:#161b22;">
+<th colspan="5" style="text-align:left; color:#8b949e; border-bottom:2px solid #30363d;"></th>
+<th id="col-group-1" colspan="4" style="color:#58a6ff; border-bottom:2px solid #58a6ff; text-align:center; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">HOME</th>
+<th id="col-group-2" colspan="4" style="color:#f97583; border-bottom:2px solid #f97583; text-align:center; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">AWAY</th>
+<th colspan="4" class="draw-col" style="color:#d2a8ff; border-bottom:2px solid #d2a8ff; text-align:center; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">DRAW</th>
+</tr>
 <tr>
 <th style="width:76px;">Server</th>
 <th style="width:54px;">Kickoff</th>
 <th style="width:56px;">Elapsed ↓</th>
 <th style="width:110px;">Event</th>
-<th>Selection</th>
-<th class="right">Wagers</th>
+<th style="width:70px;" class="item-col">Item</th>
+<!-- HOME -->
 <th class="right">WAO</th>
+<th class="right">Wagers</th>
 <th class="right">Players</th>
 <th class="right">Turnover</th>
+<!-- AWAY -->
+<th class="right">WAO</th>
+<th class="right">Wagers</th>
+<th class="right">Players</th>
+<th class="right">Turnover</th>
+<!-- DRAW -->
+<th class="right draw-col">WAO</th>
+<th class="right draw-col">Wagers</th>
+<th class="right draw-col">Players</th>
+<th class="right draw-col">Turnover</th>
 </tr>
 </thead>
 <tbody>
-<!-- TOTAL -->
-<tr style="background:#161b22;">
-<td class="time-total">TOTAL</td>
-<td class="kickoff-cell">—</td>
-<td class="elapsed-cell">—</td>
-<td>—</td>
-<td><span class="sel-name sel-home">Real Madrid</span></td>
-<td class="right bets-num" style="font-weight:700;">241</td>
-<td class="right wao">1.84</td>
-<td class="right players-num" style="font-weight:700;">128</td>
-<td class="right stake-val">37,700</td>
-</tr>
-<tr style="background:#161b22;">
-<td></td><td></td><td></td><td></td>
-<td><span class="sel-name sel-draw">Draw</span></td>
-<td class="right bets-num" style="font-weight:700;">163</td>
-<td class="right wao">1.95</td>
-<td class="right players-num">94</td>
-<td class="right stake-val">23,600</td>
-</tr>
-<tr style="background:#161b22;">
-<td></td><td></td><td></td><td></td>
-<td><span class="sel-name sel-away">Barcelona</span></td>
-<td class="right bets-num" style="font-weight:700;">106</td>
-<td class="right wao">2.27</td>
-<td class="right players-num">71</td>
-<td class="right stake-val">14,600</td>
-</tr>
-<!-- FT — <span class="event-tag tag-close">● Market Close</span> -->
-<tr>
-<td class="time-cell">21:30:07</td>
-<td class="kickoff-cell">20:00</td>
-<td class="elapsed-cell">FT</td>
-<td><span class="event-tag tag-close">● Market Close</span></td>
-<td><span class="sel-name sel-home">Real Madrid</span></td>
-<td class="right bets-num">9</td>
-<td class="right wao">1.60</td>
-<td class="right players-num">9</td>
-<td class="right stake-val">1,100</td>
-</tr>
-<tr>
-<td></td><td></td><td></td><td></td>
-<td><span class="sel-name sel-draw">Draw</span></td>
-<td class="right bets-num">7</td>
-<td class="right wao">2.00</td>
-<td class="right players-num">7</td>
-<td class="right stake-val">850</td>
-</tr>
-<tr>
-<td></td><td></td><td></td><td></td>
-<td><span class="sel-name sel-away">Barcelona</span></td>
-<td class="right bets-num">5</td>
-<td class="right wao">2.20</td>
-<td class="right players-num">5</td>
-<td class="right stake-val">650</td>
-</tr>
-<!-- 78' — <span class="event-tag tag-manual">● Manual edit</span> -->
+<!-- 78' — Manual edit -->
 <tr>
 <td class="time-cell">21:18:14</td>
 <td class="kickoff-cell">20:00</td>
 <td class="elapsed-cell">78'</td>
 <td><span class="event-tag tag-manual">● Manual edit</span></td>
-<td><span class="sel-name sel-home">Real Madrid</span></td>
-<td class="right bets-num">4</td>
+<td class="item-cell" data-1x2="-" data-handicap="H -1" data-ou="O/U 2.5" data-cs="1 – 0" data-oe="-" data-ng="-">-</td>
+<!-- HOME -->
 <td class="right wao">1.82</td>
+<td class="right bets-num">4</td>
 <td class="right players-num">4</td>
 <td class="right stake-val">400</td>
-</tr>
-<tr>
-<td></td><td></td><td></td><td></td>
-<td><span class="sel-name sel-draw">Draw</span></td>
-<td class="right bets-num">6</td>
-<td class="right wao">2.10</td>
-<td class="right players-num">6</td>
-<td class="right stake-val">500</td>
-</tr>
-<tr>
-<td></td><td></td><td></td><td></td>
-<td><span class="sel-name sel-away">Barcelona</span></td>
-<td class="right bets-num">3</td>
+<!-- AWAY -->
 <td class="right wao">2.15</td>
+<td class="right bets-num">3</td>
 <td class="right players-num">3</td>
 <td class="right stake-val">300</td>
+<!-- DRAW -->
+<td class="right wao draw-col">2.10</td>
+<td class="right bets-num draw-col">6</td>
+<td class="right players-num draw-col">6</td>
+<td class="right stake-val draw-col">500</td>
 </tr>
-<!-- 68' — <span class="event-tag tag-manual">● Manual adjustment</span> -->
-<tr>
-<td class="time-cell">21:08:21</td>
-<td class="kickoff-cell">20:00</td>
-<td class="elapsed-cell">68'</td>
-<td><span class="event-tag tag-manual">● Manual<br/>adjustment</span></td>
-<td><span class="sel-name sel-home">Real Madrid</span></td>
-<td class="right bets-num">8</td>
-<td class="right wao">1.80</td>
-<td class="right players-num">8</td>
-<td class="right stake-val">1,200</td>
+<!-- 78' — extra lines (handicap) -->
+<tr class="extra-line" data-markets="handicap" style="display:none;">
+<td class="time-cell" style="color:#30363d;">21:18:14</td>
+<td class="kickoff-cell"></td>
+<td class="elapsed-cell"></td>
+<td></td>
+<td class="item-cell">H -2</td>
+<td class="right wao">1.45</td>
+<td class="right bets-num">2</td>
+<td class="right players-num">2</td>
+<td class="right stake-val">180</td>
+<td class="right wao">2.65</td>
+<td class="right bets-num">1</td>
+<td class="right players-num">1</td>
+<td class="right stake-val">120</td>
 </tr>
-<tr>
-<td></td><td></td><td></td><td></td>
-<td><span class="sel-name sel-draw">Draw</span></td>
+<tr class="extra-line" data-markets="handicap" style="display:none;">
+<td class="time-cell" style="color:#30363d;">21:18:14</td>
+<td class="kickoff-cell"></td>
+<td class="elapsed-cell"></td>
+<td></td>
+<td class="item-cell">A -1</td>
+<td class="right wao">2.30</td>
+<td class="right bets-num">3</td>
+<td class="right players-num">3</td>
+<td class="right stake-val">250</td>
+<td class="right wao">1.65</td>
 <td class="right bets-num">5</td>
-<td class="right wao">2.00</td>
-<td class="right players-num">5</td>
-<td class="right stake-val">650</td>
-</tr>
-<tr>
-<td></td><td></td><td></td><td></td>
-<td><span class="sel-name sel-away">Barcelona</span></td>
-<td class="right bets-num">4</td>
-<td class="right wao">2.25</td>
 <td class="right players-num">4</td>
-<td class="right stake-val">500</td>
+<td class="right stake-val">480</td>
 </tr>
-<!-- 62' — <span class="event-tag tag-safe">● Safe mode</span> -->
+<!-- 78' — extra lines (ou) -->
+<tr class="extra-line" data-markets="ou" style="display:none;">
+<td class="time-cell" style="color:#30363d;">21:18:14</td>
+<td class="kickoff-cell"></td>
+<td class="elapsed-cell"></td>
+<td></td>
+<td class="item-cell">O/U 3.0</td>
+<td class="right wao">1.75</td>
+<td class="right bets-num">3</td>
+<td class="right players-num">3</td>
+<td class="right stake-val">350</td>
+<td class="right wao">2.10</td>
+<td class="right bets-num">2</td>
+<td class="right players-num">2</td>
+<td class="right stake-val">200</td>
+</tr>
+<!-- 78' — extra lines (cs) -->
+<tr class="extra-line" data-markets="cs" style="display:none;">
+<td class="time-cell" style="color:#30363d;">21:18:14</td>
+<td class="kickoff-cell"></td>
+<td class="elapsed-cell"></td>
+<td></td>
+<td class="item-cell">2 – 0</td>
+<td class="right wao">9.00</td>
+<td class="right bets-num">1</td>
+<td class="right players-num">1</td>
+<td class="right stake-val">50</td>
+<td class="right wao">12.00</td>
+<td class="right bets-num">0</td>
+<td class="right players-num">0</td>
+<td class="right stake-val">0</td>
+<td class="right wao draw-col">9.50</td>
+<td class="right bets-num draw-col">2</td>
+<td class="right players-num draw-col">2</td>
+<td class="right stake-val draw-col">120</td>
+</tr>
+<tr class="extra-line" data-markets="cs" style="display:none;">
+<td class="time-cell" style="color:#30363d;">21:18:14</td>
+<td class="kickoff-cell"></td>
+<td class="elapsed-cell"></td>
+<td></td>
+<td class="item-cell">0 – 1</td>
+<td class="right wao">8.50</td>
+<td class="right bets-num">2</td>
+<td class="right players-num">2</td>
+<td class="right stake-val">100</td>
+<td class="right wao">10.00</td>
+<td class="right bets-num">1</td>
+<td class="right players-num">1</td>
+<td class="right stake-val">80</td>
+<td class="right wao draw-col">14.00</td>
+<td class="right bets-num draw-col">1</td>
+<td class="right players-num draw-col">1</td>
+<td class="right stake-val draw-col">60</td>
+</tr>
+<!-- 62' — Safe mode -->
 <tr>
 <td class="time-cell">21:02:28</td>
 <td class="kickoff-cell">20:00</td>
 <td class="elapsed-cell">62'</td>
 <td><span class="event-tag tag-safe">● Safe mode</span></td>
-<td><span class="sel-name sel-home">Real Madrid</span></td>
-<td class="right bets-num">18</td>
+<td class="item-cell" data-1x2="-" data-handicap="H -0.5" data-ou="O/U 3.0" data-cs="2 – 1" data-oe="-" data-ng="-">-</td>
+<!-- HOME -->
 <td class="right wao">1.78</td>
+<td class="right bets-num">18</td>
 <td class="right players-num">16</td>
 <td class="right stake-val">2,800</td>
-</tr>
-<tr>
-<td></td><td></td><td></td><td></td>
-<td><span class="sel-name sel-draw">Draw</span></td>
-<td class="right bets-num">8</td>
-<td class="right wao">2.05</td>
-<td class="right players-num">8</td>
-<td class="right stake-val">1,200</td>
-</tr>
-<tr>
-<td></td><td></td><td></td><td></td>
-<td><span class="sel-name sel-away">Barcelona</span></td>
-<td class="right bets-num">6</td>
+<!-- AWAY -->
 <td class="right wao">2.30</td>
+<td class="right bets-num">6</td>
 <td class="right players-num">6</td>
 <td class="right stake-val">900</td>
+<!-- DRAW -->
+<td class="right wao draw-col">2.05</td>
+<td class="right bets-num draw-col">8</td>
+<td class="right players-num draw-col">8</td>
+<td class="right stake-val draw-col">1,200</td>
 </tr>
-<!-- 52' — <span class="event-tag tag-red">● Red Card</span> -->
-<tr>
-<td class="time-cell">20:52:35</td>
-<td class="kickoff-cell">20:00</td>
-<td class="elapsed-cell">52'</td>
-<td><span class="event-tag tag-red">● Red Card</span></td>
-<td><span class="sel-name sel-home">Real Madrid</span></td>
-<td class="right bets-num">25</td>
-<td class="right wao">1.65</td>
-<td class="right players-num">22</td>
-<td class="right stake-val">4,500</td>
-</tr>
-<tr>
-<td></td><td></td><td></td><td></td>
-<td><span class="sel-name sel-draw">Draw</span></td>
-<td class="right bets-num">45</td>
-<td class="right wao">1.95</td>
-<td class="right players-num">38</td>
-<td class="right stake-val">8,500</td>
-</tr>
-<tr>
-<td></td><td></td><td></td><td></td>
-<td><span class="sel-name sel-away">Barcelona</span></td>
-<td class="right bets-num">15</td>
-<td class="right wao">2.40</td>
-<td class="right players-num">15</td>
-<td class="right stake-val">2,500</td>
-</tr>
-<!-- 34' — <span class="event-tag tag-score">● Score change</span> -->
-<tr>
-<td class="time-cell">20:34:42</td>
-<td class="kickoff-cell">20:00</td>
-<td class="elapsed-cell">34'</td>
-<td><span class="event-tag tag-score">● Score change</span></td>
-<td><span class="sel-name sel-home">Real Madrid</span></td>
-<td class="right bets-num">65</td>
+<!-- 62' — extra lines (handicap) -->
+<tr class="extra-line" data-markets="handicap" style="display:none;">
+<td class="time-cell" style="color:#30363d;">21:02:28</td>
+<td class="kickoff-cell"></td>
+<td class="elapsed-cell"></td>
+<td></td>
+<td class="item-cell">H -1</td>
 <td class="right wao">1.72</td>
-<td class="right players-num">54</td>
-<td class="right stake-val">12,000</td>
+<td class="right bets-num">12</td>
+<td class="right players-num">10</td>
+<td class="right stake-val">1,600</td>
+<td class="right wao">2.20</td>
+<td class="right bets-num">5</td>
+<td class="right players-num">5</td>
+<td class="right stake-val">700</td>
 </tr>
-<tr>
-<td></td><td></td><td></td><td></td>
-<td><span class="sel-name sel-draw">Draw</span></td>
-<td class="right bets-num">9</td>
-<td class="right wao">2.35</td>
-<td class="right players-num">9</td>
+<tr class="extra-line" data-markets="handicap" style="display:none;">
+<td class="time-cell" style="color:#30363d;">21:02:28</td>
+<td class="kickoff-cell"></td>
+<td class="elapsed-cell"></td>
+<td></td>
+<td class="item-cell">A -1</td>
+<td class="right wao">2.40</td>
+<td class="right bets-num">4</td>
+<td class="right players-num">3</td>
+<td class="right stake-val">350</td>
+<td class="right wao">1.58</td>
+<td class="right bets-num">8</td>
+<td class="right players-num">7</td>
 <td class="right stake-val">900</td>
 </tr>
-<tr>
-<td></td><td></td><td></td><td></td>
-<td><span class="sel-name sel-away">Barcelona</span></td>
-<td class="right bets-num">8</td>
-<td class="right wao">2.50</td>
-<td class="right players-num">8</td>
+<!-- 62' — extra lines (ou) -->
+<tr class="extra-line" data-markets="ou" style="display:none;">
+<td class="time-cell" style="color:#30363d;">21:02:28</td>
+<td class="kickoff-cell"></td>
+<td class="elapsed-cell"></td>
+<td></td>
+<td class="item-cell">O/U 2.5</td>
+<td class="right wao">1.85</td>
+<td class="right bets-num">10</td>
+<td class="right players-num">9</td>
+<td class="right stake-val">1,400</td>
+<td class="right wao">2.00</td>
+<td class="right bets-num">7</td>
+<td class="right players-num">6</td>
 <td class="right stake-val">800</td>
 </tr>
-<!-- 18' — <span class="event-tag tag-yellow">● Yellow Card</span> -->
+<!-- 62' — extra lines (cs) -->
+<tr class="extra-line" data-markets="cs" style="display:none;">
+<td class="time-cell" style="color:#30363d;">21:02:28</td>
+<td class="kickoff-cell"></td>
+<td class="elapsed-cell"></td>
+<td></td>
+<td class="item-cell">1 – 0</td>
+<td class="right wao">7.50</td>
+<td class="right bets-num">5</td>
+<td class="right players-num">4</td>
+<td class="right stake-val">350</td>
+<td class="right wao">8.50</td>
+<td class="right bets-num">2</td>
+<td class="right players-num">2</td>
+<td class="right stake-val">180</td>
+<td class="right wao draw-col">6.50</td>
+<td class="right bets-num draw-col">6</td>
+<td class="right players-num draw-col">5</td>
+<td class="right stake-val draw-col">400</td>
+</tr>
+<tr class="extra-line" data-markets="cs" style="display:none;">
+<td class="time-cell" style="color:#30363d;">21:02:28</td>
+<td class="kickoff-cell"></td>
+<td class="elapsed-cell"></td>
+<td></td>
+<td class="item-cell">0 – 2</td>
+<td class="right wao">12.00</td>
+<td class="right bets-num">1</td>
+<td class="right players-num">1</td>
+<td class="right stake-val">80</td>
+<td class="right wao">15.00</td>
+<td class="right bets-num">1</td>
+<td class="right players-num">1</td>
+<td class="right stake-val">50</td>
+<td class="right wao draw-col">9.50</td>
+<td class="right bets-num draw-col">3</td>
+<td class="right players-num draw-col">3</td>
+<td class="right stake-val draw-col">200</td>
+</tr>
+<!-- 18' — Yellow Card -->
 <tr>
 <td class="time-cell">20:18:49</td>
 <td class="kickoff-cell">20:00</td>
 <td class="elapsed-cell">18'</td>
 <td><span class="event-tag tag-yellow">● Yellow Card</span></td>
-<td><span class="sel-name sel-home">Real Madrid</span></td>
-<td class="right bets-num">30</td>
+<td class="item-cell" data-1x2="-" data-handicap="H -1.5" data-ou="O/U 2.5" data-cs="0 – 0" data-oe="-" data-ng="-">-</td>
+<!-- HOME -->
 <td class="right wao">1.90</td>
+<td class="right bets-num">30</td>
 <td class="right players-num">27</td>
 <td class="right stake-val">4,500</td>
-</tr>
-<tr>
-<td></td><td></td><td></td><td></td>
-<td><span class="sel-name sel-draw">Draw</span></td>
-<td class="right bets-num">14</td>
-<td class="right wao">1.92</td>
-<td class="right players-num">14</td>
-<td class="right stake-val">1,700</td>
-</tr>
-<tr>
-<td></td><td></td><td></td><td></td>
-<td><span class="sel-name sel-away">Barcelona</span></td>
-<td class="right bets-num">10</td>
+<!-- AWAY -->
 <td class="right wao">2.35</td>
+<td class="right bets-num">10</td>
 <td class="right players-num">10</td>
 <td class="right stake-val">1,200</td>
+<!-- DRAW -->
+<td class="right wao draw-col">1.92</td>
+<td class="right bets-num draw-col">14</td>
+<td class="right players-num draw-col">14</td>
+<td class="right stake-val draw-col">1,700</td>
 </tr>
-<!-- 5' — <span class="event-tag tag-corner">● Corner</span> -->
+<!-- 18' — extra lines (handicap) -->
+<tr class="extra-line" data-markets="handicap" style="display:none;">
+<td class="time-cell" style="color:#30363d;">20:18:49</td>
+<td class="kickoff-cell"></td>
+<td class="elapsed-cell"></td>
+<td></td>
+<td class="item-cell">H -2</td>
+<td class="right wao">1.38</td>
+<td class="right bets-num">8</td>
+<td class="right players-num">7</td>
+<td class="right stake-val">1,100</td>
+<td class="right wao">3.10</td>
+<td class="right bets-num">4</td>
+<td class="right players-num">4</td>
+<td class="right stake-val">500</td>
+</tr>
+<tr class="extra-line" data-markets="handicap" style="display:none;">
+<td class="time-cell" style="color:#30363d;">20:18:49</td>
+<td class="kickoff-cell"></td>
+<td class="elapsed-cell"></td>
+<td></td>
+<td class="item-cell">A -1</td>
+<td class="right wao">2.50</td>
+<td class="right bets-num">6</td>
+<td class="right players-num">5</td>
+<td class="right stake-val">750</td>
+<td class="right wao">1.55</td>
+<td class="right bets-num">14</td>
+<td class="right players-num">12</td>
+<td class="right stake-val">1,800</td>
+</tr>
+<!-- 18' — extra lines (cs) -->
+<tr class="extra-line" data-markets="cs" style="display:none;">
+<td class="time-cell" style="color:#30363d;">20:18:49</td>
+<td class="kickoff-cell"></td>
+<td class="elapsed-cell"></td>
+<td></td>
+<td class="item-cell">2 – 1</td>
+<td class="right wao">8.00</td>
+<td class="right bets-num">8</td>
+<td class="right players-num">7</td>
+<td class="right stake-val">600</td>
+<td class="right wao">10.00</td>
+<td class="right bets-num">3</td>
+<td class="right players-num">3</td>
+<td class="right stake-val">250</td>
+<td class="right wao draw-col">6.50</td>
+<td class="right bets-num draw-col">10</td>
+<td class="right players-num draw-col">9</td>
+<td class="right stake-val draw-col">800</td>
+</tr>
+<tr class="extra-line" data-markets="cs" style="display:none;">
+<td class="time-cell" style="color:#30363d;">20:18:49</td>
+<td class="kickoff-cell"></td>
+<td class="elapsed-cell"></td>
+<td></td>
+<td class="item-cell">1 – 2</td>
+<td class="right wao">10.00</td>
+<td class="right bets-num">4</td>
+<td class="right players-num">3</td>
+<td class="right stake-val">300</td>
+<td class="right wao">7.50</td>
+<td class="right bets-num">6</td>
+<td class="right players-num">5</td>
+<td class="right stake-val">450</td>
+<td class="right wao draw-col">14.00</td>
+<td class="right bets-num draw-col">2</td>
+<td class="right players-num draw-col">2</td>
+<td class="right stake-val draw-col">150</td>
+</tr>
+<!-- 5' — Corner -->
 <tr>
 <td class="time-cell">20:05:56</td>
 <td class="kickoff-cell">20:00</td>
 <td class="elapsed-cell">5'</td>
 <td><span class="event-tag tag-corner">● Corner</span></td>
-<td><span class="sel-name sel-home">Real Madrid</span></td>
-<td class="right bets-num">22</td>
+<td class="item-cell" data-1x2="-" data-handicap="H -1" data-ou="O/U 2.5" data-cs="1 – 1" data-oe="-" data-ng="-">-</td>
+<!-- HOME -->
 <td class="right wao">1.92</td>
+<td class="right bets-num">22</td>
 <td class="right players-num">20</td>
 <td class="right stake-val">3,200</td>
-</tr>
-<tr>
-<td></td><td></td><td></td><td></td>
-<td><span class="sel-name sel-draw">Draw</span></td>
-<td class="right bets-num">18</td>
-<td class="right wao">1.88</td>
-<td class="right players-num">18</td>
-<td class="right stake-val">2,500</td>
-</tr>
-<tr>
-<td></td><td></td><td></td><td></td>
-<td><span class="sel-name sel-away">Barcelona</span></td>
-<td class="right bets-num">12</td>
+<!-- AWAY -->
 <td class="right wao">2.28</td>
+<td class="right bets-num">12</td>
 <td class="right players-num">12</td>
 <td class="right stake-val">1,800</td>
+<!-- DRAW -->
+<td class="right wao draw-col">1.88</td>
+<td class="right bets-num draw-col">18</td>
+<td class="right players-num draw-col">18</td>
+<td class="right stake-val draw-col">2,500</td>
+</tr>
+<!-- 5' — extra lines (handicap) -->
+<tr class="extra-line" data-markets="handicap" style="display:none;">
+<td class="time-cell" style="color:#30363d;">20:05:56</td>
+<td class="kickoff-cell"></td>
+<td class="elapsed-cell"></td>
+<td></td>
+<td class="item-cell">H -2</td>
+<td class="right wao">1.42</td>
+<td class="right bets-num">6</td>
+<td class="right players-num">5</td>
+<td class="right stake-val">800</td>
+<td class="right wao">2.90</td>
+<td class="right bets-num">3</td>
+<td class="right players-num">3</td>
+<td class="right stake-val">400</td>
+</tr>
+<tr class="extra-line" data-markets="handicap" style="display:none;">
+<td class="time-cell" style="color:#30363d;">20:05:56</td>
+<td class="kickoff-cell"></td>
+<td class="elapsed-cell"></td>
+<td></td>
+<td class="item-cell">A -1</td>
+<td class="right wao">2.35</td>
+<td class="right bets-num">10</td>
+<td class="right players-num">9</td>
+<td class="right stake-val">1,500</td>
+<td class="right wao">1.62</td>
+<td class="right bets-num">15</td>
+<td class="right players-num">13</td>
+<td class="right stake-val">2,100</td>
+</tr>
+<!-- 5' — extra lines (ou) -->
+<tr class="extra-line" data-markets="ou" style="display:none;">
+<td class="time-cell" style="color:#30363d;">20:05:56</td>
+<td class="kickoff-cell"></td>
+<td class="elapsed-cell"></td>
+<td></td>
+<td class="item-cell">O/U 3.0</td>
+<td class="right wao">1.80</td>
+<td class="right bets-num">8</td>
+<td class="right players-num">7</td>
+<td class="right stake-val">1,100</td>
+<td class="right wao">2.05</td>
+<td class="right bets-num">5</td>
+<td class="right players-num">5</td>
+<td class="right stake-val">700</td>
+</tr>
+<!-- 5' — extra lines (cs) -->
+<tr class="extra-line" data-markets="cs" style="display:none;">
+<td class="time-cell" style="color:#30363d;">20:05:56</td>
+<td class="kickoff-cell"></td>
+<td class="elapsed-cell"></td>
+<td></td>
+<td class="item-cell">2 – 0</td>
+<td class="right wao">9.00</td>
+<td class="right bets-num">6</td>
+<td class="right players-num">5</td>
+<td class="right stake-val">500</td>
+<td class="right wao">12.00</td>
+<td class="right bets-num">3</td>
+<td class="right players-num">3</td>
+<td class="right stake-val">250</td>
+<td class="right wao draw-col">6.50</td>
+<td class="right bets-num draw-col">12</td>
+<td class="right players-num draw-col">10</td>
+<td class="right stake-val draw-col">900</td>
+</tr>
+<tr class="extra-line" data-markets="cs" style="display:none;">
+<td class="time-cell" style="color:#30363d;">20:05:56</td>
+<td class="kickoff-cell"></td>
+<td class="elapsed-cell"></td>
+<td></td>
+<td class="item-cell">0 – 1</td>
+<td class="right wao">8.50</td>
+<td class="right bets-num">8</td>
+<td class="right players-num">7</td>
+<td class="right stake-val">650</td>
+<td class="right wao">10.00</td>
+<td class="right bets-num">5</td>
+<td class="right players-num">4</td>
+<td class="right stake-val">400</td>
+<td class="right wao draw-col">9.50</td>
+<td class="right bets-num draw-col">8</td>
+<td class="right players-num draw-col">7</td>
+<td class="right stake-val draw-col">600</td>
 </tr>
 </tbody>
 </table>
@@ -896,82 +1102,109 @@
 </div><!-- /market-content 1x2 -->
 <!-- ====== MARKET: HANDICAP (讓分) ====== -->
 <div class="market-content" data-market="handicap" style="display:none;">
+<!-- Line list table -->
 <div class="panel-section">
-<div class="panel-title">Vendor Odds</div>
-<div class="vendor-header">
-<div class="vendor-name"> </div>
-<div class="vendor-cells">
-<div>Real Madrid −1.5</div>
-<div style="color:#484f58;">—</div>
-<div>Barcelona +1.5</div>
+<div class="panel-title">Lines <span class="line-indicator" id="line-indicator-handicap">H -1</span></div>
+<table class="line-table" style="width:100%; border-collapse:collapse; font-size:12px; margin-top:8px;">
+<thead>
+<tr style="color:#8b949e; font-size:10px; text-transform:uppercase; letter-spacing:0.5px;">
+<th style="text-align:left; padding:4px 8px; border-bottom:1px solid #30363d;">Line</th>
+<th style="text-align:left; padding:4px 8px; border-bottom:1px solid #30363d;">Source</th>
+<th style="text-align:right; padding:4px 8px; border-bottom:2px solid #58a6ff; color:#58a6ff;">HOME</th>
+<th style="text-align:right; padding:4px 8px; border-bottom:2px solid #f97583; color:#f97583;">AWAY</th>
+<th style="text-align:right; padding:4px 8px; border-bottom:1px solid #30363d;">Margin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="line-row active-line" data-line="H -1" onclick="selectHandicapLine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">H -1</td>
+<td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">1.82</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">2.15</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">4.2%</td>
+</tr>
+<tr class="line-row" data-line="H -1" onclick="selectHandicapLine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">H -1</td>
+<td style="padding:6px 8px; color:#8b949e;">Sportradar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">1.85</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">2.10</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">3.8%</td>
+</tr>
+<tr class="line-row" data-line="H -2" onclick="selectHandicapLine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">H -2</td>
+<td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">1.45</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">2.65</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">3.5%</td>
+</tr>
+<tr class="line-row" data-line="H -2" onclick="selectHandicapLine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">H -2</td>
+<td style="padding:6px 8px; color:#8b949e;">Sportradar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">1.48</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">2.60</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">3.9%</td>
+</tr>
+<tr class="line-row" data-line="A -1" onclick="selectHandicapLine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">A -1</td>
+<td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">2.30</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">1.65</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">4.0%</td>
+</tr>
+<tr class="line-row" data-line="A -1" onclick="selectHandicapLine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">A -1</td>
+<td style="padding:6px 8px; color:#8b949e;">Sportradar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">2.25</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">1.68</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">3.6%</td>
+</tr>
+<tr class="line-row" data-line="H -0.5" onclick="selectHandicapLine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">H -0.5</td>
+<td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">1.62</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">2.35</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">3.4%</td>
+</tr>
+<tr class="line-row" data-line="H -0.5" onclick="selectHandicapLine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">H -0.5</td>
+<td style="padding:6px 8px; color:#8b949e;">Sportradar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">1.60</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">2.38</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">3.7%</td>
+</tr>
+</tbody>
+</table>
 </div>
-</div>
-<div class="vendor-odds-row">
-<div class="vendor-name">BetRadar</div>
-<div class="vendor-cells">
-<div class="vendor-cell"><span class="vendor-val">2.10</span><span class="vendor-pct">48%</span></div>
-<div class="vendor-cell" style="color:#484f58;">—</div>
-<div class="vendor-cell"><span class="vendor-val">1.80</span><span class="vendor-pct">56%</span></div>
-</div>
-</div>
-<div class="vendor-odds-row">
-<div class="vendor-name">Sportradar</div>
-<div class="vendor-cells">
-<div class="vendor-cell"><span class="vendor-val">2.05</span><span class="vendor-pct">49%</span></div>
-<div class="vendor-cell" style="color:#484f58;">—</div>
-<div class="vendor-cell"><span class="vendor-val">1.85</span><span class="vendor-pct">54%</span></div>
-</div>
-</div>
-</div>
+<!-- New Odds — single selected line -->
 <div class="panel-section" style="background:#1f6feb11; border:1px solid #1f6feb33; border-radius:8px; padding:14px;">
 <div class="panel-title" style="color:#58a6ff;">New Odds</div>
-<div class="odds-grid">
-<div class="odds-grid-label">Real Madrid −1.5</div>
-<div class="odds-grid-label" style="color:#484f58;">—</div>
-<div class="odds-grid-label">Barcelona +1.5</div>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px;">
+<div class="odds-grid-label" style="text-align:center; color:#58a6ff;">HOME</div>
+<div class="odds-grid-label" style="text-align:center; color:#f97583;">AWAY</div>
 </div>
-<div class="odds-grid" style="margin-top:4px;">
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:4px;">
 <div class="odds-box-new changed" id="box-handicap-c1">
-<div class="odds-old">2.10</div>
-<div class="odds-box-value" id="new-handicap-c1">2.10</div>
+<div class="odds-old">1.82</div>
+<div class="odds-box-value" id="new-handicap-c1">1.82</div>
 <div class="odds-diff diff-none" id="diff-handicap-c1" style="visibility:hidden;">0.00</div>
 </div>
-<div class="odds-box-new" style="border-color:#30363d; background:transparent; cursor:default;">
-<div class="odds-box-value" style="color:#484f58;">—</div>
-</div>
 <div class="odds-box-new" id="box-handicap-c3">
-<div class="odds-old">1.80</div>
-<div class="odds-box-value" id="new-handicap-c3">1.80</div>
+<div class="odds-old">2.15</div>
+<div class="odds-box-value" id="new-handicap-c3">2.15</div>
 <div class="odds-diff diff-none" id="diff-handicap-c3" style="visibility:hidden;">0.00</div>
 </div>
 </div>
-<!-- +/- fine tune -->
-<div class="odds-grid" style="margin-top:6px;">
-<div class="pct-controls">
+<!-- +/- fine tune (single set) -->
+<div style="display:flex; justify-content:center; gap:6px; margin-top:8px;">
 <button class="pct-btn" onclick="adjustOddsGen('handicap','c1',-0.01)">−</button>
 <span class="pct-val" id="pct-handicap-c1">48%</span>
 <button class="pct-btn" onclick="adjustOddsGen('handicap','c1',0.01)">+</button>
 </div>
-<div class="pct-controls" style="visibility:hidden;"></div>
-<div class="pct-controls">
-<button class="pct-btn" onclick="adjustOddsGen('handicap','c3',-0.01)">−</button>
-<span class="pct-val" id="pct-handicap-c3">56%</span>
-<button class="pct-btn" onclick="adjustOddsGen('handicap','c3',0.01)">+</button>
-</div>
-</div>
-<!-- Quick Adjust -->
-<div class="odds-grid" style="margin-top:10px; gap:8px;">
-<div style="display:flex; gap:3px;">
-<button class="pct-btn" onclick="quickAdjustGen('handicap','c1',0.03)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+3%</button>
-<button class="pct-btn" onclick="quickAdjustGen('handicap','c1',0.05)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+5%</button>
-<button class="pct-btn" onclick="quickAdjustGen('handicap','c1',0.07)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+7%</button>
-</div>
-<div></div>
-<div style="display:flex; gap:3px;">
-<button class="pct-btn" onclick="quickAdjustGen('handicap','c3',0.03)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+3%</button>
-<button class="pct-btn" onclick="quickAdjustGen('handicap','c3',0.05)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+5%</button>
-<button class="pct-btn" onclick="quickAdjustGen('handicap','c3',0.07)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+7%</button>
-</div>
+<!-- Quick Adjust (single set) -->
+<div style="display:flex; justify-content:center; gap:4px; margin-top:8px;">
+<button class="pct-btn" onclick="quickAdjustGen('handicap','c1',0.03)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+3%</button>
+<button class="pct-btn" onclick="quickAdjustGen('handicap','c1',0.05)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+5%</button>
+<button class="pct-btn" onclick="quickAdjustGen('handicap','c1',0.07)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+7%</button>
 </div>
 </div>
 <div class="panel-actions">
@@ -1012,48 +1245,91 @@
 </div><!-- /market-content handicap -->
 <!-- ====== MARKET: OVER/UNDER (大小) ====== -->
 <div class="market-content" data-market="ou" style="display:none;">
+<!-- Line list table -->
 <div class="panel-section">
-<div class="panel-title">Vendor Odds</div>
-<div class="vendor-header">
-<div class="vendor-name"> </div>
-<div class="vendor-cells">
-<div>Over 2.5</div>
-<div style="color:#484f58;">—</div>
-<div>Under 2.5</div>
+<div class="panel-title">Lines <span class="line-indicator" id="line-indicator-ou">O/U 2.5</span></div>
+<table class="line-table" style="width:100%; border-collapse:collapse; font-size:12px; margin-top:8px;">
+<thead>
+<tr style="color:#8b949e; font-size:10px; text-transform:uppercase; letter-spacing:0.5px;">
+<th style="text-align:left; padding:4px 8px; border-bottom:1px solid #30363d;">Line</th>
+<th style="text-align:left; padding:4px 8px; border-bottom:1px solid #30363d;">Source</th>
+<th style="text-align:right; padding:4px 8px; border-bottom:2px solid #58a6ff; color:#58a6ff;">OVER</th>
+<th style="text-align:right; padding:4px 8px; border-bottom:2px solid #f97583; color:#f97583;">UNDER</th>
+<th style="text-align:right; padding:4px 8px; border-bottom:1px solid #30363d;">Margin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="line-row active-line" data-line="O/U 2.5" onclick="selectOULine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">O/U 2.5</td>
+<td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">1.95</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">1.90</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">3.8%</td>
+</tr>
+<tr class="line-row" data-line="O/U 2.5" onclick="selectOULine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">O/U 2.5</td>
+<td style="padding:6px 8px; color:#8b949e;">Sportradar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">1.92</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">1.93</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">3.5%</td>
+</tr>
+<tr class="line-row" data-line="O/U 3.0" onclick="selectOULine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">O/U 3.0</td>
+<td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">1.75</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">2.10</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">3.6%</td>
+</tr>
+<tr class="line-row" data-line="O/U 3.0" onclick="selectOULine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">O/U 3.0</td>
+<td style="padding:6px 8px; color:#8b949e;">Sportradar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">1.78</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">2.05</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">3.2%</td>
+</tr>
+<tr class="line-row" data-line="O/U 3.5" onclick="selectOULine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">O/U 3.5</td>
+<td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">1.55</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">2.45</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">4.1%</td>
+</tr>
+<tr class="line-row" data-line="O/U 3.5" onclick="selectOULine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">O/U 3.5</td>
+<td style="padding:6px 8px; color:#8b949e;">Sportradar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">1.58</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">2.40</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">3.8%</td>
+</tr>
+<tr class="line-row" data-line="O/U 1.5" onclick="selectOULine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">O/U 1.5</td>
+<td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">1.30</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">3.40</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">3.9%</td>
+</tr>
+<tr class="line-row" data-line="O/U 1.5" onclick="selectOULine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">O/U 1.5</td>
+<td style="padding:6px 8px; color:#8b949e;">Sportradar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">1.32</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">3.35</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">3.5%</td>
+</tr>
+</tbody>
+</table>
 </div>
-</div>
-<div class="vendor-odds-row">
-<div class="vendor-name">BetRadar</div>
-<div class="vendor-cells">
-<div class="vendor-cell"><span class="vendor-val">1.95</span><span class="vendor-pct">51%</span></div>
-<div class="vendor-cell" style="color:#484f58;">—</div>
-<div class="vendor-cell"><span class="vendor-val">1.90</span><span class="vendor-pct">53%</span></div>
-</div>
-</div>
-<div class="vendor-odds-row">
-<div class="vendor-name">Sportradar</div>
-<div class="vendor-cells">
-<div class="vendor-cell"><span class="vendor-val">1.92</span><span class="vendor-pct">52%</span></div>
-<div class="vendor-cell" style="color:#484f58;">—</div>
-<div class="vendor-cell"><span class="vendor-val">1.93</span><span class="vendor-pct">52%</span></div>
-</div>
-</div>
-</div>
+<!-- New Odds — single selected line -->
 <div class="panel-section" style="background:#1f6feb11; border:1px solid #1f6feb33; border-radius:8px; padding:14px;">
 <div class="panel-title" style="color:#58a6ff;">New Odds</div>
-<div class="odds-grid">
-<div class="odds-grid-label">Over 2.5</div>
-<div class="odds-grid-label" style="color:#484f58;">—</div>
-<div class="odds-grid-label">Under 2.5</div>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px;">
+<div class="odds-grid-label" style="text-align:center; color:#58a6ff;">OVER</div>
+<div class="odds-grid-label" style="text-align:center; color:#f97583;">UNDER</div>
 </div>
-<div class="odds-grid" style="margin-top:4px;">
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:4px;">
 <div class="odds-box-new changed" id="box-ou-c1">
 <div class="odds-old">1.95</div>
 <div class="odds-box-value" id="new-ou-c1">1.95</div>
 <div class="odds-diff diff-none" id="diff-ou-c1" style="visibility:hidden;">0.00</div>
-</div>
-<div class="odds-box-new" style="border-color:#30363d; background:transparent; cursor:default;">
-<div class="odds-box-value" style="color:#484f58;">—</div>
 </div>
 <div class="odds-box-new" id="box-ou-c3">
 <div class="odds-old">1.90</div>
@@ -1061,33 +1337,17 @@
 <div class="odds-diff diff-none" id="diff-ou-c3" style="visibility:hidden;">0.00</div>
 </div>
 </div>
-<!-- +/- fine tune -->
-<div class="odds-grid" style="margin-top:6px;">
-<div class="pct-controls">
+<!-- +/- fine tune (single set) -->
+<div style="display:flex; justify-content:center; gap:6px; margin-top:8px;">
 <button class="pct-btn" onclick="adjustOddsGen('ou','c1',-0.01)">−</button>
 <span class="pct-val" id="pct-ou-c1">51%</span>
 <button class="pct-btn" onclick="adjustOddsGen('ou','c1',0.01)">+</button>
 </div>
-<div class="pct-controls" style="visibility:hidden;"></div>
-<div class="pct-controls">
-<button class="pct-btn" onclick="adjustOddsGen('ou','c3',-0.01)">−</button>
-<span class="pct-val" id="pct-ou-c3">53%</span>
-<button class="pct-btn" onclick="adjustOddsGen('ou','c3',0.01)">+</button>
-</div>
-</div>
-<!-- Quick Adjust -->
-<div class="odds-grid" style="margin-top:10px; gap:8px;">
-<div style="display:flex; gap:3px;">
-<button class="pct-btn" onclick="quickAdjustGen('ou','c1',0.03)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+3%</button>
-<button class="pct-btn" onclick="quickAdjustGen('ou','c1',0.05)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+5%</button>
-<button class="pct-btn" onclick="quickAdjustGen('ou','c1',0.07)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+7%</button>
-</div>
-<div></div>
-<div style="display:flex; gap:3px;">
-<button class="pct-btn" onclick="quickAdjustGen('ou','c3',0.03)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+3%</button>
-<button class="pct-btn" onclick="quickAdjustGen('ou','c3',0.05)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+5%</button>
-<button class="pct-btn" onclick="quickAdjustGen('ou','c3',0.07)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+7%</button>
-</div>
+<!-- Quick Adjust (single set) -->
+<div style="display:flex; justify-content:center; gap:4px; margin-top:8px;">
+<button class="pct-btn" onclick="quickAdjustGen('ou','c1',0.03)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+3%</button>
+<button class="pct-btn" onclick="quickAdjustGen('ou','c1',0.05)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+5%</button>
+<button class="pct-btn" onclick="quickAdjustGen('ou','c1',0.07)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+7%</button>
 </div>
 </div>
 <div class="panel-actions">
@@ -1128,92 +1388,121 @@
 </div><!-- /market-content ou -->
 <!-- ====== MARKET: CORRECT SCORE (猜比分) ====== -->
 <div class="market-content" data-market="cs" style="display:none;">
+<!-- Score list table -->
 <div class="panel-section">
-<div class="panel-title">Vendor Odds</div>
-<div class="vendor-header">
-<div class="vendor-name"> </div>
-<div class="vendor-cells">
-<div>1 – 0</div>
-<div>2 – 1</div>
-<div>0 – 0</div>
+<div class="panel-title">Scores <span class="line-indicator" id="line-indicator-cs">1 – 0</span></div>
+<table class="line-table" style="width:100%; border-collapse:collapse; font-size:12px; margin-top:8px;">
+<thead>
+<tr style="color:#8b949e; font-size:10px; text-transform:uppercase; letter-spacing:0.5px;">
+<th style="text-align:left; padding:4px 8px; border-bottom:1px solid #30363d;">Score</th>
+<th style="text-align:left; padding:4px 8px; border-bottom:1px solid #30363d;">Type</th>
+<th style="text-align:left; padding:4px 8px; border-bottom:1px solid #30363d;">Source</th>
+<th style="text-align:right; padding:4px 8px; border-bottom:1px solid #30363d;">Odds</th>
+<th style="text-align:right; padding:4px 8px; border-bottom:1px solid #30363d;">Prob</th>
+</tr>
+</thead>
+<tbody>
+<tr class="line-row active-line" data-line="1 – 0" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">1 – 0</td>
+<td style="padding:6px 8px; color:#58a6ff; font-size:10px;">HOME</td>
+<td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700;">7.50</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">13.3%</td>
+</tr>
+<tr class="line-row" data-line="1 – 0" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">1 – 0</td>
+<td style="padding:6px 8px; color:#58a6ff; font-size:10px;">HOME</td>
+<td style="padding:6px 8px; color:#8b949e;">Sportradar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700;">7.20</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">13.9%</td>
+</tr>
+<tr class="line-row" data-line="2 – 0" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">2 – 0</td>
+<td style="padding:6px 8px; color:#58a6ff; font-size:10px;">HOME</td>
+<td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700;">9.00</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">11.1%</td>
+</tr>
+<tr class="line-row" data-line="2 – 1" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">2 – 1</td>
+<td style="padding:6px 8px; color:#58a6ff; font-size:10px;">HOME</td>
+<td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700;">8.00</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">12.5%</td>
+</tr>
+<tr class="line-row" data-line="3 – 1" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">3 – 1</td>
+<td style="padding:6px 8px; color:#58a6ff; font-size:10px;">HOME</td>
+<td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700;">15.00</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">6.7%</td>
+</tr>
+<tr class="line-row" data-line="0 – 1" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">0 – 1</td>
+<td style="padding:6px 8px; color:#f97583; font-size:10px;">AWAY</td>
+<td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700;">8.50</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">11.8%</td>
+</tr>
+<tr class="line-row" data-line="0 – 2" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">0 – 2</td>
+<td style="padding:6px 8px; color:#f97583; font-size:10px;">AWAY</td>
+<td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700;">12.00</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">8.3%</td>
+</tr>
+<tr class="line-row" data-line="1 – 2" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">1 – 2</td>
+<td style="padding:6px 8px; color:#f97583; font-size:10px;">AWAY</td>
+<td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700;">10.00</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">10.0%</td>
+</tr>
+<tr class="line-row" data-line="0 – 0" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">0 – 0</td>
+<td style="padding:6px 8px; color:#d2a8ff; font-size:10px;">DRAW</td>
+<td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700;">9.50</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">10.5%</td>
+</tr>
+<tr class="line-row" data-line="1 – 1" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">1 – 1</td>
+<td style="padding:6px 8px; color:#d2a8ff; font-size:10px;">DRAW</td>
+<td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700;">6.50</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">15.4%</td>
+</tr>
+<tr class="line-row" data-line="2 – 2" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td style="padding:6px 8px; font-weight:700; color:#f0883e;">2 – 2</td>
+<td style="padding:6px 8px; color:#d2a8ff; font-size:10px;">DRAW</td>
+<td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
+<td style="padding:6px 8px; text-align:right; font-weight:700;">14.00</td>
+<td style="padding:6px 8px; text-align:right; color:#8b949e;">7.1%</td>
+</tr>
+</tbody>
+</table>
 </div>
-</div>
-<div class="vendor-odds-row">
-<div class="vendor-name">BetRadar</div>
-<div class="vendor-cells">
-<div class="vendor-cell"><span class="vendor-val">7.50</span></div>
-<div class="vendor-cell"><span class="vendor-val">8.00</span></div>
-<div class="vendor-cell"><span class="vendor-val">9.50</span></div>
-</div>
-</div>
-<div class="vendor-odds-row">
-<div class="vendor-name">Sportradar</div>
-<div class="vendor-cells">
-<div class="vendor-cell"><span class="vendor-val">7.20</span></div>
-<div class="vendor-cell"><span class="vendor-val">8.25</span></div>
-<div class="vendor-cell"><span class="vendor-val">9.00</span></div>
-</div>
-</div>
-</div>
+<!-- New Odds — single selected score -->
 <div class="panel-section" style="background:#1f6feb11; border:1px solid #1f6feb33; border-radius:8px; padding:14px;">
-<div class="panel-title" style="color:#58a6ff;">New Odds <span style="color:#8b949e; font-size:10px; text-transform:none; letter-spacing:0;">(top 3 scores)</span></div>
-<div class="odds-grid">
-<div class="odds-grid-label">1 – 0</div>
-<div class="odds-grid-label">2 – 1</div>
-<div class="odds-grid-label">0 – 0</div>
-</div>
-<div class="odds-grid" style="margin-top:4px;">
-<div class="odds-box-new" id="box-cs-c1">
+<div class="panel-title" style="color:#58a6ff;">New Odds</div>
+<div style="display:flex; justify-content:center; margin-top:6px;">
+<div class="odds-box-new changed" id="box-cs-c1" style="min-width:120px;">
 <div class="odds-old">7.50</div>
 <div class="odds-box-value" id="new-cs-c1">7.50</div>
 <div class="odds-diff diff-none" id="diff-cs-c1" style="visibility:hidden;">0.00</div>
 </div>
-<div class="odds-box-new" id="box-cs-c2">
-<div class="odds-old">8.00</div>
-<div class="odds-box-value" id="new-cs-c2">8.00</div>
-<div class="odds-diff diff-none" id="diff-cs-c2" style="visibility:hidden;">0.00</div>
 </div>
-<div class="odds-box-new" id="box-cs-c3">
-<div class="odds-old">9.50</div>
-<div class="odds-box-value" id="new-cs-c3">9.50</div>
-<div class="odds-diff diff-none" id="diff-cs-c3" style="visibility:hidden;">0.00</div>
-</div>
-</div>
-<!-- +/- fine tune -->
-<div class="odds-grid" style="margin-top:6px;">
-<div class="pct-controls">
+<!-- +/- fine tune (single set) -->
+<div style="display:flex; justify-content:center; gap:6px; margin-top:8px;">
 <button class="pct-btn" onclick="adjustOddsGen('cs','c1',-0.05)">−</button>
-<span class="pct-val" id="pct-cs-c1"> </span>
+<span class="pct-val" id="pct-cs-c1">13.3%</span>
 <button class="pct-btn" onclick="adjustOddsGen('cs','c1',0.05)">+</button>
 </div>
-<div class="pct-controls">
-<button class="pct-btn" onclick="adjustOddsGen('cs','c2',-0.05)">−</button>
-<span class="pct-val" id="pct-cs-c2"> </span>
-<button class="pct-btn" onclick="adjustOddsGen('cs','c2',0.05)">+</button>
-</div>
-<div class="pct-controls">
-<button class="pct-btn" onclick="adjustOddsGen('cs','c3',-0.05)">−</button>
-<span class="pct-val" id="pct-cs-c3"> </span>
-<button class="pct-btn" onclick="adjustOddsGen('cs','c3',0.05)">+</button>
-</div>
-</div>
-<!-- Quick Adjust -->
-<div class="odds-grid" style="margin-top:10px; gap:8px;">
-<div style="display:flex; gap:3px;">
-<button class="pct-btn" onclick="quickAdjustGen('cs','c1',0.03)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+3%</button>
-<button class="pct-btn" onclick="quickAdjustGen('cs','c1',0.05)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+5%</button>
-<button class="pct-btn" onclick="quickAdjustGen('cs','c1',0.07)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+7%</button>
-</div>
-<div style="display:flex; gap:3px;">
-<button class="pct-btn" onclick="quickAdjustGen('cs','c2',0.03)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+3%</button>
-<button class="pct-btn" onclick="quickAdjustGen('cs','c2',0.05)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+5%</button>
-<button class="pct-btn" onclick="quickAdjustGen('cs','c2',0.07)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+7%</button>
-</div>
-<div style="display:flex; gap:3px;">
-<button class="pct-btn" onclick="quickAdjustGen('cs','c3',0.03)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+3%</button>
-<button class="pct-btn" onclick="quickAdjustGen('cs','c3',0.05)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+5%</button>
-<button class="pct-btn" onclick="quickAdjustGen('cs','c3',0.07)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+7%</button>
-</div>
+<!-- Quick Adjust (single set) -->
+<div style="display:flex; justify-content:center; gap:4px; margin-top:8px;">
+<button class="pct-btn" onclick="quickAdjustGen('cs','c1',0.03)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+3%</button>
+<button class="pct-btn" onclick="quickAdjustGen('cs','c1',0.05)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+5%</button>
+<button class="pct-btn" onclick="quickAdjustGen('cs','c1',0.07)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+7%</button>
 </div>
 </div>
 <div class="panel-actions">
@@ -1224,14 +1513,13 @@
 <div class="panel-title">Operation Log</div>
 <div class="op-log">
 <div class="op-entry">
-<div class="op-time">17:05:30<br/><span class="op-match-time">70'</span></div>
+<div class="op-time">17:05:30<br/><span class="op-match-time">70\'</span></div>
 <div class="op-body">
 <div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Hugo</span></div>
 <div class="op-odds-change">
 <table class="op-odds-table">
 <tr><td class="op-sel">1–0</td><td class="op-old">8.00</td><td class="op-arrow">→</td><td class="op-new">7.50</td><td class="op-diff diff-down">-0.50</td></tr>
 <tr><td class="op-sel">2–1</td><td class="op-old">7.50</td><td class="op-arrow">→</td><td class="op-new">8.00</td><td class="op-diff diff-up">+0.50</td></tr>
-<tr><td class="op-sel">0–0</td><td class="op-old">8.50</td><td class="op-arrow">→</td><td class="op-new">9.50</td><td class="op-diff diff-up">+1.00</td></tr>
 </table>
 </div>
 <div class="op-reason"><span class="op-reason-text">Score-line odds rebalance</span> <button class="op-reason-edit" title="編輯備註">✎</button></div>
@@ -1945,11 +2233,122 @@ function switchMarket(tab) {
 
   var market = tab.dataset.market;
 
-  // Show/hide market content panels
+  // Show/hide market content panels (right side)
   document.querySelectorAll('.odds-panel .market-content').forEach(function(mc) {
     mc.style.display = mc.dataset.market === market ? '' : 'none';
   });
+
+  // Markets with 3 selections (show DRAW): 1x2, ng, cs
+  // Markets with 2 selections (hide DRAW): handicap, ou, oe
+  var hasDraw = (market === '1x2' || market === 'ng' || market === 'cs');
+  document.querySelectorAll('.draw-col').forEach(function(el) {
+    el.style.display = hasDraw ? '' : 'none';
+  });
+
+  // Update Item column content per market (only for base rows with data attributes)
+  document.querySelectorAll('.item-cell[data-1x2]').forEach(function(cell) {
+    cell.textContent = cell.dataset[market] || '-';
+  });
+
+  // Show/hide extra-line rows per market
+  document.querySelectorAll('.extra-line').forEach(function(row) {
+    var rowMarkets = row.dataset.markets || '';
+    row.style.display = (rowMarkets.indexOf(market) !== -1) ? '' : 'none';
+  });
+
+  // Update Item header label per market
+  var itemLabels = { '1x2': 'Item', handicap: 'Line', ou: 'Line', cs: 'Score', oe: 'Item', ng: 'Item' };
+  var itemTh = document.querySelector('.item-col');
+  if (itemTh) itemTh.textContent = itemLabels[market] || 'Item';
+
+  // Update column group headers per market
+  var g1 = document.getElementById('col-group-1');
+  var g2 = document.getElementById('col-group-2');
+  if (market === 'ou') {
+    if (g1) g1.textContent = 'OVER';
+    if (g2) g2.textContent = 'UNDER';
+  } else if (market === 'oe') {
+    if (g1) g1.textContent = 'ODD';
+    if (g2) g2.textContent = 'EVEN';
+  } else if (market === 'ng') {
+    if (g1) g1.textContent = 'HOME GOAL';
+    if (g2) g2.textContent = 'AWAY GOAL';
+  } else {
+    if (g1) g1.textContent = 'HOME';
+    if (g2) g2.textContent = 'AWAY';
+  }
+
+  // Clear row selection when switching market
+  document.querySelectorAll('.act-table tbody tr.active-row').forEach(function(r) { r.classList.remove('active-row'); });
+
+  // Auto-select first visible row for markets with lines
+  if (market === 'handicap' || market === 'ou' || market === 'cs') {
+    var firstRow = document.querySelector('.act-table tbody tr:not([style*="display:none"]):not(.extra-line)');
+    if (firstRow) selectLine(firstRow);
+  }
 }
+
+// Row click → highlight + update right panel line indicator
+(function() {
+  var tbody = document.querySelector('.act-table tbody');
+  if (tbody) {
+    tbody.addEventListener('click', function(e) {
+      var row = e.target.closest('tr');
+      if (row) selectLine(row);
+    });
+  }
+})();
+
+function selectLine(row) {
+  // Remove previous selection
+  document.querySelectorAll('.act-table tbody tr.active-row').forEach(function(r) { r.classList.remove('active-row'); });
+  // Highlight clicked row
+  row.classList.add('active-row');
+
+  // Get line text from item-cell in this row
+  var itemCell = row.querySelector('.item-cell');
+  var lineText = itemCell ? itemCell.textContent.trim() : '-';
+
+  // Get current active market
+  var activeTab = document.querySelector('#marketTabs .market-tab.active');
+  var market = activeTab ? activeTab.dataset.market : '1x2';
+
+  // Update line indicator on right panel
+  var indicator = document.getElementById('line-indicator-' + market);
+  if (indicator) indicator.textContent = lineText;
+
+  // Also highlight matching line-row on right panel
+  if (market === 'handicap') {
+    document.querySelectorAll('.line-table .line-row').forEach(function(r) { r.classList.remove('active-line'); });
+    document.querySelectorAll('.line-table .line-row[data-line="' + lineText + '"]').forEach(function(r) { r.classList.add('active-line'); });
+  }
+}
+
+// Click a line row in the right panel line table
+function selectRightPanelLine(row, marketId) {
+  // Get the line-table inside the active market panel
+  var panel = row.closest('.market-content');
+  // Highlight in right panel
+  panel.querySelectorAll('.line-table .line-row').forEach(function(r) { r.classList.remove('active-line'); });
+  var lineText = row.dataset.line;
+  panel.querySelectorAll('.line-table .line-row[data-line="' + lineText + '"]').forEach(function(r) { r.classList.add('active-line'); });
+
+  // Update indicator
+  var indicator = document.getElementById('line-indicator-' + marketId);
+  if (indicator) indicator.textContent = lineText;
+
+  // Also highlight matching row on left table
+  document.querySelectorAll('.act-table tbody tr.active-row').forEach(function(r) { r.classList.remove('active-row'); });
+  document.querySelectorAll('.act-table tbody tr').forEach(function(r) {
+    var cell = r.querySelector('.item-cell');
+    if (cell && cell.textContent.trim() === lineText) {
+      r.classList.add('active-row');
+    }
+  });
+}
+function selectHandicapLine(row) { selectRightPanelLine(row, 'handicap'); }
+function selectOULine(row) { selectRightPanelLine(row, 'ou'); }
+function selectCSLine(row) { selectRightPanelLine(row, 'cs'); }
 </script>
 </body>
 </html>
