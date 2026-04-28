@@ -758,6 +758,7 @@
 <div class="market-tab" data-market="ou" onclick="switchMarket(this)">大小</div>
 <div class="market-tab" data-market="cs" onclick="switchMarket(this)">猜比分</div>
 <div class="market-tab" data-market="oe" onclick="switchMarket(this)">單雙</div>
+<div class="market-tab" data-market="ng" onclick="switchMarket(this)">下一進球</div>
 </div>
 </div>
 <!-- Odds Panel (Right) -->
@@ -1342,6 +1343,120 @@
 </div>
 </div>
 </div><!-- /market-content oe -->
+<!-- ====== MARKET: NEXT GOAL (下一進球) ====== -->
+<div class="market-content" data-market="ng" style="display:none;">
+<div class="panel-section">
+<div class="panel-title">Vendor Odds</div>
+<div class="vendor-header">
+<div class="vendor-name"> </div>
+<div class="vendor-cells">
+<div>Home (主隊進球)</div>
+<div>No Goal (無進球)</div>
+<div>Away (客隊進球)</div>
+</div>
+</div>
+<div class="vendor-odds-row">
+<div class="vendor-name">BetRadar</div>
+<div class="vendor-cells">
+<div class="vendor-cell"><span class="vendor-val">2.10</span><span class="vendor-pct">48%</span></div>
+<div class="vendor-cell"><span class="vendor-val">6.50</span><span class="vendor-pct">15%</span></div>
+<div class="vendor-cell"><span class="vendor-val">2.70</span><span class="vendor-pct">37%</span></div>
+</div>
+</div>
+<div class="vendor-odds-row">
+<div class="vendor-name">Sportradar</div>
+<div class="vendor-cells">
+<div class="vendor-cell"><span class="vendor-val">2.15</span><span class="vendor-pct">47%</span></div>
+<div class="vendor-cell"><span class="vendor-val">6.00</span><span class="vendor-pct">17%</span></div>
+<div class="vendor-cell"><span class="vendor-val">2.75</span><span class="vendor-pct">36%</span></div>
+</div>
+</div>
+</div>
+<div class="panel-section" style="background:#1f6feb11; border:1px solid #1f6feb33; border-radius:8px; padding:14px;">
+<div class="panel-title" style="color:#58a6ff;">New Odds</div>
+<div class="odds-grid">
+<div class="odds-grid-label">Home (主隊進球)</div>
+<div class="odds-grid-label">No Goal (無進球)</div>
+<div class="odds-grid-label">Away (客隊進球)</div>
+</div>
+<div class="odds-grid" style="margin-top:4px;">
+<div class="odds-box-new" id="box-ng-c1">
+<div class="odds-old">2.10</div>
+<div class="odds-box-value" id="new-ng-c1">2.10</div>
+<div class="odds-diff diff-none" id="diff-ng-c1" style="visibility:hidden;">0.00</div>
+</div>
+<div class="odds-box-new" id="box-ng-c2">
+<div class="odds-old">6.50</div>
+<div class="odds-box-value" id="new-ng-c2">6.50</div>
+<div class="odds-diff diff-none" id="diff-ng-c2" style="visibility:hidden;">0.00</div>
+</div>
+<div class="odds-box-new" id="box-ng-c3">
+<div class="odds-old">2.70</div>
+<div class="odds-box-value" id="new-ng-c3">2.70</div>
+<div class="odds-diff diff-none" id="diff-ng-c3" style="visibility:hidden;">0.00</div>
+</div>
+</div>
+<!-- +/- fine tune -->
+<div class="odds-grid" style="margin-top:6px;">
+<div class="pct-controls">
+<button class="pct-btn" onclick="adjustOddsGen('ng','c1',-0.05)">−</button>
+<span class="pct-val" id="pct-ng-c1">48%</span>
+<button class="pct-btn" onclick="adjustOddsGen('ng','c1',0.05)">+</button>
+</div>
+<div class="pct-controls">
+<button class="pct-btn" onclick="adjustOddsGen('ng','c2',-0.05)">−</button>
+<span class="pct-val" id="pct-ng-c2">15%</span>
+<button class="pct-btn" onclick="adjustOddsGen('ng','c2',0.05)">+</button>
+</div>
+<div class="pct-controls">
+<button class="pct-btn" onclick="adjustOddsGen('ng','c3',-0.05)">−</button>
+<span class="pct-val" id="pct-ng-c3">37%</span>
+<button class="pct-btn" onclick="adjustOddsGen('ng','c3',0.05)">+</button>
+</div>
+</div>
+<!-- Quick Adjust -->
+<div class="odds-grid" style="margin-top:10px; gap:8px;">
+<div style="display:flex; gap:3px;">
+<button class="pct-btn" onclick="quickAdjustGen('ng','c1',0.03)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+3%</button>
+<button class="pct-btn" onclick="quickAdjustGen('ng','c1',0.05)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+5%</button>
+<button class="pct-btn" onclick="quickAdjustGen('ng','c1',0.07)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+7%</button>
+</div>
+<div style="display:flex; gap:3px;">
+<button class="pct-btn" onclick="quickAdjustGen('ng','c2',0.03)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+3%</button>
+<button class="pct-btn" onclick="quickAdjustGen('ng','c2',0.05)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+5%</button>
+<button class="pct-btn" onclick="quickAdjustGen('ng','c2',0.07)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+7%</button>
+</div>
+<div style="display:flex; gap:3px;">
+<button class="pct-btn" onclick="quickAdjustGen('ng','c3',0.03)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+3%</button>
+<button class="pct-btn" onclick="quickAdjustGen('ng','c3',0.05)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+5%</button>
+<button class="pct-btn" onclick="quickAdjustGen('ng','c3',0.07)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+7%</button>
+</div>
+</div>
+</div>
+<div class="panel-actions">
+<button class="btn-remove">Suspend</button>
+<button class="btn-apply">Update</button>
+</div>
+<div class="panel-section" style="margin-top:24px; border-top:1px solid #30363d; padding-top:20px;">
+<div class="panel-title">Operation Log</div>
+<div class="op-log">
+<div class="op-entry">
+<div class="op-time">17:12:45<br/><span class="op-match-time">75'</span></div>
+<div class="op-body">
+<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Hugo</span></div>
+<div class="op-odds-change">
+<table class="op-odds-table">
+<tr><td class="op-sel">Home</td><td class="op-old">2.20</td><td class="op-arrow">→</td><td class="op-new">2.10</td><td class="op-diff diff-down">-0.10</td></tr>
+<tr><td class="op-sel">No Goal</td><td class="op-old">6.00</td><td class="op-arrow">→</td><td class="op-new">6.50</td><td class="op-diff diff-up">+0.50</td></tr>
+<tr><td class="op-sel">Away</td><td class="op-old">2.80</td><td class="op-arrow">→</td><td class="op-new">2.70</td><td class="op-diff diff-down">-0.10</td></tr>
+</table>
+</div>
+<div class="op-reason"><span class="op-reason-text">Adjusted after 73' corner pressure</span> <button class="op-reason-edit" title="編輯備註">✎</button></div>
+</div>
+</div>
+</div>
+</div>
+</div><!-- /market-content ng -->
 </div>
 </div>
 </div>
@@ -1595,6 +1710,7 @@ const MARKETS = [
   { id: 'ou25',        group: 'Goals',        name: 'Over / Under 2.5',          status: 'open',   turnover: 74600 },
   { id: 'ou35',        group: 'Goals',        name: 'Over / Under 3.5',          status: 'open',   turnover: 28300 },
   { id: 'total_home',  group: 'Goals',        name: 'Home Team Total Goals',     status: 'open',   turnover: 9200 },
+  { id: 'ng',          group: 'Goals',        name: 'Next Goal (下一進球)',       status: 'open',   turnover: 18500 },
   // Corners
   { id: 'corners_ou',  group: 'Corners',      name: 'Corners O/U 9.5',           status: 'open',   turnover: 15700 },
   { id: 'corners_ah',  group: 'Corners',      name: 'Corners Asian Handicap',    status: 'closed', turnover: 0 },
