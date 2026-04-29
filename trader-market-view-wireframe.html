@@ -100,8 +100,11 @@
   td.center { text-align: center; }
 
   /* Live section */
-  .live-section { background: #1a0e0e; }
-  .live-section td { border-bottom: 1px solid #3d2222; }
+  /* Market-type group alternating colors */
+  .group-a { background: #1c2333; }
+  .group-a td { border-bottom: 1px solid #30363d; }
+  .group-b { background: #0d1117; }
+  .group-b td { border-bottom: 1px solid #21262d; }
   .live-badge { background: #da3633; color: #fff; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 3px; }
   @keyframes livePulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
 
@@ -117,7 +120,8 @@
   .odds-draw { color: #d2a8ff; }
 
   /* Turnover */
-  .turnover { color: #e6edf3; font-variant-numeric: tabular-nums; }
+  .turnover { color: #e6edf3; font-variant-numeric: tabular-nums; cursor: pointer; }
+  .turnover:hover { text-decoration: underline; color: #58a6ff; }
 
   /* Exposure */
   .expo { color: #ffa657; font-variant-numeric: tabular-nums; }
@@ -150,18 +154,6 @@
   .btn-enter:hover { background: #1f6feb44; }
   .btn-bets { background: #23863622; border-color: #3fb950; color: #3fb950; }
   .btn-bets:hover { background: #23863644; }
-  .btn-request-row { background: #8957e522; border-color: #d2a8ff; color: #d2a8ff; }
-  .btn-request-row:hover { background: #8957e544; }
-  .row-takeover-slot { display: inline-flex; align-items: center; }
-  .row-takeover-waiting { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: #d29922; padding: 2px 8px; border: 1px solid #d2992266; border-radius: 4px; background: #d2992211; }
-  .row-takeover-waiting .rts-spinner { width: 8px; height: 8px; border: 2px solid #d29922; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .row-takeover-waiting .rts-cancel { cursor: pointer; color: #8b949e; margin-left: 4px; }
-  .row-takeover-waiting .rts-cancel:hover { color: #f85149; }
-  .row-takeover-active { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: #3fb950; padding: 2px 8px; border: 1px solid #3fb95044; border-radius: 4px; background: #23863622; font-weight: 600; }
-  .row-takeover-active .rts-dot { width: 6px; height: 6px; background: #3fb950; border-radius: 50%; }
-  .row-takeover-active .rts-revoke { cursor: pointer; color: #8b949e; margin-left: 2px; font-size: 12px; }
-  .row-takeover-active .rts-revoke:hover { color: #f85149; }
   .btn-refund { background: #d2992222; border-color: #d29922; color: #d29922; }
   .btn-refund:hover { background: #d2992244; }
   .btn-close { background: #6e768122; border-color: #8b949e; color: #8b949e; }
@@ -194,98 +186,13 @@
   /* Market status badges */
   .status-badge { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 3px; display: inline-block; }
   .status-open { background: #23863633; color: #3fb950; border: 1px solid #3fb95044; }
-  .status-suspended { background: #b6222233; color: #f85149; border: 1px solid #f8514944; animation: livePulse 1.5s infinite; }
-  .status-closed { background: #6e768133; color: #8b949e; border: 1px solid #8b949e44; }
+  .status-open-auto { background: #23863633; color: #3fb950; border: 1px solid #3fb95044; }
+  .status-open-manual { background: #8957e533; color: #d2a8ff; border: 1px solid #d2a8ff44; }
+  .status-closed { background: #b6222233; color: #f85149; border: 1px solid #f8514944; animation: livePulse 1.5s infinite; }
 
-  /* ============================================= */
-  /* Manual Takeover (Trader side)                 */
-  /* ============================================= */
-  .btn-request  { background: #8957e522; border-color: #d2a8ff; color: #d2a8ff; }
-  .btn-request:hover { background: #8957e544; }
-
-  /* Waiting chip (replaces the button while pending) */
-  .chip-waiting {
-    display: flex; align-items: center; gap: 8px;
-    padding: 6px 12px; border-radius: 6px;
-    background: #d2992222; border: 1px solid #d29922;
-    color: #d29922; font-size: 12px; font-weight: 600;
-  }
-  .chip-waiting .spinner {
-    width: 12px; height: 12px; border: 2px solid #d2992244;
-    border-top-color: #d29922; border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-  .chip-waiting .escalate { color: #ffa657; font-size: 11px; margin-left: 4px; }
-  .chip-waiting .cancel-x { cursor: pointer; color: #8b949e; margin-left: 4px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* Active chip (after approved) */
-  .chip-manual {
-    display: flex; align-items: center; gap: 8px;
-    padding: 6px 12px; border-radius: 6px;
-    background: #23863622; border: 1px solid #3fb950;
-    color: #3fb950; font-size: 12px; font-weight: 700;
-  }
-  .chip-manual .dot { width: 8px; height: 8px; border-radius: 50%; background: #3fb950; box-shadow: 0 0 6px #3fb95088; animation: pulse 1.8s infinite; }
-  .chip-manual .approver { color: #8b949e; font-weight: 400; font-size: 11px; }
-  .chip-manual .fill-reason { color: #58a6ff; font-size: 11px; cursor: pointer; text-decoration: underline; margin-left: 6px; font-weight: 400; }
-
-  /* Manual mode banner (top, shown when active) */
-  .manual-banner {
-    display: flex; align-items: center; gap: 12px;
-    padding: 8px 20px; background: #23863622;
-    border-bottom: 1px solid #3fb95066;
-  }
-  .manual-banner .icon { font-size: 16px; }
-  .manual-banner .text { flex: 1; color: #3fb950; font-size: 12px; font-weight: 500; }
-  .manual-banner .text strong { color: #e6edf3; }
-  .manual-banner .revoke { background: #b6222233; border: 1px solid #f85149; color: #f85149; padding: 4px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: 600; }
-
-  /* ============================================= */
-  /* Super Trader approval toast (bottom-right)    */
-  /* ============================================= */
-  .super-toast {
-    position: fixed; bottom: 60px; right: 20px;
-    width: 340px; background: #161b22;
-    border: 1px solid #d29922; border-radius: 8px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
-    z-index: 900; overflow: hidden;
-    animation: toastIn 0.3s ease-out;
-  }
-  @keyframes toastIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-  .super-toast-header { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #d2992222; border-bottom: 1px solid #30363d; }
-  .super-toast-header .bell { font-size: 14px; animation: shake 0.8s ease-in-out 3; }
-  @keyframes shake { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-15deg); } 75% { transform: rotate(15deg); } }
-  .super-toast-header .title { flex: 1; font-size: 13px; font-weight: 700; color: #d29922; }
-  .super-toast-header .close { background: none; border: none; color: #8b949e; cursor: pointer; font-size: 14px; }
-  .super-toast-body { padding: 12px 14px; }
-  .super-toast-body .req-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 12px; }
-  .super-toast-body .req-row .k { color: #8b949e; }
-  .super-toast-body .req-row .v { color: #e6edf3; font-weight: 600; }
-  .super-toast-body .match-name { color: #58a6ff; font-weight: 700; }
-  .super-toast-actions { display: flex; gap: 8px; padding: 10px 14px; border-top: 1px solid #30363d; }
-  .super-toast-actions button { flex: 1; padding: 8px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid; }
-  .toast-reject { background: #b6222233; border-color: #f85149; color: #f85149; }
-  .toast-approve { background: #23863633; border-color: #3fb950; color: #3fb950; }
-  .toast-countdown { height: 3px; background: #30363d; position: relative; overflow: hidden; }
-  .toast-countdown-bar { height: 100%; background: #d29922; width: 90%; transition: width 1s linear; }
-
-  /* ============================================= */
-  /* Wireframe demo state switcher                  */
-  /* ============================================= */
-  .demo-switcher {
-    position: fixed; bottom: 50px; left: 20px;
-    background: #161b22; border: 1px dashed #d29922;
-    padding: 8px 10px; border-radius: 8px; z-index: 999;
-    display: flex; gap: 6px; align-items: center;
-    font-size: 11px;
-  }
-  .demo-switcher .demo-label { color: #d29922; font-weight: 700; margin-right: 4px; }
-  .demo-switcher button {
-    background: #0d1117; border: 1px solid #30363d; color: #8b949e;
-    padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;
-  }
-  .demo-switcher button.active { border-color: #d29922; color: #d29922; background: #d2992222; }
+  /* Recently updated cell flash — only the changed number, not the whole row */
+  .cell-updated { animation: cellFlash 3s ease-out; }
+  @keyframes cellFlash { 0% { background: #d2992244; } 100% { background: transparent; } }
 
   /* Wireframe label */
   .wf-note { position: fixed; bottom: 10px; right: 20px; background: #d29922; color: #000; padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 700; z-index: 999; }
@@ -342,7 +249,7 @@
 <div class="score-display">1 — 0</div>
 </div>
 <div class="match-actions">
-<button class="btn-action btn-suspend-lg" id="suspend-all-btn">⚠ Suspend All</button>
+<button class="btn-action btn-suspend-lg" id="close-all-btn" title="Close all markets (reason required)">⚠ Close All</button>
 </div>
 <div class="updated-text">Last update<br/>12:40:01.234</div>
 <div style="display:flex; align-items:center; gap:6px; border-left:1px solid #30363d; padding-left:12px;">
@@ -359,12 +266,6 @@
       </span>
 <button class="alert-banner-action">View Detail</button>
 <button class="alert-banner-dismiss" title="Dismiss">×</button>
-</div>
-<!-- Manual Mode Banner (shown when active) -->
-<div class="manual-banner" id="manualBanner" style="display: none;">
-<span class="icon">🔓</span>
-<span class="text">Manual takeover active · <strong>Hugo</strong> is operating this match · approved by <strong>Zoey</strong> at 20:42</span>
-<button class="revoke" onclick="setState('idle')">Revoke Access</button>
 </div>
 <!-- Filter Bar (simplified for single match) -->
 <div class="filter-bar">
@@ -420,22 +321,22 @@
 <th class="left">Type</th>
 <th class="left">Item</th>
 <th style="text-align:center;">Value</th>
-<th class="info-hint" data-hint="Market status: Open / Suspended / Closed" style="text-align:center;">Status</th>
+<th class="info-hint" data-hint="Market status: Open (A)uto / Open (M)anual / Closed" style="text-align:center;">Status</th>
 <!-- HOME -->
 <th class="info-hint" data-hint="Weighted Average Odds">WAO</th>
-<th class="info-hint" data-hint="Turnover (integer)">Turnover</th>
+<th class="info-hint" data-hint="Turnover · Click to view Wagers">Turnover</th>
 <th class="info-hint" data-hint="Wager count">Wagers</th>
 <th class="info-hint" data-hint="Unique player count">Players</th>
 <th>Alert</th>
 <!-- AWAY -->
 <th class="info-hint" data-hint="Weighted Average Odds">WAO</th>
-<th class="info-hint" data-hint="Turnover (integer)">Turnover</th>
+<th class="info-hint" data-hint="Turnover · Click to view Wagers">Turnover</th>
 <th class="info-hint" data-hint="Wager count">Wagers</th>
 <th class="info-hint" data-hint="Unique player count">Players</th>
 <th>Alert</th>
 <!-- DRAW -->
 <th class="info-hint" data-hint="Weighted Average Odds">WAO</th>
-<th class="info-hint" data-hint="Turnover (integer)">Turnover</th>
+<th class="info-hint" data-hint="Turnover · Click to view Wagers">Turnover</th>
 <th class="info-hint" data-hint="Wager count">Wagers</th>
 <th class="info-hint" data-hint="Unique player count">Players</th>
 <th>Alert</th>
@@ -446,7 +347,7 @@
 <!-- Players -->
 <th class="info-hint" data-hint="Total unique players" style="color:#ffa657;">Players</th>
 <!-- Turnover -->
-<th class="info-hint" data-hint="HOME + AWAY + DRAW Turnover" style="color:#3fb950;">Turnover</th>
+<th class="info-hint" data-hint="HOME + AWAY + DRAW Turnover · Click to view Wagers" style="color:#3fb950;">Turnover</th>
 <!-- Actions -->
 <th>Actions</th>
 </tr>
@@ -455,11 +356,11 @@
 <!-- ====== LIVE MARKETS (pinned top) ====== -->
 <tr class="section-row live"><td colspan="24">🔴 IN-PLAY — In-Play Markets (58')</td></tr>
 <!-- 1X2 FT -->
-<tr class="live-section">
+<tr class="group-a">
 <td class="left type-cell">1X2</td>
 <td class="left item-cell">FT</td>
 <td class="value-cell">—</td>
-<td class="center"><span class="status-badge status-open">Open</span></td>
+<td class="center"><span class="status-badge status-open-manual">Open (M)</span></td>
 <!-- HOME -->
 <td class="right"><span class="odds odds-home">1.28</span></td>
 <td class="right turnover">123,456,789</td>
@@ -479,25 +380,24 @@
 <td class="right wagers-players">84</td>
 <td class="alert-cell"></td>
 <!-- Actions -->
-<td class="right le-pct le-mid" style="font-weight:700;"><span style="color:#8b949e;">H</span> 2.8%</td>
+<td class="right le-pct le-mid" style="font-weight:700;"><span style="color:#58a6ff;font-size:10px;">H</span> 2.8%</td>
 <td class="right total-wp">342</td>
 <td class="right total-wp">198</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">370,370,367</td>
 <td class="action-cell">
-<div class="action-group"><span class="row-takeover-slot" data-row="0" id="rts-0"><button class="btn-sm btn-request-row" onclick="requestRowTakeover(0)">🔓 Request</button></span>
-<button class="btn-sm btn-suspend" title="Suspend this market">Suspend</button>
-<button class="btn-sm btn-bets">Wagers</button>
+<div class="action-group"><button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button>
+<button class="btn-sm btn-suspend" title="Close this market (reason required)">Close</button>
 </div>
 </td>
 </tr>
 <!-- AH -0.5 -->
-<tr class="live-section">
-<td class="left type-cell">PM-AH</td>
+<tr class="group-b">
+<td class="left type-cell">AH</td>
 <td class="left item-cell">FT-Goal</td>
-<td class="value-cell" style="color:#d2a8ff;">-0.5</td>
-<td class="center"><span class="status-badge status-open">Open</span></td>
-<td class="right"><span class="odds odds-home">1.28</span></td>
-<td class="right turnover">123,456,789</td>
+<td class="value-cell" style="color:#d2a8ff;"><span style="color:#58a6ff;font-size:10px;">H</span> -0.5</td>
+<td class="center"><span class="status-badge status-open-auto">Open (A)</span></td>
+<td class="right cell-updated"><span class="odds odds-home">1.28</span></td>
+<td class="right turnover cell-updated">123,456,789</td>
 <td class="right wagers-players">45</td>
 <td class="right wagers-players">32</td>
 <td class="alert-cell"></td>
@@ -507,22 +407,22 @@
 <td class="right wagers-players">31</td>
 <td class="alert-cell"></td>
 <td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">A</span> 1.6%</td>
+<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#f97583;font-size:10px;">A</span> 1.6%</td>
 <td class="right total-wp">87</td>
 <td class="right total-wp">56</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">246,913,578</td>
 <td class="action-cell">
-<div class="action-group"><span class="row-takeover-slot" data-row="1" id="rts-1"><button class="btn-sm btn-request-row" onclick="requestRowTakeover(1)">🔓 Request</button></span><button class="btn-sm btn-suspend" title="Suspend this market">Suspend</button>
-<button class="btn-sm btn-bets">Wagers</button>
+<div class="action-group"><button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button>
+<button class="btn-sm btn-suspend" title="Close this market (reason required)">Close</button>
 </div>
 </td>
 </tr>
 <!-- AH -0.75 -->
-<tr class="live-section">
+<tr class="group-b">
 <td class="left type-cell"></td>
 <td class="left item-cell"></td>
-<td class="value-cell" style="color:#d2a8ff;">-0.75</td>
-<td class="center"><span class="status-badge status-open">Open</span></td>
+<td class="value-cell" style="color:#d2a8ff;"><span style="color:#58a6ff;font-size:10px;">H</span> -0.75</td>
+<td class="center"><span class="status-badge status-open-auto">Open (A)</span></td>
 <td class="right"><span class="odds odds-home">1.68</span></td>
 <td class="right turnover">123,456,789</td>
 <td class="right wagers-players">34</td>
@@ -534,79 +434,83 @@
 <td class="right wagers-players">22</td>
 <td class="alert-cell"></td>
 <td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">A</span> 1.3%</td>
+<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#f97583;font-size:10px;">A</span> 1.3%</td>
 <td class="right total-wp">65</td>
 <td class="right total-wp">41</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">246,913,578</td>
 <td class="action-cell">
-<div class="action-group"><span class="row-takeover-slot" data-row="2" id="rts-2"><button class="btn-sm btn-request-row" onclick="requestRowTakeover(2)">🔓 Request</button></span><button class="btn-sm btn-suspend" title="Suspend this market">Suspend</button>
-<button class="btn-sm btn-bets">Wagers</button>
+<div class="action-group"><button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button>
+<button class="btn-sm btn-suspend" title="Close this market (reason required)">Close</button>
 </div>
 </td>
 </tr>
 <!-- AH -1 -->
-<tr class="live-section">
+<tr class="group-b">
 <td class="left type-cell"></td>
 <td class="left item-cell"></td>
-<td class="value-cell" style="color:#d2a8ff;">-1</td>
-<td class="center"><span class="status-badge status-suspended">Suspended</span></td>
-<td class="right"><span class="odds odds-home">1.98</span></td>
-<td class="right turnover">123,456,789</td>
-<td class="right wagers-players">22</td>
-<td class="right wagers-players">18</td>
+<td class="value-cell" style="color:#d2a8ff;"><span style="color:#58a6ff;font-size:10px;">H</span> -1</td>
+<td class="center"><span class="status-badge status-closed">Closed</span></td>
+<!-- HOME (closed - blanked) -->
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
 <td class="alert-cell"></td>
-<td class="right"><span class="odds odds-away">1.88</span></td>
-<td class="right turnover">123,456,789</td>
-<td class="right wagers-players">19</td>
-<td class="right wagers-players">15</td>
+<!-- AWAY (closed - blanked) -->
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
 <td class="alert-cell"></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">A</span> 1.0%</td>
+<!-- DRAW (closed - blanked) -->
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="alert-cell"></td>
+<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#f97583;font-size:10px;">A</span> 1.0%</td>
 <td class="right total-wp">41</td>
 <td class="right total-wp">29</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">246,913,578</td>
 <td class="action-cell">
 <div class="action-group">
-<button class="btn-sm btn-bets">Wagers</button>
-</div>
+<button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button></div>
 </td>
 </tr>
 <!-- OU HT-Corner 4.5 -->
-<tr class="live-section">
-<td class="left type-cell">LB-OU</td>
+<tr class="group-a">
+<td class="left type-cell">OU</td>
 <td class="left item-cell">HT-Corner</td>
 <td class="value-cell" style="color:#d2a8ff;">4.5</td>
 <td class="center"><span class="status-badge status-closed">Closed</span></td>
-<td class="right"><span class="odds odds-home">1.98</span></td>
-<td class="right turnover">123,456,789</td>
-<td class="right wagers-players">16</td>
-<td class="right wagers-players">14</td>
+<!-- HOME (closed - blanked) -->
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
 <td class="alert-cell"></td>
-<td class="right"><span class="odds odds-away">1.88</span></td>
-<td class="right turnover">123,456,789</td>
-<td class="right wagers-players">12</td>
-<td class="right wagers-players">10</td>
+<!-- AWAY (closed - blanked) -->
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
 <td class="alert-cell"></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">A</span> 0.8%</td>
+<!-- DRAW (closed - blanked) -->
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="alert-cell"></td>
+<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#f97583;font-size:10px;">A</span> 0.8%</td>
 <td class="right total-wp">28</td>
 <td class="right total-wp">21</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">246,913,578</td>
 <td class="action-cell">
 <div class="action-group">
-<button class="btn-sm btn-bets">Wagers</button>
-</div>
+<button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button></div>
 </td>
 </tr>
 <!-- Odd/Even FT -->
-<tr class="live-section">
+<tr class="group-b">
 <td class="left type-cell">OE</td>
 <td class="left item-cell">FT</td>
 <td class="value-cell">—</td>
-<td class="center"><span class="status-badge status-open">Open</span></td>
+<td class="center"><span class="status-badge status-open-auto">Open (A)</span></td>
 <!-- HOME (Odd) -->
-<td class="right"><span class="odds odds-home">1.85</span></td>
-<td class="right turnover">89,012,345</td>
+<td class="right cell-updated"><span class="odds odds-home">1.85</span></td>
+<td class="right turnover cell-updated">89,012,345</td>
 <td class="right wagers-players">82</td>
 <td class="right wagers-players">61</td>
 <td class="alert-cell"></td>
@@ -618,22 +522,22 @@
 <td class="alert-cell"></td>
 <!-- DRAW (N/A) -->
 <td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">H</span> 1.4%</td>
+<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#58a6ff;font-size:10px;">H</span> 1.4%</td>
 <td class="right total-wp">156</td>
 <td class="right total-wp">98</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">165,555,555</td>
 <td class="action-cell">
-<div class="action-group"><span class="row-takeover-slot" data-row="3" id="rts-3"><button class="btn-sm btn-request-row" onclick="requestRowTakeover(3)">🔓 Request</button></span><button class="btn-sm btn-suspend" title="Suspend this market">Suspend</button>
-<button class="btn-sm btn-bets">Wagers</button>
+<div class="action-group"><button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button>
+<button class="btn-sm btn-suspend" title="Close this market (reason required)">Close</button>
 </div>
 </td>
 </tr>
 <!-- Next Goal -->
-<tr class="live-section">
+<tr class="group-a">
 <td class="left type-cell">NG</td>
 <td class="left item-cell">Live</td>
 <td class="value-cell">—</td>
-<td class="center"><span class="status-badge status-open">Open</span></td>
+<td class="center"><span class="status-badge status-open-auto">Open (A)</span></td>
 <!-- HOME (Home scores next) -->
 <td class="right"><span class="odds odds-home">2.10</span></td>
 <td class="right turnover">45,678,901</td>
@@ -652,253 +556,258 @@
 <td class="right wagers-players">20</td>
 <td class="right wagers-players">16</td>
 <td class="alert-cell"></td>
-<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">H</span> 1.2%</td>
+<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#58a6ff;font-size:10px;">H</span> 1.2%</td>
 <td class="right total-wp">73</td>
 <td class="right total-wp">47</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">81,481,368</td>
 <td class="action-cell">
-<div class="action-group"><span class="row-takeover-slot" data-row="4" id="rts-4"><button class="btn-sm btn-request-row" onclick="requestRowTakeover(4)">🔓 Request</button></span><button class="btn-sm btn-suspend" title="Suspend this market">Suspend</button>
-<button class="btn-sm btn-bets">Wagers</button>
+<div class="action-group"><button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button>
+<button class="btn-sm btn-suspend" title="Close this market (reason required)">Close</button>
 </div>
 </td>
 </tr>
 <!-- Correct Score 1:0 -->
-<tr class="live-section">
-<td class="left type-cell">PM-OR</td>
+<tr class="group-b">
+<td class="left type-cell">CS</td>
 <td class="left item-cell">FT-CS</td>
 <td class="value-cell" style="color:#d2a8ff;">1:0</td>
-<td class="center"><span class="status-badge status-suspended">Suspended</span></td>
-<td class="right"><span class="odds odds-home">7.00</span></td>
-<td class="right turnover">123,456,789</td>
-<td class="right wagers-players">12</td>
-<td class="right wagers-players">9</td>
-<td class="alert-cell"><span class="alert-dot alert-critical" title="High exposure on correct score"></span></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right le-pct le-high" style="font-weight:700;"><span style="color:#8b949e;">H</span> 5.2%</td>
+<td class="center"><span class="status-badge status-closed">Closed</span></td>
+<!-- HOME (closed - blanked) -->
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="alert-cell"></td>
+<!-- AWAY (closed - blanked) -->
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="alert-cell"></td>
+<!-- DRAW (closed - blanked) -->
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="alert-cell"></td>
+<td class="right le-pct le-high" style="font-weight:700;"><span style="color:#58a6ff;font-size:10px;">H</span> 5.2%</td>
 <td class="right total-wp">12</td>
 <td class="right total-wp">9</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">123,456,789</td>
 <td class="action-cell">
 <div class="action-group">
-<button class="btn-sm btn-bets">Wagers</button></div>
+<button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button></div>
 </td>
 </tr>
 <!-- Correct Score 0:1 -->
-<tr class="live-section">
+<tr class="group-b">
 <td class="left type-cell"></td>
 <td class="left item-cell"></td>
 <td class="value-cell" style="color:#d2a8ff;">0:1</td>
-<td class="center"><span class="status-badge status-suspended">Suspended</span></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right"><span class="odds odds-away">7.00</span></td>
-<td class="right turnover">123,456,789</td>
-<td class="right wagers-players">8</td>
-<td class="right wagers-players">6</td>
-<td class="alert-cell"></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right le-pct le-mid" style="font-weight:700;"><span style="color:#8b949e;">H</span> 2.8%</td>
+<td class="center"><span class="status-badge status-closed">Closed</span></td>
+<!-- HOME (closed - blanked) -->
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="alert-cell"></td>
+<!-- AWAY (closed - blanked) -->
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="alert-cell"></td>
+<!-- DRAW (closed - blanked) -->
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="alert-cell"></td>
+<td class="right le-pct le-mid" style="font-weight:700;"><span style="color:#58a6ff;font-size:10px;">H</span> 2.8%</td>
 <td class="right total-wp">8</td>
 <td class="right total-wp">6</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">123,456,789</td>
 <td class="action-cell">
 <div class="action-group">
-<button class="btn-sm btn-bets">Wagers</button>
-</div>
+<button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button></div>
 </td>
 </tr>
 <!-- Correct Score 0:0 -->
-<tr class="live-section">
+<tr class="group-b">
 <td class="left type-cell"></td>
 <td class="left item-cell"></td>
 <td class="value-cell" style="color:#d2a8ff;">0:0</td>
-<td class="center"><span class="status-badge status-suspended">Suspended</span></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right"><span class="odds odds-draw">7.00</span></td>
-<td class="right turnover">123,456,789</td>
-<td class="right wagers-players">15</td>
-<td class="right wagers-players">11</td>
-<td class="alert-cell"></td>
-<td class="right le-pct le-mid" style="font-weight:700;"><span style="color:#8b949e;">H</span> 2.8%</td>
+<td class="center"><span class="status-badge status-closed">Closed</span></td>
+<!-- HOME (closed - blanked) -->
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="alert-cell"></td>
+<!-- AWAY (closed - blanked) -->
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="alert-cell"></td>
+<!-- DRAW (closed - blanked) -->
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="alert-cell"></td>
+<td class="right le-pct le-mid" style="font-weight:700;"><span style="color:#58a6ff;font-size:10px;">H</span> 2.8%</td>
 <td class="right total-wp">15</td>
 <td class="right total-wp">11</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">123,456,789</td>
 <td class="action-cell">
 <div class="action-group">
-<button class="btn-sm btn-bets">Wagers</button>
-</div>
+<button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button></div>
 </td>
 </tr>
 <!-- ====== PRE-MATCH MARKETS (same match, below live) ====== -->
 <tr class="section-row"><td colspan="24">⏳ PRE-MATCH — Markets opened before kick-off</td></tr>
 <!-- PM 1X2 FT -->
-<tr>
+<tr class="group-a">
 <td class="left type-cell">1X2</td>
 <td class="left item-cell">FT</td>
 <td class="value-cell">—</td>
 <td class="center"><span class="status-badge status-closed">Closed</span></td>
-<!-- HOME -->
-<td class="right"><span class="odds odds-home">1.95</span></td>
-<td class="right turnover">234,567,890</td>
-<td class="right wagers-players">512</td>
-<td class="right wagers-players">341</td>
+<!-- HOME (closed - blanked) -->
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
 <td class="alert-cell"></td>
-<!-- AWAY -->
-<td class="right"><span class="odds odds-away">3.20</span></td>
-<td class="right turnover">123,456,789</td>
-<td class="right wagers-players">389</td>
-<td class="right wagers-players">267</td>
+<!-- AWAY (closed - blanked) -->
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
 <td class="alert-cell"></td>
-<!-- DRAW -->
-<td class="right"><span class="odds odds-draw">3.60</span></td>
-<td class="right turnover">67,890,123</td>
-<td class="right wagers-players">302</td>
-<td class="right wagers-players">198</td>
+<!-- DRAW (closed - blanked) -->
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
 <td class="alert-cell"></td>
 <!-- Actions -->
-<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">A</span> 1.8%</td>
+<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#f97583;font-size:10px;">A</span> 1.8%</td>
 <td class="right total-wp">1,203</td>
 <td class="right total-wp">645</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">425,913,802</td>
 <td class="action-cell">
 <div class="action-group">
-<button class="btn-sm btn-bets">Wagers</button>
-</div>
+<button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button></div>
 </td>
 </tr>
 <!-- PM AH -0.5 -->
-<tr>
-<td class="left type-cell">PM-AH</td>
+<tr class="group-b">
+<td class="left type-cell">AH</td>
 <td class="left item-cell">FT-Goal</td>
-<td class="value-cell" style="color:#d2a8ff;">-0.5</td>
+<td class="value-cell" style="color:#d2a8ff;"><span style="color:#58a6ff;font-size:10px;">H</span> -0.5</td>
 <td class="center"><span class="status-badge status-closed">Closed</span></td>
-<td class="right"><span class="odds odds-home">1.85</span></td>
-<td class="right turnover">156,789,012</td>
-<td class="right wagers-players">241</td>
-<td class="right wagers-players">178</td>
+<!-- HOME (closed - blanked) -->
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
 <td class="alert-cell"></td>
-<td class="right"><span class="odds odds-away">2.05</span></td>
-<td class="right turnover">134,567,890</td>
-<td class="right wagers-players">215</td>
-<td class="right wagers-players">156</td>
+<!-- AWAY (closed - blanked) -->
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
 <td class="alert-cell"></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">A</span> 1.6%</td>
+<!-- DRAW (closed - blanked) -->
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="alert-cell"></td>
+<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#f97583;font-size:10px;">A</span> 1.6%</td>
 <td class="right total-wp">456</td>
 <td class="right total-wp">289</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">291,356,902</td>
 <td class="action-cell">
 <div class="action-group">
-<button class="btn-sm btn-bets">Wagers</button>
-</div>
+<button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button></div>
 </td>
 </tr>
 <!-- PM AH -0.75 -->
-<tr>
+<tr class="group-b">
 <td class="left type-cell"></td>
 <td class="left item-cell"></td>
-<td class="value-cell" style="color:#d2a8ff;">-0.75</td>
+<td class="value-cell" style="color:#d2a8ff;"><span style="color:#58a6ff;font-size:10px;">H</span> -0.75</td>
 <td class="center"><span class="status-badge status-closed">Closed</span></td>
-<td class="right"><span class="odds odds-home">1.72</span></td>
-<td class="right turnover">98,765,432</td>
-<td class="right wagers-players">168</td>
-<td class="right wagers-players">124</td>
+<!-- HOME (closed - blanked) -->
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
 <td class="alert-cell"></td>
-<td class="right"><span class="odds odds-away">2.18</span></td>
-<td class="right turnover">87,654,321</td>
-<td class="right wagers-players">144</td>
-<td class="right wagers-players">108</td>
+<!-- AWAY (closed - blanked) -->
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
 <td class="alert-cell"></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">A</span> 1.3%</td>
+<!-- DRAW (closed - blanked) -->
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="alert-cell"></td>
+<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#f97583;font-size:10px;">A</span> 1.3%</td>
 <td class="right total-wp">312</td>
 <td class="right total-wp">198</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">186,419,753</td>
 <td class="action-cell">
 <div class="action-group">
-<button class="btn-sm btn-bets">Wagers</button>
-</div>
+<button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button></div>
 </td>
 </tr>
 <!-- PM OU FT-Goal 2.5 -->
-<tr>
-<td class="left type-cell">PM-OU</td>
+<tr class="group-a">
+<td class="left type-cell">OU</td>
 <td class="left item-cell">FT-Goal</td>
 <td class="value-cell" style="color:#d2a8ff;">2.5</td>
 <td class="center"><span class="status-badge status-closed">Closed</span></td>
-<td class="right"><span class="odds odds-home">1.90</span></td>
-<td class="right turnover">145,678,901</td>
-<td class="right wagers-players">362</td>
-<td class="right wagers-players">245</td>
+<!-- HOME (closed - blanked) -->
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
 <td class="alert-cell"></td>
-<td class="right"><span class="odds odds-away">1.95</span></td>
-<td class="right turnover">132,456,789</td>
-<td class="right wagers-players">316</td>
-<td class="right wagers-players">218</td>
+<!-- AWAY (closed - blanked) -->
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
 <td class="alert-cell"></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">A</span> 1.5%</td>
+<!-- DRAW (closed - blanked) -->
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="alert-cell"></td>
+<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#f97583;font-size:10px;">A</span> 1.5%</td>
 <td class="right total-wp">678</td>
 <td class="right total-wp">387</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">278,135,690</td>
 <td class="action-cell">
 <div class="action-group">
-<button class="btn-sm btn-bets">Wagers</button>
-</div>
+<button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button></div>
 </td>
 </tr>
 <!-- PM Odd/Even FT -->
-<tr>
-<td class="left type-cell">PM-OE</td>
+<tr class="group-b">
+<td class="left type-cell">OE</td>
 <td class="left item-cell">FT</td>
 <td class="value-cell">—</td>
 <td class="center"><span class="status-badge status-closed">Closed</span></td>
-<!-- HOME (Odd) -->
-<td class="right"><span class="odds odds-home">1.82</span></td>
-<td class="right turnover">112,345,678</td>
-<td class="right wagers-players">127</td>
-<td class="right wagers-players">94</td>
+<!-- HOME (closed - blanked) -->
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
 <td class="alert-cell"></td>
-<!-- AWAY (Even) -->
-<td class="right"><span class="odds odds-away">1.98</span></td>
-<td class="right turnover">98,765,432</td>
-<td class="right wagers-players">107</td>
-<td class="right wagers-players">82</td>
+<!-- AWAY (closed - blanked) -->
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
 <td class="alert-cell"></td>
-<!-- DRAW (N/A) -->
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">H</span> 1.1%</td>
+<!-- DRAW (closed - blanked) -->
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="alert-cell"></td>
+<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#58a6ff;font-size:10px;">H</span> 1.1%</td>
 <td class="right total-wp">234</td>
 <td class="right total-wp">152</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">211,111,110</td>
 <td class="action-cell">
 <div class="action-group">
-<button class="btn-sm btn-bets">Wagers</button>
-</div>
+<button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button></div>
 </td>
 </tr>
 <!-- PM Correct Score 1:0 -->
-<tr>
-<td class="left type-cell">PM-OR</td>
+<tr class="group-a">
+<td class="left type-cell">CS</td>
 <td class="left item-cell">FT-CS</td>
 <td class="value-cell" style="color:#d2a8ff;">1:0</td>
 <td class="center"><span class="status-badge status-closed">Closed</span></td>
-<td class="right"><span class="odds odds-home">6.50</span></td>
-<td class="right turnover">23,456,789</td>
-<td class="right wagers-players">89</td>
-<td class="right wagers-players">67</td>
-<td class="alert-cell"><span class="alert-dot alert-info" title="High pre-match volume"></span></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td></td>
-<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#8b949e;">H</span> 1.0%</td>
+<!-- HOME (closed - blanked) -->
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="right">—</td>
+<td class="alert-cell"></td>
+<!-- AWAY (closed - blanked) -->
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="alert-cell"></td>
+<!-- DRAW (closed - blanked) -->
+<td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="right">—</td><td class="alert-cell"></td>
+<td class="right le-pct le-low" style="font-weight:700;"><span style="color:#58a6ff;font-size:10px;">H</span> 1.0%</td>
 <td class="right total-wp">89</td>
 <td class="right total-wp">67</td>
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">23,456,789</td>
 <td class="action-cell">
 <div class="action-group">
-<button class="btn-sm btn-bets">Wagers</button>
-</div>
+<button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button></div>
 </td>
 </tr>
 </tbody>
@@ -911,36 +820,6 @@
 </div>
 </div>
 </div>
-<!-- Super Trader approval toast (shown in super-receiving state) -->
-<div class="super-toast" id="superToast" style="display: none;">
-<div class="super-toast-header">
-<span class="bell">🔔</span>
-<span class="title">Manual Takeover Request</span>
-<button class="close" onclick="hideSuperToast()">×</button>
-</div>
-<div class="super-toast-body" id="superToastBody">
-<div class="req-row"><span class="k">Requester</span><span class="v">Hugo</span></div>
-<div class="req-row"><span class="k">Match</span><span class="v match-name">Arsenal vs Chelsea</span></div>
-<div class="req-row"><span class="k">Market</span><span class="v" id="toastMarket">1X2</span></div>
-<div class="req-row"><span class="k">Requested</span><span class="v">20:42:15 · 3s ago</span></div>
-<div class="req-row" style="margin-top:8px; padding-top:8px; border-top:1px solid #30363d;">
-<span class="k">Reason</span><span class="v" style="color:#8b949e; font-style:italic;">(not provided — can fill later)</span>
-</div>
-</div>
-<div class="toast-countdown"><div class="toast-countdown-bar" id="countdownBar"></div></div>
-<div class="super-toast-actions">
-<button class="toast-reject" id="toastReject">Reject</button>
-<button class="toast-approve" id="toastApprove">✔ Approve</button>
-</div>
-</div>
-<!-- Demo state switcher (wireframe only) -->
-<div class="demo-switcher">
-<span class="demo-label">DEMO</span>
-<button id="dsIdle" onclick="setState('idle')">Idle</button>
-<button id="dsWaiting" onclick="setState('waiting')">Waiting</button>
-<button id="dsSuper" onclick="setState('super-receiving')">Super side</button>
-<button id="dsActive" onclick="setState('active')">Active</button>
-</div>
 <!-- Wireframe Label -->
 <div class="wf-note">WIREFRAME v2.1 — Trader Market View (Single Match)</div>
 <script>
@@ -949,190 +828,26 @@ function toggleSidebar() {
   sb.classList.toggle('collapsed');
 }
 
-// ================= Per-row Manual Takeover =================
-// Each Open market row has its own takeover lifecycle: idle → waiting → active
-var _rowTimers = {};    // rowId -> intervalId
-var _rowCounters = {};  // rowId -> seconds remaining
-var _toastRowId = null; // which row the super-toast is currently showing for
-
-// Resolve the market name from a row's type-cell + value-cell
-function getRowMarketLabel(rowId) {
-  var slot = document.getElementById('rts-' + rowId);
-  if (!slot) return 'Unknown';
-  var row = slot.closest('tr');
-  if (!row) return 'Unknown';
-  var type = row.querySelector('.type-cell');
-  var val  = row.querySelector('.value-cell');
-  var label = type ? type.textContent.trim() : '';
-  if (val && val.textContent.trim() !== '—' && val.textContent.trim() !== '') {
-    label += ' ' + val.textContent.trim();
-  }
-  return label || 'Unknown';
-}
-
-function requestRowTakeover(rowId) {
-  setRowState(rowId, 'waiting');
-}
-
-function setRowState(rowId, state) {
-  var slot = document.getElementById('rts-' + rowId);
-  if (!slot) return;
-
-  // Clear any existing timer for this row
-  if (_rowTimers[rowId]) { clearInterval(_rowTimers[rowId]); delete _rowTimers[rowId]; }
-
-  var banner = document.getElementById('manualBanner');
-  var toast  = document.getElementById('superToast');
-
-  if (state === 'idle') {
-    slot.innerHTML = '<button class="btn-sm btn-request-row" onclick="requestRowTakeover(' + rowId + ')">🔓 Request</button>';
-    // Hide toast if it was for this row
-    if (_toastRowId === rowId && toast) { toast.style.display = 'none'; _toastRowId = null; }
-    // Hide banner if no rows are active
-    if (banner && !document.querySelector('.row-takeover-active')) banner.style.display = 'none';
-  }
-  else if (state === 'waiting') {
-    _rowCounters[rowId] = 60;
-    slot.innerHTML = renderRowWaiting(rowId);
-    _rowTimers[rowId] = setInterval(function() {
-      _rowCounters[rowId]--;
-      if (_rowCounters[rowId] <= 0) {
-        clearInterval(_rowTimers[rowId]);
-        delete _rowTimers[rowId];
-        setRowState(rowId, 'active');
-        return;
-      }
-      var s = document.getElementById('rts-' + rowId);
-      if (s) s.innerHTML = renderRowWaiting(rowId);
-    }, 1000);
-  }
-  else if (state === 'super-receiving') {
-    // Put row in waiting state + show toast scoped to this row
-    _rowCounters[rowId] = 60;
-    slot.innerHTML = renderRowWaiting(rowId);
-    _rowTimers[rowId] = setInterval(function() {
-      _rowCounters[rowId]--;
-      if (_rowCounters[rowId] <= 0) {
-        clearInterval(_rowTimers[rowId]);
-        delete _rowTimers[rowId];
-        return;
-      }
-      var s = document.getElementById('rts-' + rowId);
-      if (s) s.innerHTML = renderRowWaiting(rowId);
-    }, 1000);
-    showSuperToast(rowId);
-  }
-  else if (state === 'active') {
-    slot.innerHTML = renderRowActive(rowId);
-    // Hide toast if it was for this row
-    if (_toastRowId === rowId && toast) { toast.style.display = 'none'; _toastRowId = null; }
-    if (banner) banner.style.display = 'flex';
-  }
-
-  updateDemoHighlight();
-}
-
-function showSuperToast(rowId) {
-  _toastRowId = rowId;
-  var toast = document.getElementById('superToast');
-  var marketEl = document.getElementById('toastMarket');
-  var approveBtn = document.getElementById('toastApprove');
-  var rejectBtn  = document.getElementById('toastReject');
-  if (!toast) return;
-
-  // Fill in the specific market name
-  if (marketEl) marketEl.textContent = getRowMarketLabel(rowId);
-
-  // Wire buttons to this specific row
-  approveBtn.onclick = function() { setRowState(rowId, 'active'); };
-  rejectBtn.onclick  = function() { setRowState(rowId, 'idle'); };
-
-  toast.style.display = 'block';
-  animateCountdown();
-}
-
-function renderRowWaiting(rowId) {
-  var sec = _rowCounters[rowId] || 0;
-  var escalated = sec < 30;
-  return '<div class="row-takeover-waiting">'
-    + '<span class="rts-spinner"></span>'
-    + (escalated ? 'Escalated ' : 'Waiting… ')
-    + sec + 's'
-    + '<span class="rts-cancel" onclick="setRowState(' + rowId + ',\'idle\')" title="Cancel">×</span>'
-    + '</div>';
-}
-
-function renderRowActive(rowId) {
-  return '<div class="row-takeover-active">'
-    + '<span class="rts-dot"></span>'
-    + 'Manual'
-    + '<span class="rts-revoke" onclick="setRowState(' + rowId + ',\'idle\')" title="Revoke">×</span>'
-    + '</div>';
-}
-
-// Global setState — demo switcher drives the FIRST open row only (single-market demo)
-function setState(s) {
-  var toast = document.getElementById('superToast');
-  if (toast) toast.style.display = 'none';
-  _toastRowId = null;
-
-  // Find the first row with a takeover slot
-  var firstSlot = document.querySelector('.row-takeover-slot');
-  if (!firstSlot) return;
-  var rowId = parseInt(firstSlot.dataset.row);
-  if (isNaN(rowId)) return;
-
-  // Reset ALL rows to idle first
-  document.querySelectorAll('.row-takeover-slot').forEach(function(slot) {
-    var rid = parseInt(slot.dataset.row);
-    if (!isNaN(rid)) setRowState(rid, 'idle');
+// ================= Edit Toggle =================
+// Edit button toggles authorization for a market row
+document.querySelectorAll('.btn-enter').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var isEditing = btn.classList.contains('editing');
+    if (isEditing) {
+      btn.classList.remove('editing');
+      btn.textContent = 'Edit';
+      btn.style.background = '#1f6feb22';
+      btn.style.borderColor = '#58a6ff';
+      btn.style.color = '#58a6ff';
+    } else {
+      btn.classList.add('editing');
+      btn.textContent = 'Editing';
+      btn.style.background = '#23863633';
+      btn.style.borderColor = '#3fb950';
+      btn.style.color = '#3fb950';
+    }
   });
-
-  // Then apply the requested state to just the first row
-  if (s === 'idle') {
-    // Already idle from above
-  } else if (s === 'waiting') {
-    setRowState(rowId, 'waiting');
-  } else if (s === 'super-receiving') {
-    setRowState(rowId, 'super-receiving');
-  } else if (s === 'active') {
-    setRowState(rowId, 'active');
-  }
-
-  updateDemoHighlight();
-}
-
-function updateDemoHighlight() {
-  ['Idle','Waiting','Super','Active'].forEach(function(id) {
-    var el = document.getElementById('ds' + id);
-    if (el) el.classList.remove('active');
-  });
-  var hasActive  = !!document.querySelector('.row-takeover-active');
-  var hasWaiting = !!document.querySelector('.row-takeover-waiting');
-  var hasToast   = _toastRowId !== null;
-  if (hasToast) { var el = document.getElementById('dsSuper'); if (el) el.classList.add('active'); }
-  else if (hasActive) { var el = document.getElementById('dsActive'); if (el) el.classList.add('active'); }
-  else if (hasWaiting) { var el = document.getElementById('dsWaiting'); if (el) el.classList.add('active'); }
-  else { var el = document.getElementById('dsIdle'); if (el) el.classList.add('active'); }
-}
-
-function hideSuperToast() {
-  var toast = document.getElementById('superToast');
-  if (toast) toast.style.display = 'none';
-  _toastRowId = null;
-  updateDemoHighlight();
-}
-
-function animateCountdown() {
-  var bar = document.getElementById('countdownBar');
-  if (!bar) return;
-  bar.style.width = '100%';
-  bar.style.transition = 'none';
-  setTimeout(function() { bar.style.width = '0%'; bar.style.transition = 'width 60s linear'; }, 50);
-}
-
-// init — all rows start idle (already rendered as buttons)
-updateDemoHighlight();
+});
 </script>
 </body>
 </html>
