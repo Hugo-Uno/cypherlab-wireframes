@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CypherLab Backoffice — Site Map</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface-hover: #1c2129;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --text-muted: #6e7681;
+    --accent: #58a6ff;
+    --accent-dim: #1f6feb33;
+    --green: #3fb950;
+    --green-bg: #23863620;
+    --blue: #58a6ff;
+    --blue-bg: #1f6feb20;
+    --yellow: #d29922;
+    --yellow-bg: #bb800920;
+    --orange: #db6d28;
+    --orange-bg: #bd561d20;
+    --gray: #6e7681;
+    --gray-bg: #6e768120;
+    --red: #f85149;
+    --red-bg: #f8514920;
+    --purple: #bc8cff;
+    --purple-bg: #bc8cff20;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .header h1 {
+    font-size: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .header h1 .logo {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: #fff;
+  }
+  .header-subtitle {
+    color: var(--text-dim);
+    font-size: 13px;
+    margin-top: 4px;
+  }
+
+  /* ── Stats Bar ── */
+  .stats-bar {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .stat-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .stat-chip:hover { border-color: var(--text-dim); }
+  .stat-chip.active { border-color: var(--accent); background: var(--accent-dim); }
+  .stat-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+  .stat-dot.live { background: var(--green); }
+  .stat-dot.wireframe { background: var(--blue); }
+  .stat-dot.spec { background: var(--yellow); }
+  .stat-dot.planning { background: var(--orange); }
+  .stat-dot.placeholder { background: var(--gray); }
+
+  /* ── Search ── */
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    min-width: 260px;
+    transition: border-color 0.15s;
+  }
+  .search-box:focus-within { border-color: var(--accent); }
+  .search-box svg { color: var(--text-dim); flex-shrink: 0; }
+  .search-box input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-size: 13px;
+    width: 100%;
+  }
+  .search-box input::placeholder { color: var(--text-muted); }
+
+  /* ── Controls ── */
+  .controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .btn-sm {
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-dim);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn-sm:hover { color: var(--text); border-color: var(--text-dim); }
+
+  /* ── Main Content ── */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 32px 80px;
+  }
+
+  /* ── Tree ── */
+  .tree { list-style: none; }
+  .tree .tree { padding-left: 0; }
+
+  /* ── Section (Level 1) ── */
+  .section {
+    margin-bottom: 8px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.12s;
+    border: 1px solid transparent;
+  }
+  .section-header:hover { background: var(--surface); }
+  .section.open > .section-header { background: var(--surface); border-color: var(--border); }
+  .section-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .section-label {
+    flex: 1;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .section-name {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .section-name-en {
+    font-size: 12px;
+    color: var(--text-dim);
+    font-weight: 400;
+  }
+  .section-count {
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--bg);
+    padding: 1px 8px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .chevron {
+    color: var(--text-muted);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .section.open > .section-header .chevron { transform: rotate(90deg); }
+
+  /* ── Children ── */
+  .section-children {
+    display: none;
+    padding: 4px 0 4px 20px;
+    border-left: 2px solid var(--border);
+    margin-left: 30px;
+    margin-top: 4px;
+  }
+  .section.open > .section-children { display: block; }
+
+  /* ── Page Node ── */
+  .page-node {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: background 0.12s;
+    position: relative;
+  }
+  .page-node:hover { background: var(--surface-hover); }
+  .page-node::before {
+    content: '';
+    position: absolute;
+    left: -21px;
+    top: 18px;
+    width: 16px;
+    height: 2px;
+    background: var(--border);
+  }
+
+  .page-icon {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+
+  .page-info { flex: 1; min-width: 0; }
+  .page-title {
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .page-title-en {
+    color: var(--text-dim);
+    font-weight: 400;
+    font-size: 12px;
+  }
+  .page-route {
+    font-family: 'SF Mono', SFMono-Regular, Consolas, monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .page-meta {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  /* ── Badges ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 1px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 500;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+  .badge-live { color: var(--green); background: var(--green-bg); border-color: var(--green); }
+  .badge-wireframe { color: var(--blue); background: var(--blue-bg); border-color: var(--blue); }
+  .badge-spec { color: var(--yellow); background: var(--yellow-bg); border-color: var(--yellow); }
+  .badge-planning { color: var(--orange); background: var(--orange-bg); border-color: var(--orange); }
+  .badge-placeholder { color: var(--gray); background: var(--gray-bg); border-color: var(--gray); }
+
+  .perm-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-family: 'SF Mono', SFMono-Regular, Consolas, monospace;
+    color: var(--purple);
+    background: var(--purple-bg);
+    border: 1px solid transparent;
+  }
+  .perm-tag.high-risk {
+    color: var(--red);
+    background: var(--red-bg);
+    border-color: var(--red);
+  }
+  .perm-bits {
+    color: var(--text-muted);
+    font-size: 9px;
+  }
+
+  .role-tag {
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    color: var(--yellow);
+    background: var(--yellow-bg);
+  }
+
+  .wireframe-link {
+    font-size: 10px;
+    color: var(--accent);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .wireframe-link:hover { text-decoration: underline; }
+
+  /* ── Legend ── */
+  .legend {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-size: 12px;
+  }
+  .legend-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .legend-group-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+  .legend-items {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text-dim);
+  }
+
+  /* ── Hidden ── */
+  .hidden { display: none !important; }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .header { padding: 16px; }
+    .main { padding: 16px; }
+    .search-box { min-width: 200px; }
+    .legend { gap: 16px; }
+    .stats-bar { gap: 8px; }
+  }
+
+  /* ── No results ── */
+  .no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+  }
+  .no-results svg { margin-bottom: 12px; }
+  .no-results p { font-size: 14px; }
+
+  /* ── Summary table ── */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .summary-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .summary-card .number {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .summary-card .label {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ Header ═══ -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>
+        <span class="logo">C</span>
+        CypherLab Backoffice — Site Map
+      </h1>
+      <div class="header-subtitle">後台系統頁面地圖 &nbsp;·&nbsp; Draft v1.0 &nbsp;·&nbsp; 2026-04-30</div>
+    </div>
+    <div class="controls">
+      <div class="search-box">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M10.68 11.74a6 6 0 1 1 1.06-1.06l3.04 3.04a.75.75 0 1 1-1.06 1.06l-3.04-3.04ZM11 6.5a4.5 4.5 0 1 0-9 0 4.5 4.5 0 0 0 9 0Z"/></svg>
+        <input type="text" id="searchInput" placeholder="搜尋頁面、權限碼、路由…" />
+      </div>
+      <button class="btn-sm" onclick="expandAll()">全展開</button>
+      <button class="btn-sm" onclick="collapseAll()">全收合</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat-chip" data-filter="all" onclick="filterByStatus(this, 'all')">
+      <strong id="statTotal">0</strong> 頁面總計
+    </div>
+    <div class="stat-chip" data-filter="live" onclick="filterByStatus(this, 'live')">
+      <span class="stat-dot live"></span> <strong id="statLive">0</strong> 已上線
+    </div>
+    <div class="stat-chip" data-filter="wireframe" onclick="filterByStatus(this, 'wireframe')">
+      <span class="stat-dot wireframe"></span> <strong id="statWireframe">0</strong> Wireframe
+    </div>
+    <div class="stat-chip" data-filter="spec" onclick="filterByStatus(this, 'spec')">
+      <span class="stat-dot spec"></span> <strong id="statSpec">0</strong> SPEC 完成
+    </div>
+    <div class="stat-chip" data-filter="planning" onclick="filterByStatus(this, 'planning')">
+      <span class="stat-dot planning"></span> <strong id="statPlanning">0</strong> 規劃中
+    </div>
+    <div class="stat-chip" data-filter="placeholder" onclick="filterByStatus(this, 'placeholder')">
+      <span class="stat-dot placeholder"></span> <strong id="statPlaceholder">0</strong> 待開發
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Main ═══ -->
+<div class="main">
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-group">
+      <div class="legend-group-title">開發狀態 Status</div>
+      <div class="legend-items">
+        <span class="legend-item"><span class="badge badge-live">已上線</span> Deployed</span>
+        <span class="legend-item"><span class="badge badge-wireframe">Wireframe</span> UI designed</span>
+        <span class="legend-item"><span class="badge badge-spec">SPEC</span> Spec written</span>
+        <span class="legend-item"><span class="badge badge-planning">規劃中</span> Planning</span>
+        <span class="legend-item"><span class="badge badge-placeholder">待開發</span> Placeholder</span>
+      </div>
+    </div>
+    <div class="legend-group">
+      <div class="legend-group-title">權限標註 Permissions</div>
+      <div class="legend-items">
+        <span class="legend-item"><span class="perm-tag">CODE <span class="perm-bits">R+W</span></span> Standard</span>
+        <span class="legend-item"><span class="perm-tag high-risk">CODE <span class="perm-bits">R+W+A</span></span> High-Risk</span>
+        <span class="legend-item"><span class="role-tag">Role</span> Role restriction</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tree Root -->
+  <ul class="tree" id="siteTree"></ul>
+  <div class="no-results hidden" id="noResults">
+    <svg width="40" height="40" viewBox="0 0 16 16" fill="currentColor" opacity="0.3"><path d="M10.68 11.74a6 6 0 1 1 1.06-1.06l3.04 3.04a.75.75 0 1 1-1.06 1.06l-3.04-3.04ZM11 6.5a4.5 4.5 0 1 0-9 0 4.5 4.5 0 0 0 9 0Z"/></svg>
+    <p>沒有符合的結果</p>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// Config
+// ═══════════════════════════════════════════════
+const WIREFRAME_BASE = 'https://hugo-uno.github.io/cypherlab-wireframes/';
+
+// ═══════════════════════════════════════════════
+// Site Map Data — matches actual BO sidebar nav
+// Ref: v0 demo + trader-dashboard wireframe
+// ═══════════════════════════════════════════════
+const siteData = [
+  // ── Trader Section (above divider) ──
+  {
+    name: '儀表板 Dashboard', icon: '📋', iconBg: '#238636', separator: false,
+    children: [
+      { name: 'Trader Dashboard', nameEn: '', route: '/', status: 'wireframe',
+        perms: [{ code: 'DASHBOARD', bits: 'R', risk: false }],
+        wireframe: 'trader-dashboard-wireframe.html',
+        roles: ['Trader', 'Supervisor'] },
+    ]
+  },
+  {
+    name: '賽事 Matches', icon: '⚽', iconBg: '#1f6feb', separator: false,
+    children: [
+      { name: '賽事列表', nameEn: 'Match List', route: '/matches', status: 'live',
+        perms: [{ code: 'MATCH', bits: 'R+W+A+D', risk: false }] },
+      { name: '賽事詳情', nameEn: 'Match Detail', route: '/matches/:id', status: 'live',
+        perms: [{ code: 'MATCH', bits: 'R+W', risk: false }] },
+      { name: '賽事對應', nameEn: 'Match Reconciliation', route: '/matches/reconciliation', status: 'wireframe',
+        perms: [{ code: 'MATCH', bits: 'R+W+A', risk: false }],
+        wireframe: 'match-reconciliation-wireframe.html' },
+    ]
+  },
+  {
+    name: '盤口 Markets', icon: '📊', iconBg: '#8957e5', separator: false,
+    children: [
+      { name: 'Trader Market View', nameEn: '', route: '/markets', status: 'wireframe',
+        perms: [{ code: 'MATCH_MARKET', bits: 'R+W+A+D', risk: false }],
+        wireframe: 'trader-market-view-wireframe.html',
+        roles: ['Trader', 'Supervisor'] },
+      { name: '市場動態', nameEn: 'Market Activity', route: '/markets/activity', status: 'wireframe',
+        perms: [{ code: 'MATCH_MARKET', bits: 'R', risk: false }],
+        wireframe: 'market-activity-wireframe.html' },
+      { name: '賠率調整', nameEn: 'Odds Adjustment', route: '/markets/odds', status: 'placeholder',
+        perms: [{ code: 'ODDS_ADJUST', bits: 'R+W', risk: false }, { code: 'MANUAL_OVERRIDE', bits: 'R+W+A', risk: true }],
+        roles: ['Trader', 'Supervisor'] },
+      { name: '盤口狀態', nameEn: 'Market Status', route: '/markets/status', status: 'placeholder',
+        perms: [{ code: 'MARKET_SUSPEND', bits: 'R+W', risk: false }] },
+      { name: '注額限制', nameEn: 'Wager Limit', route: '/markets/wager-limit', status: 'placeholder',
+        perms: [{ code: 'WAGER_LIMIT', bits: 'R+W', risk: false }],
+        roles: ['Supervisor'] },
+    ]
+  },
+  {
+    name: '注單 Wagers', icon: '🎫', iconBg: '#db6d28', separator: false,
+    children: [
+      { name: '注單查詢', nameEn: 'Wager Page', route: '/wagers', status: 'wireframe',
+        perms: [{ code: 'BET', bits: 'R+W', risk: false }],
+        wireframe: 'wager-page-wireframe.html' },
+      { name: '注單結算', nameEn: 'Settlement Review', route: '/wagers/settlement', status: 'wireframe',
+        perms: [{ code: 'SETTLEMENT', bits: 'R+W+A', risk: true }],
+        wireframe: 'settlement-review-wireframe.html',
+        roles: ['Supervisor'],
+        notes: 'Maker-Checker · 30s SLA' },
+      { name: '結算記錄', nameEn: 'Settlement History', route: '/wagers/settlement/history', status: 'planning',
+        perms: [{ code: 'SETTLEMENT', bits: 'R', risk: true }] },
+      { name: '作廢 / 退款', nameEn: 'Void / Refund', route: '/wagers/void', status: 'planning',
+        perms: [{ code: 'SETTLEMENT_VOID', bits: 'R+W+A', risk: true }],
+        notes: 'Maker-Checker' },
+      { name: '注單取消', nameEn: 'Bet Cancel', route: '/wagers/cancel', status: 'planning',
+        perms: [{ code: 'BET_CANCEL', bits: 'R+W+A', risk: true }] },
+    ]
+  },
+  {
+    name: '玩家 Players', icon: '👥', iconBg: '#d29922', separator: false,
+    children: [
+      { name: '玩家目錄', nameEn: 'Player Directory', route: '/players', status: 'placeholder',
+        perms: [{ code: 'PLAYER', bits: 'R+W', risk: false }] },
+      { name: '玩家限制', nameEn: 'Player Restriction', route: '/players/restriction', status: 'placeholder',
+        perms: [{ code: 'PLAYER_RESTRICTION', bits: 'R+W+A', risk: true }] },
+      { name: '案件管理', nameEn: 'Case Management', route: '/players/cases', status: 'placeholder',
+        perms: [{ code: 'CASE', bits: 'R+W+A', risk: false }] },
+    ]
+  },
+  {
+    name: '稽核日誌 Audit Log', icon: '📝', iconBg: '#6e7681', separator: false,
+    children: [
+      { name: '稽核日誌', nameEn: 'Audit Log', route: '/audit', status: 'placeholder',
+        perms: [{ code: 'AUDIT_LOG', bits: 'R', risk: false }] },
+      { name: '操作日誌', nameEn: 'Operation Log', route: '/audit/operations', status: 'placeholder',
+        perms: [{ code: 'OPERATION_LOG', bits: 'R', risk: false }] },
+    ]
+  },
+  {
+    name: '告警 Alerts', icon: '🔔', iconBg: '#f85149', separator: false,
+    children: [
+      { name: '告警中心', nameEn: 'Alert Center', route: '/alerts', status: 'placeholder',
+        perms: [{ code: 'ALERT', bits: 'R+W', risk: false }] },
+      { name: '通知管理', nameEn: 'Notification Settings', route: '/alerts/settings', status: 'placeholder',
+        perms: [{ code: 'NOTIFICATION', bits: 'R+W', risk: false }] },
+    ]
+  },
+  // ── Admin Section (below divider) ──
+  {
+    name: '商戶 Merchants', icon: '🏪', iconBg: '#8957e5', separator: true,
+    children: [
+      { name: '商戶帳戶', nameEn: 'Merchant Accounts', route: '/merchants', status: 'placeholder',
+        perms: [{ code: 'MERCHANT', bits: 'R+W+A+D', risk: true }] },
+      { name: '額度管理', nameEn: 'Credit Management', route: '/merchants/credits', status: 'placeholder',
+        perms: [{ code: 'WALLET_ADJUST', bits: 'R+W+A', risk: true }],
+        notes: 'Maker-Checker' },
+      { name: '損益報表', nameEn: 'P&L Reports', route: '/merchants/pnl', status: 'placeholder',
+        perms: [{ code: 'REPORT', bits: 'R', risk: false }] },
+    ]
+  },
+  {
+    name: '權限 Permissions', icon: '🔑', iconBg: '#d29922', separator: false,
+    children: [
+      { name: '管理員帳號', nameEn: 'Admins', route: '/permissions/admins', status: 'placeholder',
+        perms: [{ code: 'ACCESS_ADMIN', bits: 'R+W+D', risk: true }],
+        roles: ['Admin'] },
+      { name: '角色管理', nameEn: 'Roles', route: '/permissions/roles', status: 'placeholder',
+        perms: [{ code: 'ACCESS_ROLE', bits: 'R+W+A+D', risk: true }],
+        roles: ['Admin'] },
+    ]
+  },
+  {
+    name: '報表 Reports', icon: '📈', iconBg: '#1f6feb', separator: false,
+    children: [
+      { name: '報表中心', nameEn: 'Report Center', route: '/reports', status: 'placeholder',
+        perms: [{ code: 'REPORT', bits: 'R', risk: false }] },
+      { name: '數據源效能', nameEn: 'Source Performance', route: '/reports/source-performance', status: 'planning',
+        perms: [{ code: 'MATCH_ODDS', bits: 'R', risk: false }],
+        notes: 'Settlement SPEC SE-3' },
+    ]
+  },
+  {
+    name: '全域設定 Global Settings', icon: '⚙️', iconBg: '#6e7681', separator: false,
+    children: [
+      { name: '全域設定', nameEn: 'Global Settings', route: '/settings', status: 'placeholder',
+        perms: [{ code: 'GLOBAL_SETTING', bits: 'R+W+A', risk: true }],
+        roles: ['Admin'],
+        notes: 'Maker-Checker' },
+      { name: '運動類型', nameEn: 'Sports Type', route: '/settings/sports', status: 'placeholder',
+        perms: [{ code: 'GLOBAL_SETTING', bits: 'R+W+A', risk: true }] },
+      { name: '基礎聯賽', nameEn: 'Base League', route: '/settings/leagues', status: 'placeholder',
+        perms: [{ code: 'GLOBAL_SETTING', bits: 'R+W+A', risk: true }] },
+      { name: '隊伍管理', nameEn: 'Team Management', route: '/settings/teams', status: 'placeholder',
+        perms: [{ code: 'MATCH', bits: 'R+W', risk: false }] },
+      { name: '國家 / 地區', nameEn: 'Country / Region', route: '/settings/countries', status: 'placeholder',
+        perms: [{ code: 'GLOBAL_SETTING', bits: 'R+W', risk: true }] },
+    ]
+  },
+  {
+    name: '系統 System', icon: '🛠', iconBg: '#6e7681', separator: false,
+    children: [
+      { name: '直播管理', nameEn: 'Stream Management', route: '/system/streaming', status: 'placeholder',
+        perms: [{ code: 'MATCH_STREAM', bits: 'R+W', risk: false }] },
+      { name: '風控設定', nameEn: 'Risk Control', route: '/system/risk', status: 'placeholder',
+        perms: [{ code: 'RISK_CONTROL', bits: 'R+W+A', risk: true }] },
+      { name: '錢包調整', nameEn: 'Wallet Adjustment', route: '/system/wallet', status: 'planning',
+        perms: [{ code: 'WALLET_ADJUST', bits: 'R+W+A', risk: true }],
+        notes: 'Maker-Checker' },
+      { name: '登入頁', nameEn: 'Login', route: '/login', status: 'live',
+        perms: [], notes: 'Public' },
+    ]
+  },
+];
+
+// ═══════════════════════════════════════════════
+// Render
+// ═══════════════════════════════════════════════
+const statusLabel = {
+  live: '已上線', wireframe: 'Wireframe', spec: 'SPEC', planning: '規劃中', placeholder: '待開發'
+};
+const statusClass = {
+  live: 'badge-live', wireframe: 'badge-wireframe', spec: 'badge-spec', planning: 'badge-planning', placeholder: 'badge-placeholder'
+};
+const statusDotColor = {
+  live: 'var(--green)', wireframe: 'var(--blue)', spec: 'var(--yellow)', planning: 'var(--orange)', placeholder: 'var(--gray)'
+};
+
+function renderTree() {
+  const tree = document.getElementById('siteTree');
+  tree.innerHTML = '';
+
+  siteData.forEach((section, si) => {
+    // Separator before admin section
+    if (section.separator) {
+      const sep = document.createElement('li');
+      sep.style.cssText = 'border-top:1px solid var(--border); margin:16px 14px 12px; opacity:0.5;';
+      const sepLabel = document.createElement('div');
+      sepLabel.style.cssText = 'font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; padding-top:8px; padding-left:4px;';
+      sepLabel.textContent = 'Admin / Settings';
+      sep.appendChild(sepLabel);
+      tree.appendChild(sep);
+    }
+
+    const li = document.createElement('li');
+    li.className = 'section';  // default collapsed
+    li.dataset.sectionIndex = si;
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'section-header';
+    header.onclick = () => li.classList.toggle('open');
+
+    header.innerHTML = `
+      <div class="section-icon" style="background:${section.iconBg}20; color:${section.iconBg}">
+        ${section.icon}
+      </div>
+      <div class="section-label">
+        <div class="section-name">${section.name}</div>
+      </div>
+      <span class="section-count">${section.children.length}</span>
+      <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"/>
+      </svg>
+    `;
+    li.appendChild(header);
+
+    // Children
+    const childrenDiv = document.createElement('div');
+    childrenDiv.className = 'section-children';
+
+    section.children.forEach(page => {
+      const node = document.createElement('div');
+      node.className = 'page-node';
+      node.dataset.status = page.status;
+      node.dataset.search = `${section.name} ${page.name} ${page.nameEn} ${page.route || ''} ${(page.perms||[]).map(p=>p.code).join(' ')} ${(page.roles||[]).join(' ')} ${page.notes||''}`.toLowerCase();
+
+      let permHtml = (page.perms || []).map(p =>
+        `<span class="perm-tag ${p.risk ? 'high-risk' : ''}">${p.code} <span class="perm-bits">${p.bits}</span></span>`
+      ).join('');
+
+      let roleHtml = (page.roles || []).map(r =>
+        `<span class="role-tag">${r}</span>`
+      ).join('');
+
+      let wireframeHtml = page.wireframe
+        ? `<a class="wireframe-link" href="${WIREFRAME_BASE}${page.wireframe}" target="_blank">
+            <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5H4.5v9h9v-2.75a.75.75 0 0 1 1.5 0v3.5a.75.75 0 0 1-.75.75h-10.5a.75.75 0 0 1-.75-.75V2.75A.75.75 0 0 1 3.75 2Zm6.44.5h2.56v2.56a.75.75 0 0 1-1.5 0V4.31L7.78 7.78a.75.75 0 0 1-1.06-1.06l3.47-3.47h-.75a.75.75 0 0 1 0-1.5Z"/></svg>
+            Wireframe
+           </a>`
+        : '';
+
+      let notesHtml = page.notes ? `<span style="font-size:10px;color:var(--text-muted);">· ${page.notes}</span>` : '';
+
+      const displayName = page.nameEn
+        ? `${page.name} <span class="page-title-en">${page.nameEn}</span>`
+        : page.name;
+
+      node.innerHTML = `
+        <div class="page-icon" style="background:${statusDotColor[page.status]}"></div>
+        <div class="page-info">
+          <div class="page-title">
+            ${displayName}
+            <span class="badge ${statusClass[page.status]}">${statusLabel[page.status]}</span>
+            ${wireframeHtml}
+            ${notesHtml}
+          </div>
+          ${page.route ? `<div class="page-route">${page.route}</div>` : ''}
+          <div class="page-meta">
+            ${permHtml}
+            ${roleHtml}
+          </div>
+        </div>
+      `;
+      childrenDiv.appendChild(node);
+    });
+
+    li.appendChild(childrenDiv);
+    tree.appendChild(li);
+  });
+
+  updateStats();
+}
+
+// ═══════════════════════════════════════════════
+// Stats
+// ═══════════════════════════════════════════════
+function updateStats() {
+  let counts = { total: 0, live: 0, wireframe: 0, spec: 0, planning: 0, placeholder: 0 };
+  document.querySelectorAll('.page-node:not(.hidden)').forEach(n => {
+    counts.total++;
+    counts[n.dataset.status]++;
+  });
+  document.getElementById('statTotal').textContent = counts.total;
+  document.getElementById('statLive').textContent = counts.live;
+  document.getElementById('statWireframe').textContent = counts.wireframe;
+  document.getElementById('statSpec').textContent = counts.spec;
+  document.getElementById('statPlanning').textContent = counts.planning;
+  document.getElementById('statPlaceholder').textContent = counts.placeholder;
+}
+
+// ═══════════════════════════════════════════════
+// Search
+// ═══════════════════════════════════════════════
+let currentFilter = 'all';
+
+document.getElementById('searchInput').addEventListener('input', function() {
+  applyFilters();
+});
+
+function applyFilters() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  let anyVisible = false;
+
+  document.querySelectorAll('.section').forEach(section => {
+    let sectionHasVisible = false;
+    section.querySelectorAll('.page-node').forEach(node => {
+      const matchesSearch = !q || node.dataset.search.includes(q);
+      const matchesStatus = currentFilter === 'all' || node.dataset.status === currentFilter;
+      const visible = matchesSearch && matchesStatus;
+      node.classList.toggle('hidden', !visible);
+      if (visible) { sectionHasVisible = true; anyVisible = true; }
+    });
+    section.classList.toggle('hidden', !sectionHasVisible);
+    if (sectionHasVisible && (q || currentFilter !== 'all')) {
+      section.classList.add('open');
+    }
+  });
+
+  document.getElementById('noResults').classList.toggle('hidden', anyVisible);
+  updateStats();
+}
+
+function filterByStatus(chip, status) {
+  document.querySelectorAll('.stat-chip').forEach(c => c.classList.remove('active'));
+  if (currentFilter === status) {
+    currentFilter = 'all';
+  } else {
+    currentFilter = status;
+    chip.classList.add('active');
+  }
+  applyFilters();
+}
+
+// ═══════════════════════════════════════════════
+// Expand / Collapse
+// ═══════════════════════════════════════════════
+function expandAll() {
+  document.querySelectorAll('.section:not(.hidden)').forEach(s => s.classList.add('open'));
+}
+function collapseAll() {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('open'));
+}
+
+// ═══════════════════════════════════════════════
+// Init — default collapsed
+// ═══════════════════════════════════════════════
+renderTree();
+</script>
+</body>
+</html>
