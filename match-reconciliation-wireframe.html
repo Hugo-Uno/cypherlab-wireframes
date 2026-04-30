@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>Match ID Reconciliation - Wireframe</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif;
+    background: #0a0a0f;
+    color: #e4e4e7;
+    font-size: 13px;
+  }
+
+  /* Layout */
+  .app { display: flex; min-height: 100vh; }
+  .sidebar {
+    width: 220px;
+    background: #08080c;
+    color: #a1a1aa;
+    padding: 16px 0;
+    flex-shrink: 0;
+    border-right: 1px solid #1f1f24;
+  }
+  .sidebar .logo {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid #1f1f24;
+    font-weight: 700;
+    color: #fafafa;
+    font-size: 15px;
+  }
+  .sidebar .nav-item {
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .sidebar .nav-item:hover { background: #18181f; color: #fafafa; }
+  .sidebar .nav-item.active {
+    background: #0ea5e9;
+    color: #fff;
+  }
+  .sidebar .nav-section {
+    padding: 16px 20px 6px;
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #52525b;
+    letter-spacing: 0.05em;
+  }
+
+  .main { flex: 1; display: flex; flex-direction: column; }
+  .topbar {
+    height: 52px;
+    background: #111116;
+    border-bottom: 1px solid #1f1f24;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    justify-content: space-between;
+  }
+  .topbar .breadcrumb { color: #71717a; font-size: 13px; }
+  .topbar .user { font-size: 13px; color: #d4d4d8; }
+
+  .content { padding: 24px; flex: 1; }
+
+  .page-header { margin-bottom: 20px; }
+  .page-header h1 { font-size: 20px; font-weight: 600; margin-bottom: 4px; color: #fafafa; }
+  .page-header .subtitle { color: #71717a; font-size: 13px; }
+
+  /* Filter bar */
+  .filter-card {
+    background: #111116;
+    border: 1px solid #1f1f24;
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+  }
+  .filter-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .filter {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .filter label {
+    font-size: 11px;
+    color: #71717a;
+    font-weight: 500;
+  }
+  .filter select,
+  .filter input {
+    height: 32px;
+    border: 1px solid #2a2a32;
+    border-radius: 4px;
+    padding: 0 10px;
+    font-size: 12px;
+    background: #18181f;
+    color: #e4e4e7;
+    min-width: 140px;
+  }
+  .filter input.search { min-width: 200px; }
+  .filter input::placeholder { color: #52525b; }
+  .filter-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+    align-self: flex-end;
+  }
+  .btn {
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 4px;
+    border: 1px solid #2a2a32;
+    background: #18181f;
+    font-size: 12px;
+    cursor: pointer;
+    color: #e4e4e7;
+  }
+  .btn:hover { background: #22222b; }
+  .btn-primary {
+    background: #0ea5e9;
+    color: #fff;
+    border-color: #0ea5e9;
+  }
+  .btn-primary:hover { background: #0284c7; }
+
+  /* Active filter chips */
+  .active-filters {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed #2a2a32;
+    align-items: center;
+  }
+  .active-filters .label {
+    font-size: 11px;
+    color: #71717a;
+    margin-right: 4px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(14, 165, 233, 0.15);
+    color: #7dd3fc;
+    border: 1px solid rgba(14, 165, 233, 0.3);
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+  }
+  .chip .x { cursor: pointer; opacity: 0.6; }
+
+  /* Table */
+  .table-card {
+    background: #111116;
+    border: 1px solid #1f1f24;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .table-toolbar {
+    padding: 10px 16px;
+    border-bottom: 1px solid #1f1f24;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: #a1a1aa;
+  }
+  .table-toolbar strong { color: #fafafa; }
+  .table-toolbar .left { display: flex; gap: 16px; align-items: center; }
+  .table-toolbar .legend { display: flex; gap: 12px; }
+  .legend-item { display: inline-flex; align-items: center; gap: 4px; }
+  .legend-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+  thead {
+    background: #18181f;
+    border-bottom: 1px solid #1f1f24;
+  }
+  th {
+    text-align: left;
+    padding: 10px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #71717a;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #1f1f24;
+    font-size: 12px;
+    vertical-align: middle;
+    color: #d4d4d8;
+  }
+  /* Zebra striping by GROUP (not row) — 同一個我方賽事 ID 的 rows 共用一個底色 */
+  tr.zebra td { background-color: rgba(255, 255, 255, 0.05); }
+  tr:hover td { background-color: #1e1e26; }
+
+  /* Group styling — visually group rows that share an internal match ID via colored left border */
+  .group-row td:first-child {
+    border-left: 3px solid #4c1d95;
+    padding-left: 0;
+    width: 28px;
+  }
+  .group-row.conflict td:first-child {
+    border-left-color: #b91c1c;
+  }
+  .group-row.lowconf td:first-child {
+    border-left-color: #c2410c;
+  }
+  .group-row.critical td:first-child {
+    border-left-color: #dc2626;
+    box-shadow: inset 3px 0 0 #ef4444;
+  }
+  .group-row.matched td:first-child {
+    border-left-color: #16a34a;
+  }
+  .group-row.group-first td {
+    border-top: 1px solid #2a2a32;
+  }
+  .group-row.group-last td,
+  .group-row.group-only td {
+    border-bottom: 1px solid #2a2a32;
+  }
+
+  /* Spacer row between groups */
+  .spacer td {
+    background: transparent;
+    border-bottom: none;
+    height: 8px;
+    padding: 0;
+  }
+  .spacer:hover td { background: transparent; }
+
+  /* Internal ID chip in column */
+  .id-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    align-items: flex-start;
+  }
+  .internal-id {
+    font-family: "SF Mono", Menlo, monospace;
+    background: rgba(167, 139, 250, 0.12);
+    color: #c4b5fd;
+    border: 1px solid rgba(167, 139, 250, 0.25);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .internal-id.empty {
+    background: transparent;
+    color: #71717a;
+    border-style: dashed;
+    border-color: #3f3f46;
+    font-style: italic;
+  }
+  /* Coverage badge — X/3 sources */
+  .coverage {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: "SF Mono", monospace;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 8px;
+    border: 1px solid;
+  }
+  .coverage.full {
+    background: rgba(34, 197, 94, 0.12);
+    color: #86efac;
+    border-color: rgba(34, 197, 94, 0.3);
+  }
+  .coverage.partial {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fcd34d;
+    border-color: rgba(245, 158, 11, 0.4);
+    font-weight: 600;
+  }
+  .coverage.critical {
+    background: rgba(239, 68, 68, 0.15);
+    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.4);
+    font-weight: 600;
+  }
+  .missing-tag {
+    font-size: 10px;
+    color: #71717a;
+    margin-left: 4px;
+  }
+  .missing-tag b { color: #fcd34d; font-weight: 500; }
+
+  /* Diff highlight (e.g. swapped home/away, mismatched start time) */
+  .team.diff,
+  .time-cell .diff {
+    color: #fca5a5;
+    text-decoration: underline dotted #ef4444;
+    text-underline-offset: 2px;
+  }
+
+  /* Cells */
+  .source-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .source-name {
+    font-weight: 500;
+    color: #fafafa;
+  }
+  .source-id {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px;
+    color: #71717a;
+  }
+  .team {
+    font-weight: 500;
+    color: #fafafa;
+  }
+  .time-cell {
+    white-space: nowrap;
+    color: #d4d4d8;
+  }
+  .time-cell .countdown {
+    display: block;
+    font-size: 10px;
+    color: #71717a;
+    margin-top: 2px;
+  }
+  .time-cell .countdown.urgent { color: #f87171; font-weight: 500; }
+
+  /* Status badges */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 500;
+    white-space: nowrap;
+    border: 1px solid transparent;
+  }
+  .badge-matched { background: rgba(34, 197, 94, 0.15); color: #86efac; border-color: rgba(34, 197, 94, 0.3); }
+  .badge-pending { background: rgba(245, 158, 11, 0.15); color: #fcd34d; border-color: rgba(245, 158, 11, 0.3); }
+  .badge-conflict { background: rgba(239, 68, 68, 0.15); color: #fca5a5; border-color: rgba(239, 68, 68, 0.3); }
+  .badge-lowconf { background: rgba(249, 115, 22, 0.15); color: #fdba74; border-color: rgba(249, 115, 22, 0.3); }
+  .badge-ignored { background: rgba(113, 113, 122, 0.2); color: #a1a1aa; border-color: rgba(113, 113, 122, 0.4); }
+
+  /* Action buttons in row */
+  .actions {
+    white-space: nowrap;
+    text-align: right;
+  }
+  .actions .action-link + .action-link {
+    margin-left: 4px;
+  }
+  .action-link {
+    color: #38bdf8;
+    cursor: pointer;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+  .action-link:hover { background: rgba(14, 165, 233, 0.15); }
+  .action-link.danger { color: #f87171; }
+  .action-link.danger:hover { background: rgba(239, 68, 68, 0.15); }
+
+  /* Confidence bar */
+  .conf {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .conf-bar {
+    width: 50px;
+    height: 4px;
+    background: #2a2a32;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .conf-fill { height: 100%; }
+  .conf-fill.high { background: #22c55e; }
+  .conf-fill.med { background: #f59e0b; }
+  .conf-fill.low { background: #ef4444; }
+  .conf-text { font-size: 10px; color: #a1a1aa; font-family: "SF Mono", monospace; }
+
+  /* Expanded detail panel */
+  .detail-row td {
+    padding: 0;
+    background: #0d0d12;
+  }
+  .detail-panel {
+    padding: 16px 20px;
+    border-top: 2px solid #0ea5e9;
+    border-bottom: 1px solid #1f1f24;
+  }
+  .detail-panel h3 {
+    font-size: 13px;
+    color: #fafafa;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .source-card {
+    background: #15151b;
+    border: 1px solid #2a2a32;
+    border-radius: 4px;
+    padding: 10px 12px;
+  }
+  .source-card.internal {
+    border-color: rgba(167, 139, 250, 0.4);
+    background: rgba(76, 29, 149, 0.15);
+  }
+  .source-card .sc-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #2a2a32;
+  }
+  .source-card .sc-name { font-weight: 600; font-size: 12px; color: #fafafa; }
+  .source-card .sc-id {
+    font-family: "SF Mono", monospace;
+    font-size: 10px;
+    color: #71717a;
+  }
+  .source-card .sc-field {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+    font-size: 11px;
+  }
+  .source-card .sc-field .k { color: #71717a; }
+  .source-card .sc-field .v { color: #e4e4e7; }
+  .source-card .sc-field.diff .v { color: #f87171; font-weight: 500; }
+
+  .ai-suggestion {
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 4px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .ai-suggestion .ai-text { font-size: 12px; color: #fcd34d; }
+  .ai-suggestion .ai-text strong { font-weight: 600; color: #fde68a; }
+
+  .resolve-bar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 10px 12px;
+    background: #15151b;
+    border: 1px solid #2a2a32;
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+  .resolve-bar input {
+    flex: 1;
+    height: 32px;
+    border: 1px solid #2a2a32;
+    background: #0a0a0f;
+    color: #e4e4e7;
+    border-radius: 4px;
+    padding: 0 10px;
+    font-size: 12px;
+  }
+  .resolve-bar input::placeholder { color: #52525b; }
+  .resolve-bar > span { color: #fafafa; }
+
+  .audit-log {
+    background: #15151b;
+    border: 1px solid #2a2a32;
+    border-radius: 4px;
+    padding: 10px 12px;
+  }
+  .audit-log h4 {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #71717a;
+    margin-bottom: 8px;
+    letter-spacing: 0.03em;
+  }
+  .audit-item {
+    display: flex;
+    gap: 12px;
+    padding: 4px 0;
+    font-size: 11px;
+    color: #a1a1aa;
+  }
+  .audit-item .ts {
+    color: #52525b;
+    font-family: "SF Mono", monospace;
+    width: 130px;
+    flex-shrink: 0;
+  }
+  .audit-item .who { color: #fafafa; font-weight: 500; }
+
+  /* Pagination */
+  .pagination {
+    padding: 12px 16px;
+    border-top: 1px solid #1f1f24;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: #71717a;
+  }
+  .page-btns { display: flex; gap: 4px; }
+  .page-btn {
+    width: 28px; height: 28px;
+    border: 1px solid #2a2a32;
+    background: #18181f;
+    color: #d4d4d8;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 11px;
+  }
+  .page-btn:hover { background: #22222b; }
+  .page-btn.active { background: #0ea5e9; color: #fff; border-color: #0ea5e9; }
+
+  /* Wireframe banner */
+  .wf-banner {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px dashed rgba(245, 158, 11, 0.4);
+    color: #fcd34d;
+    padding: 8px 16px;
+    margin-bottom: 14px;
+    border-radius: 4px;
+    font-size: 12px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">CypherLab Backoffice</div>
+    <div class="nav-section">Operations</div>
+    <div class="nav-item">Dashboard</div>
+    <div class="nav-item">Matches</div>
+    <div class="nav-item">Markets</div>
+    <div class="nav-item">Orders</div>
+    <div class="nav-section">Data Quality</div>
+    <div class="nav-item active">Match ID Reconciliation</div>
+    <div class="nav-item">Market Mapping</div>
+    <div class="nav-item">Player Mapping</div>
+    <div class="nav-section">System</div>
+    <div class="nav-item">Users</div>
+    <div class="nav-item">Settings</div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="topbar">
+      <div class="breadcrumb">Data Quality / Match ID Reconciliation</div>
+      <div class="user">Hugo (TPM)</div>
+    </div>
+
+    <div class="content">
+
+      <div class="wf-banner">
+        WIREFRAME — 賽事 ID 對應頁面 / Match ID Reconciliation Console
+      </div>
+
+      <div class="page-header">
+        <h1>賽事 ID 對應</h1>
+        <div class="subtitle">處理多個數據源 (Sportradar / Bet365 / OpticOdds…) 與我方賽事 ID 之間的對應 — AI 自動配對，人工複查與修正</div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="filter-card">
+        <div class="filter-row">
+          <div class="filter">
+            <label>數據源</label>
+            <select><option>全部</option><option>Sportradar</option><option>Bet365</option><option>OpticOdds</option></select>
+          </div>
+          <div class="filter">
+            <label>聯賽</label>
+            <select><option>全部</option><option>NBA</option><option>NFL</option><option>EPL</option><option>MLB</option></select>
+          </div>
+          <div class="filter">
+            <label>覆蓋狀態</label>
+            <select><option>不完整 + 衝突 + 未對應 (預設)</option><option>全部</option><option>完整對應 3/3</option><option>部分對應 2/3</option><option>嚴重不足 1/3</option><option>衝突</option><option>未對應 (Orphan)</option></select>
+          </div>
+          <div class="filter">
+            <label>時間範圍</label>
+            <select><option>今天</option><option>明天</option><option>本週</option><option>自訂</option></select>
+          </div>
+          <div class="filter">
+            <label>搜尋</label>
+            <input type="text" class="search" placeholder="隊名 / 賽事 ID">
+          </div>
+          <div class="filter-actions">
+            <button class="btn">重置</button>
+            <button class="btn btn-primary">套用</button>
+          </div>
+        </div>
+        <div class="active-filters">
+          <span class="label">已套用：</span>
+          <span class="chip">覆蓋狀態：不完整 + 衝突 + 未對應 <span class="x">×</span></span>
+          <span class="chip">時間：今天 <span class="x">×</span></span>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-card">
+
+        <div class="table-toolbar">
+          <div class="left">
+            <span>已連接 <strong>3 個數據源</strong>：Sportradar · Bet365 · OpticOdds</span>
+            <span style="color:#52525b">|</span>
+            <span><strong style="color:#fcd34d">8 場</strong> 覆蓋不足 · <strong style="color:#fca5a5">2 場</strong> 衝突 · <strong style="color:#fcd34d">5 筆</strong> 未對應 source</span>
+            <span style="color:#52525b">|</span>
+            <span style="color:#52525b">完整對應 (3/3) <strong style="color:#86efac">142 場</strong> · <span class="action-link">顯示中（隱藏）</span></span>
+          </div>
+          <div>
+            <button class="btn">匯出 CSV</button>
+            <button class="btn">重新跑 AI 配對</button>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th style="width:28px"></th>
+              <th>數據源 / Source ID</th>
+              <th>聯賽</th>
+              <th>主隊</th>
+              <th>客隊</th>
+              <th>開賽時間 ↓</th>
+              <th>我方賽事 ID</th>
+              <th>狀態</th>
+              <th>AI 信心</th>
+              <th style="text-align:right">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <!-- ========== 3/3 完整對應 (對照組) ========== -->
+            <tr class="group-row group-first matched zebra">
+              <td></td>
+              <td><div class="source-cell"><span class="source-name">Sportradar</span><span class="source-id">sr:match:48291003</span></div></td>
+              <td>NBA</td>
+              <td class="team">Los Angeles Lakers</td>
+              <td class="team">Boston Celtics</td>
+              <td class="time-cell">2026-04-27 17:30<span class="countdown">即將開賽</span></td>
+              <td>
+                <div class="id-cell">
+                  <span class="internal-id">MATCH_2026_NBA_00821</span>
+                  <span><span class="coverage full">3/3</span></span>
+                </div>
+              </td>
+              <td><span class="badge badge-matched">完整對應</span></td>
+              <td><div class="conf"><div class="conf-bar"><div class="conf-fill high" style="width:98%"></div></div><span class="conf-text">98%</span></div></td>
+              <td class="actions" style="text-align:right"><span class="action-link">改對應</span><span class="action-link danger">解除</span></td>
+            </tr>
+            <tr class="group-row matched zebra">
+              <td></td>
+              <td><div class="source-cell"><span class="source-name">Bet365</span><span class="source-id">b365_evt_887112</span></div></td>
+              <td>NBA</td>
+              <td class="team">L.A. Lakers</td>
+              <td class="team">Boston</td>
+              <td class="time-cell">2026-04-27 17:30<span class="countdown">即將開賽</span></td>
+              <td>
+                <div class="id-cell">
+                  <span class="internal-id">MATCH_2026_NBA_00821</span>
+                </div>
+              </td>
+              <td><span class="badge badge-matched">完整對應</span></td>
+              <td><div class="conf"><div class="conf-bar"><div class="conf-fill high" style="width:95%"></div></div><span class="conf-text">95%</span></div></td>
+              <td class="actions" style="text-align:right"><span class="action-link">改對應</span><span class="action-link danger">解除</span></td>
+            </tr>
+            <tr class="group-row group-last matched zebra">
+              <td></td>
+              <td><div class="source-cell"><span class="source-name">OpticOdds</span><span class="source-id">oo_3a8f9b21</span></div></td>
+              <td>NBA</td>
+              <td class="team">Lakers</td>
+              <td class="team">Celtics</td>
+              <td class="time-cell">2026-04-27 17:30<span class="countdown">即將開賽</span></td>
+              <td>
+                <div class="id-cell">
+                  <span class="internal-id">MATCH_2026_NBA_00821</span>
+                </div>
+              </td>
+              <td><span class="badge badge-matched">完整對應</span></td>
+              <td><div class="conf"><div class="conf-bar"><div class="conf-fill high" style="width:92%"></div></div><span class="conf-text">92%</span></div></td>
+              <td class="actions" style="text-align:right"><span class="action-link">改對應</span><span class="action-link danger">解除</span></td>
+            </tr>
+
+            <tr class="spacer"><td colspan="10"></td></tr>
+
+            <!-- ========== 1/3 嚴重不足 — 只有 1 個數據源 ========== -->
+            <tr class="group-row group-first group-only critical">
+              <td></td>
+              <td><div class="source-cell"><span class="source-name">Sportradar</span><span class="source-id">sr:match:48291002</span></div></td>
+              <td>NBA</td>
+              <td class="team">Brooklyn Nets</td>
+              <td class="team">Philadelphia 76ers</td>
+              <td class="time-cell">2026-04-27 18:00<span class="countdown urgent">30 分鐘後</span></td>
+              <td>
+                <div class="id-cell">
+                  <span class="internal-id">MATCH_2026_NBA_00819</span>
+                  <span><span class="coverage critical">1/3</span><span class="missing-tag">缺：<b>Bet365</b>、<b>OpticOdds</b></span></span>
+                </div>
+              </td>
+              <td><span class="badge badge-conflict">嚴重不足</span></td>
+              <td><div class="conf"><div class="conf-bar"><div class="conf-fill high" style="width:96%"></div></div><span class="conf-text">96%</span></div></td>
+              <td class="actions" style="text-align:right"><span class="action-link">手動補對應</span><span class="action-link">重跑 AI</span></td>
+            </tr>
+
+            <tr class="spacer"><td colspan="10"></td></tr>
+
+            <!-- ========== 2/3 + 衝突 (Warriors vs Heat) ========== -->
+            <tr class="group-row group-first conflict zebra">
+              <td></td>
+              <td><div class="source-cell"><span class="source-name">Sportradar</span><span class="source-id">sr:match:48291004</span></div></td>
+              <td>NBA</td>
+              <td class="team">Golden State Warriors</td>
+              <td class="team">Miami Heat</td>
+              <td class="time-cell">2026-04-27 22:00<span class="countdown urgent">4.5 小時後</span></td>
+              <td>
+                <div class="id-cell">
+                  <span class="internal-id">MATCH_2026_NBA_00822</span>
+                  <span><span class="coverage partial">2/3</span><span class="missing-tag">缺：<b>OpticOdds</b></span></span>
+                </div>
+              </td>
+              <td><span class="badge badge-conflict">衝突</span></td>
+              <td><div class="conf"><div class="conf-bar"><div class="conf-fill med" style="width:72%"></div></div><span class="conf-text">72%</span></div></td>
+              <td class="actions" style="text-align:right"><span class="action-link">改對應</span><span class="action-link danger">解除</span></td>
+            </tr>
+            <tr class="group-row group-last conflict zebra">
+              <td></td>
+              <td><div class="source-cell"><span class="source-name">Bet365</span><span class="source-id">b365_evt_887113</span></div></td>
+              <td>NBA</td>
+              <td class="team diff">Miami Heat</td>
+              <td class="team diff">Golden State Warriors</td>
+              <td class="time-cell"><span class="diff">2026-04-27 22:30</span><span class="countdown urgent">5 小時後</span></td>
+              <td>
+                <div class="id-cell">
+                  <span class="internal-id">MATCH_2026_NBA_00822</span>
+                </div>
+              </td>
+              <td><span class="badge badge-conflict">衝突</span></td>
+              <td><div class="conf"><div class="conf-bar"><div class="conf-fill med" style="width:55%"></div></div><span class="conf-text">55%</span></div></td>
+              <td class="actions" style="text-align:right"><span class="action-link">改對應</span><span class="action-link danger">解除</span></td>
+            </tr>
+
+            <!-- ===== EXPANDED DETAIL PANEL (Warriors vs Heat 衝突展開) ===== -->
+            <tr class="detail-row" id="detail-warriors">
+              <td colspan="10">
+                <div class="detail-panel">
+                  <h3>
+                    <span class="badge badge-conflict">衝突</span>
+                    MATCH_2026_NBA_00822 — Golden State Warriors vs Miami Heat
+                    <span style="margin-left:auto;font-size:11px;color:#71717a;font-weight:400;">2 個數據源已對應 · 缺 OpticOdds</span>
+                  </h3>
+
+                  <!-- Source cards comparison -->
+                  <div class="detail-grid">
+                    <!-- Our internal record -->
+                    <div class="source-card internal">
+                      <div class="sc-header">
+                        <span class="sc-name">我方紀錄</span>
+                        <span class="sc-id">MATCH_2026_NBA_00822</span>
+                      </div>
+                      <div class="sc-field"><span class="k">聯賽</span><span class="v">NBA</span></div>
+                      <div class="sc-field"><span class="k">主隊</span><span class="v">Golden State Warriors</span></div>
+                      <div class="sc-field"><span class="k">客隊</span><span class="v">Miami Heat</span></div>
+                      <div class="sc-field"><span class="k">開賽時間</span><span class="v">2026-04-27 22:00</span></div>
+                      <div class="sc-field"><span class="k">場館</span><span class="v">Chase Center</span></div>
+                    </div>
+
+                    <!-- Sportradar -->
+                    <div class="source-card">
+                      <div class="sc-header">
+                        <span class="sc-name">Sportradar</span>
+                        <span class="sc-id">sr:match:48291004</span>
+                      </div>
+                      <div class="sc-field"><span class="k">聯賽</span><span class="v">NBA</span></div>
+                      <div class="sc-field"><span class="k">主隊</span><span class="v">Golden State Warriors</span></div>
+                      <div class="sc-field"><span class="k">客隊</span><span class="v">Miami Heat</span></div>
+                      <div class="sc-field"><span class="k">開賽時間</span><span class="v">2026-04-27 22:00</span></div>
+                      <div class="sc-field"><span class="k">場館</span><span class="v">Chase Center, San Francisco</span></div>
+                      <div style="margin-top:6px"><span class="badge badge-matched" style="font-size:9px;">✓ 一致</span></div>
+                    </div>
+
+                    <!-- Bet365 — has conflicts -->
+                    <div class="source-card" style="border-color:rgba(239,68,68,0.4);">
+                      <div class="sc-header">
+                        <span class="sc-name">Bet365</span>
+                        <span class="sc-id">b365_evt_887113</span>
+                      </div>
+                      <div class="sc-field"><span class="k">聯賽</span><span class="v">NBA</span></div>
+                      <div class="sc-field diff"><span class="k">主隊</span><span class="v">Miami Heat</span></div>
+                      <div class="sc-field diff"><span class="k">客隊</span><span class="v">Golden State Warriors</span></div>
+                      <div class="sc-field diff"><span class="k">開賽時間</span><span class="v">2026-04-27 22:30 (+30m)</span></div>
+                      <div class="sc-field"><span class="k">場館</span><span class="v">—</span></div>
+                      <div style="margin-top:6px"><span class="badge badge-conflict" style="font-size:9px;">主客顛倒 · 時間差 30 分鐘</span></div>
+                    </div>
+                  </div>
+
+                  <!-- AI Suggestion -->
+                  <div class="ai-suggestion">
+                    <div class="ai-text">
+                      <strong>AI 建議：</strong>Bet365 主客隊順序與 Sportradar / 我方紀錄相反，開賽時間差 30 分鐘。建議以 Sportradar 為準，將 Bet365 標記為「主客顛倒」並修正時間。
+                      <span style="display:block;margin-top:4px;font-size:11px;color:#a1a1aa;">信心度 72% · 依據：隊名完全匹配（順序互換）、同日同聯賽、場館吻合</span>
+                    </div>
+                    <div style="display:flex;gap:6px;flex-shrink:0;">
+                      <button class="btn btn-primary" style="font-size:11px;height:28px;">接受建議</button>
+                      <button class="btn" style="font-size:11px;height:28px;">忽略</button>
+                    </div>
+                  </div>
+
+                  <!-- Manual resolve bar -->
+                  <div class="resolve-bar">
+                    <span style="white-space:nowrap;">手動修正：</span>
+                    <select style="height:32px;border:1px solid #2a2a32;background:#0a0a0f;color:#e4e4e7;border-radius:4px;padding:0 10px;font-size:12px;min-width:200px;">
+                      <option>選擇操作…</option>
+                      <option>確認對應正確（忽略差異）</option>
+                      <option>修正 Bet365 主客順序</option>
+                      <option>修正 Bet365 開賽時間</option>
+                      <option>解除 Bet365 對應</option>
+                      <option>解除全部對應</option>
+                    </select>
+                    <input type="text" placeholder="備註（選填）">
+                    <button class="btn btn-primary">送出</button>
+                  </div>
+
+                  <!-- Audit log -->
+                  <div class="audit-log">
+                    <h4>操作紀錄</h4>
+                    <div class="audit-item">
+                      <span class="ts">2026-04-27 14:32</span>
+                      <span><span class="who">System (AI)</span> — 自動配對 Sportradar sr:match:48291004 → MATCH_2026_NBA_00822（信心 92%）</span>
+                    </div>
+                    <div class="audit-item">
+                      <span class="ts">2026-04-27 14:32</span>
+                      <span><span class="who">System (AI)</span> — 自動配對 Bet365 b365_evt_887113 → MATCH_2026_NBA_00822（信心 55%），標記衝突：主客顛倒 + 時間差</span>
+                    </div>
+                    <div class="audit-item">
+                      <span class="ts">2026-04-27 14:33</span>
+                      <span><span class="who">System</span> — 標記 OpticOdds 缺失，等待數據同步</span>
+                    </div>
+                  </div>
+
+                </div>
+              </td>
+            </tr>
+
+            <tr class="spacer"><td colspan="10"></td></tr>
+
+            <!-- ========== 2/3 部分對應 (Man City vs Arsenal) ========== -->
+            <tr class="group-row group-first lowconf">
+              <td></td>
+              <td><div class="source-cell"><span class="source-name">Sportradar</span><span class="source-id">sr:match:48291050</span></div></td>
+              <td>EPL</td>
+              <td class="team">Manchester City</td>
+              <td class="team">Arsenal</td>
+              <td class="time-cell">2026-04-28 02:00<span class="countdown">8 小時後</span></td>
+              <td>
+                <div class="id-cell">
+                  <span class="internal-id">MATCH_2026_EPL_00318</span>
+                  <span><span class="coverage partial">2/3</span><span class="missing-tag">缺：<b>Bet365</b></span></span>
+                </div>
+              </td>
+              <td><span class="badge badge-lowconf">部分對應</span></td>
+              <td><div class="conf"><div class="conf-bar"><div class="conf-fill med" style="width:68%"></div></div><span class="conf-text">68%</span></div></td>
+              <td class="actions" style="text-align:right"><span class="action-link">改對應</span><span class="action-link danger">解除</span></td>
+            </tr>
+            <tr class="group-row group-last lowconf">
+              <td></td>
+              <td><div class="source-cell"><span class="source-name">OpticOdds</span><span class="source-id">oo_5b1c8d77</span></div></td>
+              <td>EPL</td>
+              <td class="team">Man City</td>
+              <td class="team">Arsenal FC</td>
+              <td class="time-cell">2026-04-28 02:00<span class="countdown">8 小時後</span></td>
+              <td>
+                <div class="id-cell">
+                  <span class="internal-id">MATCH_2026_EPL_00318</span>
+                </div>
+              </td>
+              <td><span class="badge badge-lowconf">部分對應</span></td>
+              <td><div class="conf"><div class="conf-bar"><div class="conf-fill med" style="width:61%"></div></div><span class="conf-text">61%</span></div></td>
+              <td class="actions" style="text-align:right"><span class="action-link">改對應</span><span class="action-link danger">解除</span></td>
+            </tr>
+
+            <tr class="spacer"><td colspan="10"></td></tr>
+
+            <!-- ========== 未對應 / 待對應 (Orphans) — 各自獨立 row ========== -->
+            <tr class="zebra">
+              <td></td>
+              <td><div class="source-cell"><span class="source-name">OpticOdds</span><span class="source-id">oo_7c2d11e9</span></div></td>
+              <td>MLB</td>
+              <td class="team">New York Yankees</td>
+              <td class="team">Boston Red Sox</td>
+              <td class="time-cell">2026-04-28 03:05<span class="countdown">9 小時後</span></td>
+              <td><span class="internal-id empty">未對應</span></td>
+              <td><span class="badge badge-pending">待對應</span></td>
+              <td><div class="conf"><div class="conf-bar"><div class="conf-fill low" style="width:35%"></div></div><span class="conf-text">35%</span></div></td>
+              <td class="actions" style="text-align:right"><span class="action-link">手動對應</span><span class="action-link">建立新賽事</span><span class="action-link danger">忽略</span></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><div class="source-cell"><span class="source-name">Bet365</span><span class="source-id">b365_evt_887220</span></div></td>
+              <td>NFL</td>
+              <td class="team">Kansas City Chiefs</td>
+              <td class="team">Buffalo Bills</td>
+              <td class="time-cell">2026-04-28 09:00<span class="countdown">15 小時後</span></td>
+              <td><span class="internal-id empty">未對應</span></td>
+              <td><span class="badge badge-pending">待對應</span></td>
+              <td><div class="conf"><div class="conf-bar"><div class="conf-fill low" style="width:0%"></div></div><span class="conf-text">—</span></div></td>
+              <td class="actions" style="text-align:right"><span class="action-link">手動對應</span><span class="action-link">建立新賽事</span><span class="action-link danger">忽略</span></td>
+            </tr>
+            <tr class="zebra">
+              <td></td>
+              <td><div class="source-cell"><span class="source-name">Sportradar</span><span class="source-id">sr:match:48291077</span></div></td>
+              <td>EPL</td>
+              <td class="team">Tottenham Hotspur</td>
+              <td class="team">Liverpool</td>
+              <td class="time-cell">2026-04-28 19:30<span class="countdown">26 小時後</span></td>
+              <td><span class="internal-id empty">未對應</span></td>
+              <td><span class="badge badge-pending">待對應</span></td>
+              <td><div class="conf"><div class="conf-bar"><div class="conf-fill med" style="width:62%"></div></div><span class="conf-text">62%</span></div></td>
+              <td class="actions" style="text-align:right"><span class="action-link">手動對應</span><span class="action-link">建立新賽事</span><span class="action-link danger">忽略</span></td>
+            </tr>
+
+          </tbody>
+        </table>
+
+        <div class="pagination">
+          <span>顯示 1–10 / 共 47 筆</span>
+          <div class="page-btns">
+            <button class="page-btn">‹</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">4</button>
+            <button class="page-btn">5</button>
+            <button class="page-btn">›</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+(function() {
+  /* ── Expand / Collapse detail panel ── */
+  // Initially the Warriors detail panel is visible as a demo;
+  // clicking any group-row toggles its detail (only Warriors has one in this wireframe)
+  var detailPanel = document.getElementById('detail-warriors');
+
+  // Find all group rows and make them clickable
+  document.querySelectorAll('.group-row').forEach(function(row) {
+    row.style.cursor = 'pointer';
+    row.addEventListener('click', function(e) {
+      // Don't toggle if clicking action links or buttons
+      if (e.target.closest('.action-link') || e.target.closest('button')) return;
+
+      // Check if this row belongs to the Warriors conflict group
+      var id = row.querySelector('.internal-id');
+      if (id && id.textContent.indexOf('00822') !== -1) {
+        // Toggle the detail panel
+        if (detailPanel.style.display === 'none') {
+          detailPanel.style.display = '';
+        } else {
+          detailPanel.style.display = 'none';
+        }
+      } else {
+        alert('展開 Detail Panel（此 wireframe 僅示範 Warriors vs Heat 衝突組）');
+      }
+    });
+  });
+
+  /* ── Action link handlers ── */
+  document.querySelectorAll('.action-link').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var text = link.textContent.trim();
+
+      if (text === '手動對應') {
+        var team = link.closest('tr').querySelector('.team');
+        var name = team ? team.textContent : '';
+        alert('開啟手動對應 Modal — 搜尋我方賽事 ID 來對應「' + name + '」');
+      } else if (text === '建立新賽事') {
+        alert('開啟建立新賽事表單 — 從此數據源自動帶入隊名、聯賽、開賽時間');
+      } else if (text === '忽略') {
+        alert('將此筆標記為「已忽略」，不再顯示於預設篩選');
+      } else if (text === '手動補對應') {
+        alert('開啟手動補對應 — 搜尋缺失數據源的 Source ID 來補齊覆蓋');
+      } else if (text === '重跑 AI') {
+        alert('針對此賽事重新執行 AI 配對');
+      } else if (text === '改對應') {
+        alert('修改此數據源的對應 — 可重新選擇我方賽事 ID');
+      } else if (text === '解除') {
+        alert('解除此數據源與我方賽事 ID 的對應');
+      }
+    });
+  });
+
+  /* ── Toolbar buttons ── */
+  document.querySelectorAll('.table-toolbar .btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var text = btn.textContent.trim();
+      if (text === '匯出 CSV') {
+        alert('匯出目前篩選結果為 CSV');
+      } else if (text === '重新跑 AI 配對') {
+        alert('對所有未對應 / 衝突 / 低信心的賽事重新執行 AI 配對');
+      }
+    });
+  });
+
+  /* ── Detail panel internal buttons ── */
+  var detailBtns = detailPanel ? detailPanel.querySelectorAll('.btn') : [];
+  detailBtns.forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var text = btn.textContent.trim();
+      if (text === '接受建議') {
+        alert('接受 AI 建議 — 修正 Bet365 主客順序並調整開賽時間為 22:00');
+      } else if (text === '忽略') {
+        alert('忽略此 AI 建議');
+      } else if (text === '送出') {
+        var sel = detailPanel.querySelector('select');
+        var note = detailPanel.querySelector('input[type="text"]');
+        alert('送出手動修正：' + sel.value + (note.value ? '（備註：' + note.value + '）' : ''));
+      }
+    });
+  });
+
+  /* ── Filter bar buttons ── */
+  document.querySelectorAll('.filter-card .btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if (btn.textContent.trim() === '重置') {
+        alert('重置所有篩選條件為預設值');
+      } else if (btn.textContent.trim() === '套用') {
+        alert('套用篩選條件');
+      }
+    });
+  });
+
+  /* ── Chip remove ── */
+  document.querySelectorAll('.chip .x').forEach(function(x) {
+    x.addEventListener('click', function() {
+      x.closest('.chip').style.display = 'none';
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

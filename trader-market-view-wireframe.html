@@ -152,6 +152,10 @@
   .btn-suspend:hover { background: #b6222266; }
   .btn-enter { background: #1f6feb22; border-color: #58a6ff; color: #58a6ff; }
   .btn-enter:hover { background: #1f6feb44; }
+  .btn-toggle-auto { background: #1f6feb22; border-color: #58a6ff; color: #58a6ff; min-width: 28px; }
+  .btn-toggle-auto:hover { background: #1f6feb44; }
+  .btn-toggle-auto.manual { background: #8957e522; border-color: #d2a8ff; color: #d2a8ff; }
+  .btn-toggle-auto.manual:hover { background: #8957e544; }
   .btn-bets { background: #23863622; border-color: #3fb950; color: #3fb950; }
   .btn-bets:hover { background: #23863644; }
   .btn-refund { background: #d2992222; border-color: #d29922; color: #d29922; }
@@ -386,6 +390,7 @@
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">370,370,367</td>
 <td class="action-cell">
 <div class="action-group"><button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button>
+<button class="btn-sm btn-toggle-auto manual" title="Toggle Auto/Manual">M</button>
 <button class="btn-sm btn-suspend" title="Close this market (reason required)">Close</button>
 </div>
 </td>
@@ -413,6 +418,7 @@
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">246,913,578</td>
 <td class="action-cell">
 <div class="action-group"><button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button>
+<button class="btn-sm btn-toggle-auto" title="Toggle Auto/Manual">A</button>
 <button class="btn-sm btn-suspend" title="Close this market (reason required)">Close</button>
 </div>
 </td>
@@ -440,6 +446,7 @@
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">246,913,578</td>
 <td class="action-cell">
 <div class="action-group"><button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button>
+<button class="btn-sm btn-toggle-auto" title="Toggle Auto/Manual">A</button>
 <button class="btn-sm btn-suspend" title="Close this market (reason required)">Close</button>
 </div>
 </td>
@@ -528,6 +535,7 @@
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">165,555,555</td>
 <td class="action-cell">
 <div class="action-group"><button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button>
+<button class="btn-sm btn-toggle-auto" title="Toggle Auto/Manual">A</button>
 <button class="btn-sm btn-suspend" title="Close this market (reason required)">Close</button>
 </div>
 </td>
@@ -562,6 +570,7 @@
 <td class="right" style="font-weight:700; color:#3fb950; font-variant-numeric:tabular-nums;">81,481,368</td>
 <td class="action-cell">
 <div class="action-group"><button class="btn-sm btn-enter" title="Open Market Activity in new tab">Edit</button>
+<button class="btn-sm btn-toggle-auto" title="Toggle Auto/Manual">A</button>
 <button class="btn-sm btn-suspend" title="Close this market (reason required)">Close</button>
 </div>
 </td>
@@ -830,21 +839,33 @@ function toggleSidebar() {
 
 // ================= Edit Toggle =================
 // Edit button toggles authorization for a market row
+/* Edit button — navigation (demo: alert) */
 document.querySelectorAll('.btn-enter').forEach(function(btn) {
   btn.addEventListener('click', function() {
-    var isEditing = btn.classList.contains('editing');
-    if (isEditing) {
-      btn.classList.remove('editing');
-      btn.textContent = 'Edit';
+    alert('Navigate to Market Activity page (new tab)');
+  });
+});
+
+/* Toggle Auto button — switch A ↔ M */
+document.querySelectorAll('.btn-toggle-auto').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var isManual = btn.classList.contains('manual');
+    var row = btn.closest('tr');
+    var badge = row.querySelector('.status-badge');
+    if (isManual) {
+      btn.classList.remove('manual');
+      btn.textContent = 'A';
       btn.style.background = '#1f6feb22';
       btn.style.borderColor = '#58a6ff';
       btn.style.color = '#58a6ff';
+      if (badge) { badge.className = 'status-badge status-open-auto'; badge.textContent = 'Open (A)'; }
     } else {
-      btn.classList.add('editing');
-      btn.textContent = 'Editing';
-      btn.style.background = '#23863633';
-      btn.style.borderColor = '#3fb950';
-      btn.style.color = '#3fb950';
+      btn.classList.add('manual');
+      btn.textContent = 'M';
+      btn.style.background = '#8957e522';
+      btn.style.borderColor = '#d2a8ff';
+      btn.style.color = '#d2a8ff';
+      if (badge) { badge.className = 'status-badge status-open-manual'; badge.textContent = 'Open (M)'; }
     }
   });
 });
