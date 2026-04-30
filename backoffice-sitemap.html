@@ -517,9 +517,17 @@ const siteData = [
   {
     name: '儀表板 Dashboard', icon: '📋', iconBg: '#238636', separator: false,
     children: [
-      { name: 'Trader Dashboard', nameEn: '', route: '/', status: 'wireframe',
+      { name: 'Trader Dashboard', nameEn: '', route: '/', status: 'spec',
         perms: [{ code: 'DASHBOARD', bits: 'R', risk: false }],
         wireframe: 'trader-dashboard-wireframe.html',
+        roles: ['Trader', 'Supervisor'] },
+      { name: 'Trader Market View', nameEn: '', route: '/trader/market-view', status: 'spec',
+        perms: [{ code: 'MATCH_MARKET', bits: 'R+W+A+D', risk: false }],
+        wireframe: 'trader-market-view-wireframe.html',
+        roles: ['Trader', 'Supervisor'] },
+      { name: '手動操盤頁', nameEn: 'Market Activity', route: '/trader/market-activity', status: 'wireframe',
+        perms: [{ code: 'MATCH_MARKET', bits: 'R+W', risk: false }],
+        wireframe: 'market-activity-wireframe.html',
         roles: ['Trader', 'Supervisor'] },
     ]
   },
@@ -538,13 +546,6 @@ const siteData = [
   {
     name: '盤口 Markets', icon: '📊', iconBg: '#8957e5', separator: false,
     children: [
-      { name: 'Trader Market View', nameEn: '', route: '/markets', status: 'wireframe',
-        perms: [{ code: 'MATCH_MARKET', bits: 'R+W+A+D', risk: false }],
-        wireframe: 'trader-market-view-wireframe.html',
-        roles: ['Trader', 'Supervisor'] },
-      { name: '市場動態', nameEn: 'Market Activity', route: '/markets/activity', status: 'wireframe',
-        perms: [{ code: 'MATCH_MARKET', bits: 'R', risk: false }],
-        wireframe: 'market-activity-wireframe.html' },
       { name: '賠率調整', nameEn: 'Odds Adjustment', route: '/markets/odds', status: 'placeholder',
         perms: [{ code: 'ODDS_ADJUST', bits: 'R+W', risk: false }, { code: 'MANUAL_OVERRIDE', bits: 'R+W+A', risk: true }],
         roles: ['Trader', 'Supervisor'] },
