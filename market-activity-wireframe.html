@@ -197,15 +197,6 @@
   /* Left: Activity */
   .activity-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; border-right: 1px solid #30363d; }
 
-  /* Filter bar */
-  .filter-bar { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid #30363d; }
-  .filter-label { font-size: 11px; color: #8b949e; }
-  .filter-chip { background: #161b22; border: 1px solid #30363d; color: #e6edf3; padding: 4px 10px; border-radius: 6px; font-size: 11px; display: flex; align-items: center; gap: 4px; cursor: pointer; }
-  .filter-chip .icon { font-size: 12px; }
-  .time-tabs { margin-left: auto; display: flex; gap: 2px; }
-  .time-tab { padding: 4px 10px; font-size: 11px; border-radius: 4px; cursor: pointer; color: #8b949e; border: 1px solid transparent; }
-  .time-tab:hover { color: #e6edf3; }
-  .time-tab.active { background: #58a6ff; color: #fff; border-color: #58a6ff; }
 
   /* Activity table */
   .activity-scroll { flex: 1; overflow-y: auto; }
@@ -247,8 +238,35 @@
   .item-cell { color: #f0883e; font-weight: 600; font-size: 12px; white-space: nowrap; }
 
   /* Extra line rows (sub-lines for same event) */
-  .extra-line { background: #0a0e14; }
   .extra-line td { border-top: 1px solid #21262d; }
+
+  /* ---- Event group coloring ----
+     Each event node gets its own <tbody class="event-group event-group-{type}">.
+     All rows in the group share one tinted background so trader can see
+     "this whole block belongs to one event". */
+  tbody.event-group { border-top: 2px solid #30363d; }
+  tbody.event-group:first-child { border-top: none; }
+  /* Event group colors — assigned by ORDER of appearance, not event type, so
+     two consecutive Manual edits or two Yellow Cards still get distinct tints.
+     Cycles through 6 colors then wraps. */
+  tbody.event-group-1 tr { background: rgba(88, 166, 255, 0.06); }   /* blue   */
+  tbody.event-group-2 tr { background: rgba(63, 185, 80, 0.06); }    /* green  */
+  tbody.event-group-3 tr { background: rgba(210, 153, 34, 0.06); }   /* gold   */
+  tbody.event-group-4 tr { background: rgba(210, 168, 255, 0.06); }  /* purple */
+  tbody.event-group-5 tr { background: rgba(248, 81, 73, 0.06); }    /* red    */
+  tbody.event-group-6 tr { background: rgba(240, 136, 62, 0.06); }   /* orange */
+  /* Hover should still be visible over the group tint */
+  tbody.event-group tr:hover { background: #1c2129 !important; }
+  /* Active row outline takes precedence */
+  tbody.event-group tr.active-row { background: #1f6feb33 !important; }
+
+  /* ---- AH (handicap) Line side coloring ----
+     For handicap extra-line rows, distinguish Home vs Away lines visually.
+     Item-cell text color + 3px left accent border. */
+  tr.extra-line[data-line-side="home"] td.item-cell { color: #58a6ff; font-weight: 700; }
+  tr.extra-line[data-line-side="away"] td.item-cell { color: #f97583; font-weight: 700; }
+  tr.extra-line[data-line-side="home"] td:first-child { box-shadow: inset 3px 0 0 #58a6ff; }
+  tr.extra-line[data-line-side="away"] td:first-child { box-shadow: inset 3px 0 0 #f97583; }
 
   /* Row selection highlight */
   .act-table tbody tr { cursor: pointer; }
@@ -273,7 +291,7 @@
   .stake-val { font-variant-numeric: tabular-nums; color: #3fb950; font-weight: 600; }
 
   /* Right: Odds panel */
-  .odds-panel { width: 600px; background: #0d1117; padding: 24px; overflow-y: auto; flex-shrink: 0; }
+  .odds-panel { width: 500px; background: #0d1117; padding: 18px; overflow-y: auto; flex-shrink: 0; }
 
   .panel-section { margin-bottom: 20px; }
   .panel-title { font-size: 12px; font-weight: 700; color: #8b949e; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; }
@@ -334,7 +352,7 @@
   .op-action { margin-bottom: 3px; }
   .op-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }
   .op-tag-override { background: #8957e533; color: #d2a8ff; border: 1px solid #8957e555; }
-  .op-tag-suspend { background: #f8514933; color: #f85149; border: 1px solid #f8514955; }
+  .op-tag-close { background: #f8514933; color: #f85149; border: 1px solid #f8514955; }
   .op-tag-resume { background: #23863633; color: #3fb950; border: 1px solid #3fb95055; }
   .op-tag-safe { background: #58a6ff33; color: #58a6ff; border: 1px solid #58a6ff55; }
   .op-detail { font-size: 12px; color: #e6edf3; line-height: 1.4; }
@@ -373,29 +391,250 @@
 
   /* Wireframe note */
   .wf-note { position: fixed; bottom: 10px; right: 20px; background: #d29922; color: #000; padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 700; z-index: 999; }
+
+  /* ================================================================
+     Vendor Odds upgrade
+     Adds vendor health indicators, Auto Mode toggle, warning state.
+     Currently demoed in 1X2 panel only.
+     ================================================================ */
+
+  /* Vendor Odds section header */
+  .vendor-section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .vendor-section-head .panel-title { margin-bottom: 0; }
+  .vendor-section-head .vendor-spacer { flex: 1; }
+
+  /* Auto Mode toggle pill — sits in Vendor Odds header, controls per-market mode */
+  .auto-mode-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #238636; color: #fff;
+    padding: 5px 10px 5px 8px; border-radius: 999px;
+    font-size: 11px; font-weight: 700; cursor: pointer;
+    border: 1px solid #2ea043;
+    user-select: none;
+  }
+  .auto-mode-pill .am-dot { width: 8px; height: 8px; border-radius: 50%; background: #fff; box-shadow: 0 0 6px #fff; }
+  .auto-mode-pill .am-text { letter-spacing: 0.3px; text-transform: uppercase; }
+  .auto-mode-pill[data-mode="manual"] {
+    background: #d29922; border-color: #d29922; color: #0d1117;
+  }
+  .auto-mode-pill[data-mode="warning"] {
+    background: #f85149; border-color: #f85149; color: #fff;
+  }
+  .auto-mode-pill:hover { filter: brightness(1.1); }
+
+  /* Vendor health badge (Main / Backup, OK / Delayed / Down) */
+  .vendor-badges { display: inline-flex; gap: 4px; margin-left: 6px; }
+  .vendor-badge { font-size: 9px; padding: 1px 6px; border-radius: 3px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; }
+  .vendor-badge.role-main   { background: #1f6feb33; color: #58a6ff; border: 1px solid #58a6ff66; }
+  .vendor-badge.role-backup { background: #6e768133; color: #8b949e; border: 1px solid #8b949e66; }
+  .vendor-badge.health-ok      { background: #23863633; color: #3fb950; border: 1px solid #3fb95066; }
+  .vendor-badge.health-delayed { background: #d2992233; color: #d29922; border: 1px solid #d2992266; }
+  .vendor-badge.health-down    { background: #f8514933; color: #f85149; border: 1px solid #f8514966; }
+
+  /* Vendor warning banner — appears when system has auto-dropped limit */
+  .vendor-warning-banner {
+    display: flex; align-items: center; gap: 10px;
+    background: #f8514915; border: 1px solid #f8514966; border-radius: 6px;
+    padding: 8px 12px; margin-bottom: 10px;
+    font-size: 11px; color: #f85149;
+  }
+  .vendor-warning-banner .vw-icon { font-size: 14px; }
+  .vendor-warning-banner .vw-msg { flex: 1; color: #e6edf3; }
+  .vendor-warning-banner .vw-msg b { color: #f85149; }
+  .vendor-warning-banner .vw-restore {
+    background: #238636; color: #fff; border: 1px solid #2ea043;
+    padding: 4px 10px; border-radius: 4px; font-size: 10px; font-weight: 700; cursor: pointer;
+  }
+  .vendor-warning-banner .vw-restore:hover { background: #2ea043; }
+
+  /* Vendor row — when delayed/down, dim the values + add left tint */
+  .vendor-odds-row[data-health="delayed"] { background: #d2992208; box-shadow: inset 3px 0 0 #d29922; padding-left: 6px; }
+  .vendor-odds-row[data-health="down"] { background: #f8514908; box-shadow: inset 3px 0 0 #f85149; padding-left: 6px; opacity: 0.6; }
+
+  /* ================================================================
+     Pending Approval state for New Odds Update button
+     Update button has 2 modes based on user permission tier:
+       - direct  (ODDS_UPDATE_DIRECT.W)  → green "Update" → commits immediately
+       - request (ODDS_UPDATE_REQUEST.W) → blue  "Submit for Approval" → creates pending
+     Operation Log shows pending entries with approve/reject buttons (visible to ODDS_UPDATE_APPROVE.A).
+     Demo: top-right "View as" toggle switches between tiers.
+     ================================================================ */
+
+  /* Update button — uniform "Update" label across all permission tiers (per design B).
+     Pre-click: same green button for everyone.
+     Post-click feedback varies in JS:
+       - Direct tier: brief flash "✓ Sent" then revert (existing flashUpdate logic)
+       - Request tier: grey out + label "✓ Submitted · awaiting approval (mm:ss)" with countdown */
+  .btn-apply.is-pending {
+    background: #30363d !important;
+    color: #8b949e !important;
+    cursor: not-allowed;
+    pointer-events: none;
+    font-weight: 500;
+    font-size: 12px;
+  }
+
+  /* Pending Approval banner — appears above New Odds when there's a pending */
+  .pending-approval-banner {
+    display: none;
+    align-items: center; gap: 10px;
+    background: #d2a8ff15; border: 1px solid #d2a8ff66; border-radius: 6px;
+    padding: 8px 12px; margin-bottom: 10px;
+    font-size: 11px;
+  }
+  body.view-request .pending-approval-banner,
+  body.view-supervisor .pending-approval-banner { display: flex; }
+  .pending-approval-banner .pa-icon { font-size: 14px; color: #d2a8ff; }
+  .pending-approval-banner .pa-msg { flex: 1; color: #e6edf3; }
+  .pending-approval-banner .pa-msg b { color: #d2a8ff; }
+  .pending-approval-banner .pa-time { font-variant-numeric: tabular-nums; color: #8b949e; }
+
+  /* Operation Log: Pending Approval entry */
+  .op-tag-pending  { background: #d2a8ff33; color: #d2a8ff; border: 1px solid #d2a8ff66; }
+  .op-tag-approved { background: #23863633; color: #3fb950; border: 1px solid #3fb95066; }
+  .op-tag-rejected { background: #f8514933; color: #f85149; border: 1px solid #f8514966; }
+
+  .op-pending-actions { display: none; gap: 6px; margin-top: 6px; }
+  body.view-supervisor .op-entry.pending .op-pending-actions { display: flex; }
+  .op-pending-actions .btn-approve {
+    background: #238636; color: #fff; border: 1px solid #2ea043;
+    padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer;
+  }
+  .op-pending-actions .btn-approve:hover { background: #2ea043; }
+  .op-pending-actions .btn-reject {
+    background: #161b22; color: #f85149; border: 1px solid #f8514966;
+    padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer;
+  }
+  .op-pending-actions .btn-reject:hover { background: #f8514922; }
+  .op-entry.pending { background: #d2a8ff08; border-left: 3px solid #d2a8ff; padding-left: 8px; }
+
+  /* ================================================================
+     Demo tier toggle (top-right of topbar) — flips body class to show
+     different role views. NOT a real product control; wireframe only.
+     ================================================================ */
+  .view-as-toggle {
+    display: inline-flex; gap: 0; border: 1px dashed #d29922; border-radius: 6px;
+    padding: 2px; background: #d2992210;
+  }
+  .view-as-toggle .vt-label { font-size: 9px; color: #d29922; padding: 4px 8px 4px 6px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; }
+  .view-as-toggle button {
+    background: transparent; color: #8b949e; border: none;
+    padding: 4px 10px; font-size: 11px; cursor: pointer; border-radius: 4px; font-weight: 600;
+  }
+  .view-as-toggle button:hover { color: #e6edf3; background: #161b22; }
+  .view-as-toggle button.active { background: #d29922; color: #0d1117; }
+
+  /* Inline Reason dropdown for Op Log entries (post-hoc capture per SPEC §4.13) */
+  .op-reason-select {
+    background: #161b22; border: 1px dashed #484f58; color: #8b949e;
+    padding: 3px 22px 3px 8px; border-radius: 4px; font-size: 11px;
+    appearance: none; cursor: pointer;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='%238b949e' d='M0 0l5 6 5-6z'/></svg>");
+    background-repeat: no-repeat; background-position: right 8px center;
+  }
+  .op-reason-select:focus { border-color: #58a6ff; color: #e6edf3; outline: none; }
+  .op-reason-select:hover { border-color: #58a6ff; color: #e6edf3; border-style: solid; }
+  .op-reason-select.has-value { border-style: solid; color: #e6edf3; }
+
+  /* Pending Approval Popup notification
+     Floats top-right under topbar. Visible only in Supervisor view when there's a pending. */
+  .pending-popup {
+    display: none;
+    position: fixed; top: 70px; right: 24px; z-index: 1000;
+    width: 340px;
+    background: #161b22; border: 1px solid #d2a8ff; border-radius: 10px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 0 4px #d2a8ff22;
+    padding: 14px 16px;
+    animation: pp-slide-in 0.25s ease-out;
+  }
+  body.view-supervisor .pending-popup { display: block; }
+  @keyframes pp-slide-in {
+    from { transform: translateX(20px); opacity: 0; }
+    to   { transform: translateX(0); opacity: 1; }
+  }
+  .pending-popup .pp-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .pending-popup .pp-icon { font-size: 16px; color: #d2a8ff; }
+  .pending-popup .pp-title { font-size: 13px; font-weight: 700; color: #d2a8ff; flex: 1; }
+  .pending-popup .pp-close { background: none; border: none; color: #8b949e; cursor: pointer; font-size: 16px; padding: 0; line-height: 1; }
+  .pending-popup .pp-close:hover { color: #e6edf3; }
+  .pending-popup .pp-body { font-size: 12px; color: #e6edf3; line-height: 1.5; margin-bottom: 10px; }
+  .pending-popup .pp-body b { color: #d2a8ff; }
+  .pending-popup .pp-meta { font-size: 10px; color: #8b949e; margin-bottom: 10px; }
+  .pending-popup .pp-actions { display: flex; gap: 6px; }
+  .pending-popup .pp-actions .btn-approve,
+  .pending-popup .pp-actions .btn-reject {
+    flex: 1; padding: 6px 0; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; border: 1px solid;
+  }
+  .pending-popup .pp-actions .btn-approve { background: #238636; color: #fff; border-color: #2ea043; }
+  .pending-popup .pp-actions .btn-approve:hover { background: #2ea043; }
+  .pending-popup .pp-actions .btn-reject { background: #161b22; color: #f85149; border-color: #f8514966; }
+  .pending-popup .pp-actions .btn-reject:hover { background: #f8514922; }
+  .pending-popup .pp-actions .btn-review {
+    background: #161b22; color: #58a6ff; border: 1px solid #58a6ff66;
+    padding: 6px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer;
+  }
+  .pending-popup .pp-actions .btn-review:hover { background: #1f6feb22; }
+
+  /* Operation Log: probability column alongside odds */
+  .op-odds-table .op-prob-old, .op-odds-table .op-prob-new { color: #d2a8ff; font-size: 11px; }
+  .op-odds-table .op-prob-old { opacity: 0.6; }
+
+  /* Live snapshot indicator: the top-most event row
+     keeps accumulating bets live; older rows are frozen snapshots.
+     Marked only by a 3px green left border — no chip, no animation. */
+  tbody.live-snapshot tr:first-of-type { box-shadow: inset 3px 0 0 #3fb950; }
+
+  /* TOTAL columns: aggregate Wagers + Players + Turnover
+     across HOME + AWAY + DRAW. Subtle background tint + bolder numbers to
+     visually separate from per-selection columns. */
+  .act-table .total-col { background: rgba(230, 237, 243, 0.04); }
+  .act-table td.total-col { font-weight: 800; font-variant-numeric: tabular-nums; }
+  .act-table td.total-col.total-wagers  { color: #e6edf3; }
+  .act-table td.total-col.total-players { color: #58a6ff; }
+  .act-table td.total-col.total-turnover { color: #3fb950; }
+
 </style>
 </head>
-<body>
+<body class="view-direct">
+<!-- Pending Approval popup notification (Supervisor view only) -->
+<div class="pending-popup" id="pendingPopup">
+<div class="pp-head">
+<span class="pp-icon">⏳</span>
+<span class="pp-title">1 Pending Approval</span>
+<button class="pp-close" onclick="document.getElementById('pendingPopup').style.display='none'">×</button>
+</div>
+<div class="pp-body">
+<b>Trader A</b> submitted odds change on<br/>
+<b>Real Madrid vs Barcelona</b> · 1X2<br/>
+Home <span style="color:#f85149">+0.06</span> · Away <span style="color:#3fb950">−0.07</span>
+</div>
+<div class="pp-meta">Submitted 42s ago · No reason yet (operator can add post-hoc)</div>
+<div class="pp-actions">
+<button class="btn-approve" onclick="alert('(wireframe) approved')">✓ Approve</button>
+<button class="btn-reject" onclick="alert('(wireframe) rejected')">✗ Reject</button>
+<button class="btn-review" onclick="alert('(wireframe) jump to log')">Review</button>
+</div>
+</div>
 <div class="app">
 <!-- Sidebar -->
 <nav class="sidebar" id="sidebar">
 <div class="sb-header">
 <h2>CypherBook</h2>
-<button class="sb-collapse">«</button>
+<button class="sb-collapse" id="sbCollapseBtn" onclick="toggleSidebar()" title="Collapse / expand sidebar">«</button>
 </div>
 <div class="sb-nav">
-<div class="sb-item" onclick="location.href='trader-dashboard-wireframe.html'"><span class="sb-icon">📋</span> Dashboard</div>
-<div class="sb-item" onclick="location.href='trader-market-view-wireframe.html'"><span class="sb-icon">📊</span> Markets</div>
-<div class="sb-item active" onclick="location.href='market-activity-wireframe.html'" style="padding-left: 36px; font-size: 12px;"><span class="sb-icon">📉</span> Market Activity</div>
-<div class="sb-item" onclick="location.href='wager-page-wireframe.html'"><span class="sb-icon">🎫</span> Wagers</div>
-<div class="sb-item"><span class="sb-icon">👥</span> Players</div>
-<div class="sb-item"><span class="sb-icon">📝</span> Audit Log</div>
-<div class="sb-item"><span class="sb-icon">🔔</span> Alerts</div>
-<div class="sb-item"><span class="sb-icon">🏪</span> Merchants</div>
-<div class="sb-item"><span class="sb-icon">🔑</span> Permissions</div>
-<div class="sb-item"><span class="sb-icon">📈</span> Reports</div>
-<div class="sb-item"><span class="sb-icon">⚙️</span> Global Settings</div>
-<div class="sb-item"><span class="sb-icon">🛠</span> System</div>
+<div class="sb-item" onclick="location.href='trader-dashboard-wireframe.html'"><span class="sb-icon">📋</span> <span class="sb-label">Dashboard</span></div>
+<div class="sb-item" onclick="location.href='trader-market-view-wireframe.html'"><span class="sb-icon">📊</span> <span class="sb-label">Markets</span></div>
+<div class="sb-item active" onclick="location.href='market-activity-wireframe.html'" style="padding-left: 36px; font-size: 12px;"><span class="sb-icon">📉</span> <span class="sb-label">Market Activity</span></div>
+<div class="sb-item" onclick="location.href='wager-page-wireframe.html'"><span class="sb-icon">🎫</span> <span class="sb-label">Wagers</span></div>
+<div class="sb-item"><span class="sb-icon">👥</span> <span class="sb-label">Players</span></div>
+<div class="sb-item"><span class="sb-icon">📝</span> <span class="sb-label">Audit Log</span></div>
+<div class="sb-item"><span class="sb-icon">🔔</span> <span class="sb-label">Alerts</span></div>
+<div class="sb-item"><span class="sb-icon">🏪</span> <span class="sb-label">Merchants</span></div>
+<div class="sb-item"><span class="sb-icon">🔑</span> <span class="sb-label">Permissions</span></div>
+<div class="sb-item"><span class="sb-icon">📈</span> <span class="sb-label">Reports</span></div>
+<div class="sb-item"><span class="sb-icon">⚙️</span> <span class="sb-label">Global Settings</span></div>
+<div class="sb-item"><span class="sb-icon">🛠</span> <span class="sb-label">System</span></div>
 </div>
 </nav>
 <!-- Main -->
@@ -405,6 +644,12 @@
 <a class="back-link topbar-back">← Back to Market</a>
 <input class="topbar-search" placeholder="Search matches, players, markets..."/>
 <div class="topbar-right">
+<div class="view-as-toggle" title="Wireframe demo: switch role view to see how Update button + Pending Approval flow change">
+<span class="vt-label">View as</span>
+<button class="active" onclick="setView('direct')">Trader · Direct</button>
+<button onclick="setView('request')">Trader · Request</button>
+<button onclick="setView('supervisor')">Supervisor</button>
+</div>
 <span class="env-badge">Production</span>
 <span class="topbar-time">17:26:38</span>
 <span class="notif-icon">🔔<span class="notif-badge">3</span></span>
@@ -462,11 +707,11 @@
 <span class="ctrl-now"><span class="hv-label"></span><b id="spread-now">5.00%</b></span>
 </div>
 <button class="ctrl-big-btn" onclick="spreadStep(-0.1)">−</button>
-<input autocomplete="off" class="ctrl-input" id="spread-input" inputmode="decimal" onblur="onSpreadInput()" oninput="onSpreadTyping()" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur();}" type="text" value="5.00"/>
+<span class="ctrl-readout" id="spread-readout">5.00%</span>
 <button class="ctrl-big-btn" onclick="spreadStep(0.1)">+</button>
-<button class="ctrl-quick" onclick="spreadQuick(this, 3)">+3%</button>
-<button class="ctrl-quick" onclick="spreadQuick(this, 5)">+5%</button>
-<button class="ctrl-quick" onclick="spreadQuick(this, 7)">+7%</button>
+<button class="ctrl-quick" onclick="spreadQuick(this, 2)">2%</button>
+<button class="ctrl-quick" onclick="spreadQuick(this, 3)">3%</button>
+<button class="ctrl-quick active" onclick="spreadQuick(this, 5)">5%</button>
 <button class="ctrl-update" onclick="spreadUpdate(this)">Update</button>
 </div>
 <!-- Wager Limit row -->
@@ -478,7 +723,7 @@
 <span class="ctrl-now"><span class="hv-label"></span><b id="limit-now">100,000</b></span>
 </div>
 <button class="ctrl-quick" onclick="limitQuick(this, 10)">10%</button>
-<button class="ctrl-quick" onclick="limitQuick(this, 30)">30%</button>
+<button class="ctrl-quick" onclick="limitQuick(this, 25)">25%</button>
 <button class="ctrl-quick active" onclick="limitQuick(this, 100)">100%</button>
 <span class="ctrl-readout" id="limit-readout">100,000</span>
 <button class="ctrl-update" onclick="limitUpdate(this)">Update</button>
@@ -489,17 +734,6 @@
 <div class="content">
 <!-- Activity Panel -->
 <div class="activity-panel">
-<!-- Filters -->
-<div class="filter-bar">
-<span class="filter-label">Filters:</span>
-<span class="filter-chip"><span class="icon">▽</span> 10 selected</span>
-<div class="time-tabs">
-<span class="filter-label" style="margin-right:4px;">Time:</span>
-<span class="time-tab">12h</span>
-<span class="time-tab">1h</span>
-<span class="time-tab active">All</span>
-</div>
-</div>
 <!-- Table -->
 <div class="activity-scroll">
 <table class="act-table">
@@ -509,6 +743,7 @@
 <th id="col-group-1" colspan="4" style="color:#58a6ff; border-bottom:2px solid #58a6ff; text-align:center; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">HOME</th>
 <th id="col-group-2" colspan="4" style="color:#f97583; border-bottom:2px solid #f97583; text-align:center; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">AWAY</th>
 <th colspan="4" class="draw-col" style="color:#d2a8ff; border-bottom:2px solid #d2a8ff; text-align:center; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">DRAW</th>
+<th colspan="3" class="total-col" style="color:#e6edf3; border-bottom:2px solid #6e7681; text-align:center; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">TOTAL</th>
 </tr>
 <tr>
 <th style="width:76px;">Server</th>
@@ -531,10 +766,14 @@
 <th class="right draw-col">Wagers</th>
 <th class="right draw-col">Players</th>
 <th class="right draw-col">Turnover</th>
+<!-- TOTAL -->
+<th class="right total-col">Wagers</th>
+<th class="right total-col">Players</th>
+<th class="right total-col">Turnover</th>
 </tr>
 </thead>
-<tbody>
-<!-- 78' — Manual edit -->
+<tbody class="event-group event-group-1 live-snapshot">
+<!-- 78' — Manual edit (LIVE: still accumulating bets until next event) -->
 <tr>
 <td class="time-cell">21:18:14</td>
 <td class="kickoff-cell">20:00</td>
@@ -556,9 +795,12 @@
 <td class="right bets-num draw-col">6</td>
 <td class="right players-num draw-col">6</td>
 <td class="right stake-val draw-col">500</td>
+<td class="right total-col total-wagers">13</td>
+<td class="right total-col total-players">13</td>
+<td class="right total-col total-turnover">1,200</td>
 </tr>
 <!-- 78' — extra lines (handicap) -->
-<tr class="extra-line" data-markets="handicap" style="display:none;">
+<tr class="extra-line" data-markets="handicap" data-line-side="home" style="display:none;">
 <td class="time-cell" style="color:#30363d;">21:18:14</td>
 <td class="kickoff-cell"></td>
 <td class="elapsed-cell"></td>
@@ -572,8 +814,11 @@
 <td class="right bets-num">1</td>
 <td class="right players-num">1</td>
 <td class="right stake-val">120</td>
+<td class="right total-col total-wagers">3</td>
+<td class="right total-col total-players">3</td>
+<td class="right total-col total-turnover">300</td>
 </tr>
-<tr class="extra-line" data-markets="handicap" style="display:none;">
+<tr class="extra-line" data-markets="handicap" data-line-side="away" style="display:none;">
 <td class="time-cell" style="color:#30363d;">21:18:14</td>
 <td class="kickoff-cell"></td>
 <td class="elapsed-cell"></td>
@@ -587,6 +832,9 @@
 <td class="right bets-num">5</td>
 <td class="right players-num">4</td>
 <td class="right stake-val">480</td>
+<td class="right total-col total-wagers">8</td>
+<td class="right total-col total-players">7</td>
+<td class="right total-col total-turnover">730</td>
 </tr>
 <!-- 78' — extra lines (ou) -->
 <tr class="extra-line" data-markets="ou" style="display:none;">
@@ -603,6 +851,9 @@
 <td class="right bets-num">2</td>
 <td class="right players-num">2</td>
 <td class="right stake-val">200</td>
+<td class="right total-col total-wagers">5</td>
+<td class="right total-col total-players">5</td>
+<td class="right total-col total-turnover">550</td>
 </tr>
 <!-- 78' — extra lines (cs) -->
 <tr class="extra-line" data-markets="cs" style="display:none;">
@@ -623,6 +874,9 @@
 <td class="right bets-num draw-col">2</td>
 <td class="right players-num draw-col">2</td>
 <td class="right stake-val draw-col">120</td>
+<td class="right total-col total-wagers">3</td>
+<td class="right total-col total-players">3</td>
+<td class="right total-col total-turnover">170</td>
 </tr>
 <tr class="extra-line" data-markets="cs" style="display:none;">
 <td class="time-cell" style="color:#30363d;">21:18:14</td>
@@ -642,7 +896,12 @@
 <td class="right bets-num draw-col">1</td>
 <td class="right players-num draw-col">1</td>
 <td class="right stake-val draw-col">60</td>
+<td class="right total-col total-wagers">4</td>
+<td class="right total-col total-players">4</td>
+<td class="right total-col total-turnover">240</td>
 </tr>
+</tbody>
+<tbody class="event-group event-group-2">
 <!-- 62' — Safe mode -->
 <tr>
 <td class="time-cell">21:02:28</td>
@@ -665,9 +924,12 @@
 <td class="right bets-num draw-col">8</td>
 <td class="right players-num draw-col">8</td>
 <td class="right stake-val draw-col">1,200</td>
+<td class="right total-col total-wagers">32</td>
+<td class="right total-col total-players">30</td>
+<td class="right total-col total-turnover">4,900</td>
 </tr>
 <!-- 62' — extra lines (handicap) -->
-<tr class="extra-line" data-markets="handicap" style="display:none;">
+<tr class="extra-line" data-markets="handicap" data-line-side="home" style="display:none;">
 <td class="time-cell" style="color:#30363d;">21:02:28</td>
 <td class="kickoff-cell"></td>
 <td class="elapsed-cell"></td>
@@ -681,8 +943,11 @@
 <td class="right bets-num">5</td>
 <td class="right players-num">5</td>
 <td class="right stake-val">700</td>
+<td class="right total-col total-wagers">17</td>
+<td class="right total-col total-players">15</td>
+<td class="right total-col total-turnover">2,300</td>
 </tr>
-<tr class="extra-line" data-markets="handicap" style="display:none;">
+<tr class="extra-line" data-markets="handicap" data-line-side="away" style="display:none;">
 <td class="time-cell" style="color:#30363d;">21:02:28</td>
 <td class="kickoff-cell"></td>
 <td class="elapsed-cell"></td>
@@ -696,6 +961,9 @@
 <td class="right bets-num">8</td>
 <td class="right players-num">7</td>
 <td class="right stake-val">900</td>
+<td class="right total-col total-wagers">12</td>
+<td class="right total-col total-players">10</td>
+<td class="right total-col total-turnover">1,250</td>
 </tr>
 <!-- 62' — extra lines (ou) -->
 <tr class="extra-line" data-markets="ou" style="display:none;">
@@ -712,6 +980,9 @@
 <td class="right bets-num">7</td>
 <td class="right players-num">6</td>
 <td class="right stake-val">800</td>
+<td class="right total-col total-wagers">17</td>
+<td class="right total-col total-players">15</td>
+<td class="right total-col total-turnover">2,200</td>
 </tr>
 <!-- 62' — extra lines (cs) -->
 <tr class="extra-line" data-markets="cs" style="display:none;">
@@ -732,6 +1003,9 @@
 <td class="right bets-num draw-col">6</td>
 <td class="right players-num draw-col">5</td>
 <td class="right stake-val draw-col">400</td>
+<td class="right total-col total-wagers">13</td>
+<td class="right total-col total-players">11</td>
+<td class="right total-col total-turnover">930</td>
 </tr>
 <tr class="extra-line" data-markets="cs" style="display:none;">
 <td class="time-cell" style="color:#30363d;">21:02:28</td>
@@ -751,7 +1025,12 @@
 <td class="right bets-num draw-col">3</td>
 <td class="right players-num draw-col">3</td>
 <td class="right stake-val draw-col">200</td>
+<td class="right total-col total-wagers">5</td>
+<td class="right total-col total-players">5</td>
+<td class="right total-col total-turnover">330</td>
 </tr>
+</tbody>
+<tbody class="event-group event-group-3">
 <!-- 18' — Yellow Card -->
 <tr>
 <td class="time-cell">20:18:49</td>
@@ -774,9 +1053,12 @@
 <td class="right bets-num draw-col">14</td>
 <td class="right players-num draw-col">14</td>
 <td class="right stake-val draw-col">1,700</td>
+<td class="right total-col total-wagers">54</td>
+<td class="right total-col total-players">51</td>
+<td class="right total-col total-turnover">7,400</td>
 </tr>
 <!-- 18' — extra lines (handicap) -->
-<tr class="extra-line" data-markets="handicap" style="display:none;">
+<tr class="extra-line" data-markets="handicap" data-line-side="home" style="display:none;">
 <td class="time-cell" style="color:#30363d;">20:18:49</td>
 <td class="kickoff-cell"></td>
 <td class="elapsed-cell"></td>
@@ -790,8 +1072,11 @@
 <td class="right bets-num">4</td>
 <td class="right players-num">4</td>
 <td class="right stake-val">500</td>
+<td class="right total-col total-wagers">12</td>
+<td class="right total-col total-players">11</td>
+<td class="right total-col total-turnover">1,600</td>
 </tr>
-<tr class="extra-line" data-markets="handicap" style="display:none;">
+<tr class="extra-line" data-markets="handicap" data-line-side="away" style="display:none;">
 <td class="time-cell" style="color:#30363d;">20:18:49</td>
 <td class="kickoff-cell"></td>
 <td class="elapsed-cell"></td>
@@ -805,6 +1090,9 @@
 <td class="right bets-num">14</td>
 <td class="right players-num">12</td>
 <td class="right stake-val">1,800</td>
+<td class="right total-col total-wagers">20</td>
+<td class="right total-col total-players">17</td>
+<td class="right total-col total-turnover">2,550</td>
 </tr>
 <!-- 18' — extra lines (cs) -->
 <tr class="extra-line" data-markets="cs" style="display:none;">
@@ -825,6 +1113,9 @@
 <td class="right bets-num draw-col">10</td>
 <td class="right players-num draw-col">9</td>
 <td class="right stake-val draw-col">800</td>
+<td class="right total-col total-wagers">21</td>
+<td class="right total-col total-players">19</td>
+<td class="right total-col total-turnover">1,650</td>
 </tr>
 <tr class="extra-line" data-markets="cs" style="display:none;">
 <td class="time-cell" style="color:#30363d;">20:18:49</td>
@@ -844,7 +1135,12 @@
 <td class="right bets-num draw-col">2</td>
 <td class="right players-num draw-col">2</td>
 <td class="right stake-val draw-col">150</td>
+<td class="right total-col total-wagers">12</td>
+<td class="right total-col total-players">10</td>
+<td class="right total-col total-turnover">900</td>
 </tr>
+</tbody>
+<tbody class="event-group event-group-4">
 <!-- 5' — Corner -->
 <tr>
 <td class="time-cell">20:05:56</td>
@@ -867,9 +1163,12 @@
 <td class="right bets-num draw-col">18</td>
 <td class="right players-num draw-col">18</td>
 <td class="right stake-val draw-col">2,500</td>
+<td class="right total-col total-wagers">52</td>
+<td class="right total-col total-players">50</td>
+<td class="right total-col total-turnover">7,500</td>
 </tr>
 <!-- 5' — extra lines (handicap) -->
-<tr class="extra-line" data-markets="handicap" style="display:none;">
+<tr class="extra-line" data-markets="handicap" data-line-side="home" style="display:none;">
 <td class="time-cell" style="color:#30363d;">20:05:56</td>
 <td class="kickoff-cell"></td>
 <td class="elapsed-cell"></td>
@@ -883,8 +1182,11 @@
 <td class="right bets-num">3</td>
 <td class="right players-num">3</td>
 <td class="right stake-val">400</td>
+<td class="right total-col total-wagers">9</td>
+<td class="right total-col total-players">8</td>
+<td class="right total-col total-turnover">1,200</td>
 </tr>
-<tr class="extra-line" data-markets="handicap" style="display:none;">
+<tr class="extra-line" data-markets="handicap" data-line-side="away" style="display:none;">
 <td class="time-cell" style="color:#30363d;">20:05:56</td>
 <td class="kickoff-cell"></td>
 <td class="elapsed-cell"></td>
@@ -898,6 +1200,9 @@
 <td class="right bets-num">15</td>
 <td class="right players-num">13</td>
 <td class="right stake-val">2,100</td>
+<td class="right total-col total-wagers">25</td>
+<td class="right total-col total-players">22</td>
+<td class="right total-col total-turnover">3,600</td>
 </tr>
 <!-- 5' — extra lines (ou) -->
 <tr class="extra-line" data-markets="ou" style="display:none;">
@@ -914,6 +1219,9 @@
 <td class="right bets-num">5</td>
 <td class="right players-num">5</td>
 <td class="right stake-val">700</td>
+<td class="right total-col total-wagers">13</td>
+<td class="right total-col total-players">12</td>
+<td class="right total-col total-turnover">1,800</td>
 </tr>
 <!-- 5' — extra lines (cs) -->
 <tr class="extra-line" data-markets="cs" style="display:none;">
@@ -934,6 +1242,9 @@
 <td class="right bets-num draw-col">12</td>
 <td class="right players-num draw-col">10</td>
 <td class="right stake-val draw-col">900</td>
+<td class="right total-col total-wagers">21</td>
+<td class="right total-col total-players">18</td>
+<td class="right total-col total-turnover">1,650</td>
 </tr>
 <tr class="extra-line" data-markets="cs" style="display:none;">
 <td class="time-cell" style="color:#30363d;">20:05:56</td>
@@ -953,6 +1264,9 @@
 <td class="right bets-num draw-col">8</td>
 <td class="right players-num draw-col">7</td>
 <td class="right stake-val draw-col">600</td>
+<td class="right total-col total-wagers">21</td>
+<td class="right total-col total-players">18</td>
+<td class="right total-col total-turnover">1,650</td>
 </tr>
 </tbody>
 </table>
@@ -972,7 +1286,20 @@
 <!-- ====== MARKET: 1X2 ====== -->
 <div class="market-content" data-market="1x2">
 <div class="panel-section">
+<div class="vendor-section-head">
 <div class="panel-title">Vendor Odds</div>
+<div class="vendor-spacer"></div>
+<button class="auto-mode-pill" id="autoModePill" data-mode="auto" onclick="cycleAutoMode()" title="Per-market Auto Mode toggle (per Perry MVP). Demo: click to cycle Auto → Manual → Warning → Auto.">
+<span class="am-dot"></span>
+<span class="am-text" id="amText">Auto · Vendors OK</span>
+</button>
+</div>
+<!-- Vendor warning banner — only visible when auto-mode = warning (vendor delayed/down) -->
+<div class="vendor-warning-banner" id="vendorWarning" style="display:none;">
+<span class="vw-icon">⚠</span>
+<span class="vw-msg"><b>BetRadar delayed 4.2s</b> · Wager limit auto-dropped to <b>10,000</b> (1/10 house) · Sportradar still serving</span>
+<button class="vw-restore" onclick="restoreAutoMode()">Restore</button>
+</div>
 <div class="vendor-header">
 <div class="vendor-name"> </div>
 <div class="vendor-cells">
@@ -981,22 +1308,37 @@
 <div>Barcelona</div>
 </div>
 </div>
-<div class="vendor-odds-row">
-<div class="vendor-name">BetRadar</div>
+<div class="vendor-odds-row" id="vendor-row-betradar" data-health="ok">
+<div class="vendor-name">BetRadar
+<span class="vendor-badges">
+<span class="vendor-badge role-main">Main</span>
+<span class="vendor-badge health-ok" id="badge-betradar-health">OK</span>
+</span>
+</div>
 <div class="vendor-cells">
 <div class="vendor-cell"><span class="vendor-val">2.35</span><span class="vendor-pct">43%</span></div>
 <div class="vendor-cell"><span class="vendor-val">3.40</span><span class="vendor-pct">29%</span></div>
 <div class="vendor-cell"><span class="vendor-val">2.95</span><span class="vendor-pct">34%</span></div>
 </div>
 </div>
-<div class="vendor-odds-row">
-<div class="vendor-name">Sportradar</div>
+<div class="vendor-odds-row" data-health="ok">
+<div class="vendor-name">Sportradar
+<span class="vendor-badges">
+<span class="vendor-badge role-backup">Backup</span>
+<span class="vendor-badge health-ok">OK</span>
+</span>
+</div>
 <div class="vendor-cells">
 <div class="vendor-cell"><span class="vendor-val">2.25</span><span class="vendor-pct">44%</span></div>
 <div class="vendor-cell"><span class="vendor-val">3.25</span><span class="vendor-pct">31%</span></div>
 <div class="vendor-cell"><span class="vendor-val">2.82</span><span class="vendor-pct">35%</span></div>
 </div>
 </div>
+</div>
+<!-- Pending Approval banner (visible in Trader-Request view, also visible to Supervisor) -->
+<div class="pending-approval-banner">
+<span class="pa-icon">⏳</span>
+<span class="pa-msg"><b>1 odds change awaiting approval</b> · submitted by Trader A <span class="pa-time">42s ago</span></span>
 </div>
 <!-- New Odds (linked +/- controls) -->
 <div class="panel-section" id="newOddsPanel" style="background:#1f6feb11; border:1px solid #1f6feb33; border-radius:8px; padding:14px;">
@@ -1044,40 +1386,68 @@
 <!-- Quick Adjust per selection: + row -->
 <div class="odds-grid" style="margin-top:10px; gap:8px;">
 <div style="display:flex; gap:3px;">
+<button class="pct-btn" onclick="quickAdjustSel('home',0.02)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+2%</button>
 <button class="pct-btn" onclick="quickAdjustSel('home',0.03)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+3%</button>
 <button class="pct-btn" onclick="quickAdjustSel('home',0.05)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+5%</button>
-<button class="pct-btn" onclick="quickAdjustSel('home',0.07)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+7%</button>
 </div>
 <div style="display:flex; gap:3px;">
+<button class="pct-btn" onclick="quickAdjustSel('draw',0.02)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+2%</button>
 <button class="pct-btn" onclick="quickAdjustSel('draw',0.03)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+3%</button>
 <button class="pct-btn" onclick="quickAdjustSel('draw',0.05)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+5%</button>
-<button class="pct-btn" onclick="quickAdjustSel('draw',0.07)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+7%</button>
 </div>
 <div style="display:flex; gap:3px;">
+<button class="pct-btn" onclick="quickAdjustSel('away',0.02)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+2%</button>
 <button class="pct-btn" onclick="quickAdjustSel('away',0.03)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+3%</button>
 <button class="pct-btn" onclick="quickAdjustSel('away',0.05)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+5%</button>
-<button class="pct-btn" onclick="quickAdjustSel('away',0.07)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+7%</button>
 </div>
 </div>
 </div>
+<!-- (Reason removed from this panel — operator speed first; reason is added post-hoc in Operation Log; see SPEC §4.13) -->
 <!-- Actions -->
 <div class="panel-actions">
-<button class="btn-remove">Suspend</button>
-<button class="btn-apply">Update</button>
+<button class="btn-remove">Close Market</button>
+<button class="btn-apply" onclick="submitUpdate(this)" id="updateBtn1x2">Update</button>
 </div>
 <!-- Operation Log (below Override) -->
 <div class="panel-section" style="margin-top:24px; border-top:1px solid #30363d; padding-top:20px;">
 <div class="panel-title">Operation Log</div>
 <div class="op-log">
+<!-- Pending Approval demo entry — Trader sent change, waiting for Supervisor -->
+<div class="op-entry pending">
+<div class="op-time">17:26:38<br/><span class="op-match-time">79'</span></div>
+<div class="op-body">
+<div class="op-action"><span class="op-tag op-tag-pending">Pending Approval</span> <span class="op-operator">Trader A</span> <select class="op-reason-select">
+<option value="">+ Add reason…</option>
+<option>Market imbalance correction</option>
+<option>Public over-betting</option>
+<option>Vendor odds drift</option>
+<option>Score / event reaction</option>
+<option>Pre-match line set</option>
+<option>Risk: large single bet</option>
+<option>Risk: known sharp player</option>
+</select></div>
+<div class="op-odds-change">
+<table class="op-odds-table">
+<tr><td class="op-sel">Home</td><td class="op-old">2.36 <span class="op-prob-old">(42.4%)</span></td><td class="op-arrow">→</td><td class="op-new">2.42 <span class="op-prob-new">(41.3%)</span></td><td class="op-diff diff-up">+0.06</td></tr>
+<tr><td class="op-sel">Draw</td><td class="op-old">3.40 <span class="op-prob-old">(29.4%)</span></td><td class="op-arrow">→</td><td class="op-new">3.40 <span class="op-prob-new">(29.4%)</span></td><td class="op-diff diff-none">±0.00</td></tr>
+<tr><td class="op-sel">Away</td><td class="op-old">2.95 <span class="op-prob-old">(33.9%)</span></td><td class="op-arrow">→</td><td class="op-new">2.88 <span class="op-prob-new">(34.7%)</span></td><td class="op-diff diff-down">−0.07</td></tr>
+</table>
+</div>
+<div class="op-pending-actions">
+<button class="btn-approve" onclick="alert('(wireframe) approve flow')">✓ Approve</button>
+<button class="btn-reject" onclick="alert('(wireframe) reject flow')">✗ Reject</button>
+</div>
+</div>
+</div>
 <div class="op-entry">
 <div class="op-time">17:24:38<br/><span class="op-match-time">78'</span></div>
 <div class="op-body">
-<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Hugo</span></div>
+<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Trader A</span></div>
 <div class="op-odds-change">
 <table class="op-odds-table">
-<tr><td class="op-sel">Home</td><td class="op-old">2.30</td><td class="op-arrow">→</td><td class="op-new">2.35</td><td class="op-diff diff-up">+0.05</td></tr>
-<tr><td class="op-sel">Draw</td><td class="op-old">3.33</td><td class="op-arrow">→</td><td class="op-new">3.40</td><td class="op-diff diff-up">+0.07</td></tr>
-<tr><td class="op-sel">Away</td><td class="op-old">2.89</td><td class="op-arrow">→</td><td class="op-new">2.95</td><td class="op-diff diff-up">+0.06</td></tr>
+<tr><td class="op-sel">Home</td><td class="op-old">2.30 <span class="op-prob-old">(43.5%)</span></td><td class="op-arrow">→</td><td class="op-new">2.35 <span class="op-prob-new">(42.6%)</span></td><td class="op-diff diff-up">+0.05</td></tr>
+<tr><td class="op-sel">Draw</td><td class="op-old">3.33 <span class="op-prob-old">(30.0%)</span></td><td class="op-arrow">→</td><td class="op-new">3.40 <span class="op-prob-new">(29.4%)</span></td><td class="op-diff diff-up">+0.07</td></tr>
+<tr><td class="op-sel">Away</td><td class="op-old">2.89 <span class="op-prob-old">(34.6%)</span></td><td class="op-arrow">→</td><td class="op-new">2.95 <span class="op-prob-new">(33.9%)</span></td><td class="op-diff diff-up">+0.06</td></tr>
 </table>
 </div>
 <div class="op-reason"><span class="op-reason-text">Market imbalance correction</span> <button class="op-reason-edit" title="編輯備註">✎</button></div>
@@ -1086,7 +1456,7 @@
 <div class="op-entry">
 <div class="op-time">16:48:10<br/><span class="op-match-time">PM</span></div>
 <div class="op-body">
-<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Hugo</span></div>
+<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Trader A</span></div>
 <div class="op-odds-change">
 <table class="op-odds-table">
 <tr><td class="op-sel">Home</td><td class="op-old">2.25</td><td class="op-arrow">→</td><td class="op-new">2.30</td><td class="op-diff diff-up">+0.05</td></tr>
@@ -1202,14 +1572,14 @@
 </div>
 <!-- Quick Adjust (single set) -->
 <div style="display:flex; justify-content:center; gap:4px; margin-top:8px;">
+<button class="pct-btn" onclick="quickAdjustGen('handicap','c1',0.02)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+2%</button>
 <button class="pct-btn" onclick="quickAdjustGen('handicap','c1',0.03)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+3%</button>
 <button class="pct-btn" onclick="quickAdjustGen('handicap','c1',0.05)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+5%</button>
-<button class="pct-btn" onclick="quickAdjustGen('handicap','c1',0.07)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+7%</button>
 </div>
 </div>
 <div class="panel-actions">
-<button class="btn-remove">Suspend</button>
-<button class="btn-apply">Update</button>
+<button class="btn-remove">Close Market</button>
+<button class="btn-apply" onclick="submitUpdate(this)">Update</button>
 </div>
 <div class="panel-section" style="margin-top:24px; border-top:1px solid #30363d; padding-top:20px;">
 <div class="panel-title">Operation Log</div>
@@ -1217,7 +1587,7 @@
 <div class="op-entry">
 <div class="op-time">16:55:12<br/><span class="op-match-time">65'</span></div>
 <div class="op-body">
-<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Hugo</span></div>
+<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Trader A</span></div>
 <div class="op-odds-change">
 <table class="op-odds-table">
 <tr><td class="op-sel">Home −1.5</td><td class="op-old">2.15</td><td class="op-arrow">→</td><td class="op-new">2.10</td><td class="op-diff diff-down">-0.05</td></tr>
@@ -1230,7 +1600,7 @@
 <div class="op-entry">
 <div class="op-time">15:30:00<br/><span class="op-match-time">PM</span></div>
 <div class="op-body">
-<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Hugo</span></div>
+<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Trader A</span></div>
 <div class="op-odds-change">
 <table class="op-odds-table">
 <tr><td class="op-sel">Home −1.5</td><td class="op-old">2.20</td><td class="op-arrow">→</td><td class="op-new">2.15</td><td class="op-diff diff-down">-0.05</td></tr>
@@ -1345,14 +1715,14 @@
 </div>
 <!-- Quick Adjust (single set) -->
 <div style="display:flex; justify-content:center; gap:4px; margin-top:8px;">
+<button class="pct-btn" onclick="quickAdjustGen('ou','c1',0.02)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+2%</button>
 <button class="pct-btn" onclick="quickAdjustGen('ou','c1',0.03)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+3%</button>
 <button class="pct-btn" onclick="quickAdjustGen('ou','c1',0.05)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+5%</button>
-<button class="pct-btn" onclick="quickAdjustGen('ou','c1',0.07)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+7%</button>
 </div>
 </div>
 <div class="panel-actions">
-<button class="btn-remove">Suspend</button>
-<button class="btn-apply">Update</button>
+<button class="btn-remove">Close Market</button>
+<button class="btn-apply" onclick="submitUpdate(this)">Update</button>
 </div>
 <div class="panel-section" style="margin-top:24px; border-top:1px solid #30363d; padding-top:20px;">
 <div class="panel-title">Operation Log</div>
@@ -1360,7 +1730,7 @@
 <div class="op-entry">
 <div class="op-time">17:10:05<br/><span class="op-match-time">72'</span></div>
 <div class="op-body">
-<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Hugo</span></div>
+<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Trader A</span></div>
 <div class="op-odds-change">
 <table class="op-odds-table">
 <tr><td class="op-sel">Over 2.5</td><td class="op-old">1.88</td><td class="op-arrow">→</td><td class="op-new">1.95</td><td class="op-diff diff-up">+0.07</td></tr>
@@ -1373,7 +1743,7 @@
 <div class="op-entry">
 <div class="op-time">16:20:45<br/><span class="op-match-time">PM</span></div>
 <div class="op-body">
-<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Hugo</span></div>
+<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Trader A</span></div>
 <div class="op-odds-change">
 <table class="op-odds-table">
 <tr><td class="op-sel">Over 2.5</td><td class="op-old">1.85</td><td class="op-arrow">→</td><td class="op-new">1.88</td><td class="op-diff diff-up">+0.03</td></tr>
@@ -1500,14 +1870,14 @@
 </div>
 <!-- Quick Adjust (single set) -->
 <div style="display:flex; justify-content:center; gap:4px; margin-top:8px;">
+<button class="pct-btn" onclick="quickAdjustGen('cs','c1',0.02)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+2%</button>
 <button class="pct-btn" onclick="quickAdjustGen('cs','c1',0.03)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+3%</button>
 <button class="pct-btn" onclick="quickAdjustGen('cs','c1',0.05)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+5%</button>
-<button class="pct-btn" onclick="quickAdjustGen('cs','c1',0.07)" style="width:auto; padding:0 12px; height:34px; font-size:12px; font-weight:700;">+7%</button>
 </div>
 </div>
 <div class="panel-actions">
-<button class="btn-remove">Suspend</button>
-<button class="btn-apply">Update</button>
+<button class="btn-remove">Close Market</button>
+<button class="btn-apply" onclick="submitUpdate(this)">Update</button>
 </div>
 <div class="panel-section" style="margin-top:24px; border-top:1px solid #30363d; padding-top:20px;">
 <div class="panel-title">Operation Log</div>
@@ -1515,7 +1885,7 @@
 <div class="op-entry">
 <div class="op-time">17:05:30<br/><span class="op-match-time">70\'</span></div>
 <div class="op-body">
-<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Hugo</span></div>
+<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Trader A</span></div>
 <div class="op-odds-change">
 <table class="op-odds-table">
 <tr><td class="op-sel">1–0</td><td class="op-old">8.00</td><td class="op-arrow">→</td><td class="op-new">7.50</td><td class="op-diff diff-down">-0.50</td></tr>
@@ -1596,21 +1966,21 @@
 <!-- Quick Adjust -->
 <div class="odds-grid" style="margin-top:10px; gap:8px;">
 <div style="display:flex; gap:3px;">
+<button class="pct-btn" onclick="quickAdjustGen('oe','c1',0.02)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+2%</button>
 <button class="pct-btn" onclick="quickAdjustGen('oe','c1',0.03)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+3%</button>
 <button class="pct-btn" onclick="quickAdjustGen('oe','c1',0.05)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+5%</button>
-<button class="pct-btn" onclick="quickAdjustGen('oe','c1',0.07)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+7%</button>
 </div>
 <div></div>
 <div style="display:flex; gap:3px;">
+<button class="pct-btn" onclick="quickAdjustGen('oe','c3',0.02)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+2%</button>
 <button class="pct-btn" onclick="quickAdjustGen('oe','c3',0.03)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+3%</button>
 <button class="pct-btn" onclick="quickAdjustGen('oe','c3',0.05)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+5%</button>
-<button class="pct-btn" onclick="quickAdjustGen('oe','c3',0.07)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+7%</button>
 </div>
 </div>
 </div>
 <div class="panel-actions">
-<button class="btn-remove">Suspend</button>
-<button class="btn-apply">Update</button>
+<button class="btn-remove">Close Market</button>
+<button class="btn-apply" onclick="submitUpdate(this)">Update</button>
 </div>
 <div class="panel-section" style="margin-top:24px; border-top:1px solid #30363d; padding-top:20px;">
 <div class="panel-title">Operation Log</div>
@@ -1618,7 +1988,7 @@
 <div class="op-entry">
 <div class="op-time">16:40:20<br/><span class="op-match-time">55'</span></div>
 <div class="op-body">
-<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Hugo</span></div>
+<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Trader A</span></div>
 <div class="op-odds-change">
 <table class="op-odds-table">
 <tr><td class="op-sel">Odd</td><td class="op-old">1.92</td><td class="op-arrow">→</td><td class="op-new">1.90</td><td class="op-diff diff-down">-0.02</td></tr>
@@ -1705,25 +2075,25 @@
 <!-- Quick Adjust -->
 <div class="odds-grid" style="margin-top:10px; gap:8px;">
 <div style="display:flex; gap:3px;">
+<button class="pct-btn" onclick="quickAdjustGen('ng','c1',0.02)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+2%</button>
 <button class="pct-btn" onclick="quickAdjustGen('ng','c1',0.03)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+3%</button>
 <button class="pct-btn" onclick="quickAdjustGen('ng','c1',0.05)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+5%</button>
-<button class="pct-btn" onclick="quickAdjustGen('ng','c1',0.07)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+7%</button>
 </div>
 <div style="display:flex; gap:3px;">
+<button class="pct-btn" onclick="quickAdjustGen('ng','c2',0.02)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+2%</button>
 <button class="pct-btn" onclick="quickAdjustGen('ng','c2',0.03)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+3%</button>
 <button class="pct-btn" onclick="quickAdjustGen('ng','c2',0.05)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+5%</button>
-<button class="pct-btn" onclick="quickAdjustGen('ng','c2',0.07)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+7%</button>
 </div>
 <div style="display:flex; gap:3px;">
+<button class="pct-btn" onclick="quickAdjustGen('ng','c3',0.02)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+2%</button>
 <button class="pct-btn" onclick="quickAdjustGen('ng','c3',0.03)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+3%</button>
 <button class="pct-btn" onclick="quickAdjustGen('ng','c3',0.05)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+5%</button>
-<button class="pct-btn" onclick="quickAdjustGen('ng','c3',0.07)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+7%</button>
 </div>
 </div>
 </div>
 <div class="panel-actions">
-<button class="btn-remove">Suspend</button>
-<button class="btn-apply">Update</button>
+<button class="btn-remove">Close Market</button>
+<button class="btn-apply" onclick="submitUpdate(this)">Update</button>
 </div>
 <div class="panel-section" style="margin-top:24px; border-top:1px solid #30363d; padding-top:20px;">
 <div class="panel-title">Operation Log</div>
@@ -1731,7 +2101,7 @@
 <div class="op-entry">
 <div class="op-time">17:12:45<br/><span class="op-match-time">75'</span></div>
 <div class="op-body">
-<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Hugo</span></div>
+<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Trader A</span></div>
 <div class="op-odds-change">
 <table class="op-odds-table">
 <tr><td class="op-sel">Home</td><td class="op-old">2.20</td><td class="op-arrow">→</td><td class="op-new">2.10</td><td class="op-diff diff-down">-0.10</td></tr>
@@ -1749,7 +2119,7 @@
 </div>
 </div>
 </div>
-<div class="wf-note">WIREFRAME v1.1 — Market Activity</div>
+<div class="wf-note">WIREFRAME v1.13 — Market Activity (2026-05-02)</div>
 <script>
 // ============================================================
 // Spread control — house 5%, adjustable via ± / input / quick presets
@@ -1762,26 +2132,18 @@ function setSpread(v, opts) {
   if (v < 0) v = 0;
   if (v > 30) v = 30;
   spreadVal = v;
-  if (!opts || opts.updateInput !== false) {
-    document.getElementById('spread-input').value = v.toFixed(2);
-  }
+  // Read-only readout: no manual key entry, just display
+  var readout = document.getElementById('spread-readout');
+  if (readout) readout.textContent = v.toFixed(2) + '%';
   document.getElementById('spread-now').textContent = v.toFixed(2) + '%';
   document.querySelector('#spreadRow .ctrl-now').classList.toggle('diff', Math.abs(v - HOUSE_SPREAD) > 0.005);
 }
 
-function onSpreadTyping() {
-  var raw = parseFloat(document.getElementById('spread-input').value);
-  if (!isNaN(raw)) setSpread(raw, { updateInput: false });
-}
 function spreadStep(delta) { setSpread(spreadVal + delta); }
 function spreadQuick(btn, n) {
   document.querySelectorAll('.ctrl-spread .ctrl-quick').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  setSpread(HOUSE_SPREAD + n);  // delta above house
-}
-function onSpreadInput() {
-  var raw = parseFloat(document.getElementById('spread-input').value);
-  if (!isNaN(raw)) setSpread(raw);
+  setSpread(n);  // absolute value: button label = target spread %
 }
 function spreadUpdate(btn) { flashUpdate(btn); }
 
@@ -2349,6 +2711,147 @@ function selectRightPanelLine(row, marketId) {
 function selectHandicapLine(row) { selectRightPanelLine(row, 'handicap'); }
 function selectOULine(row) { selectRightPanelLine(row, 'ou'); }
 function selectCSLine(row) { selectRightPanelLine(row, 'cs'); }
+
+// ============================================================
+// Demo: View-as toggle (top-right) — flips body class to simulate
+// different user permission tiers. Wireframe-only control.
+// ============================================================
+function setView(tier) {
+  document.body.classList.remove('view-direct', 'view-request', 'view-supervisor');
+  document.body.classList.add('view-' + tier);
+  document.querySelectorAll('.view-as-toggle button').forEach(function(b) {
+    b.classList.toggle('active', b.textContent.toLowerCase().indexOf(tier) !== -1);
+  });
+  // Per design B: button label is uniform "Update" for all tiers.
+  // The post-click feedback (Direct flash vs Request grey+countdown) is handled
+  // by the click handler at submit time, not by view-as toggle.
+  document.querySelectorAll('.btn-apply').forEach(function(b) {
+    b.textContent = 'Update';
+    b.classList.remove('is-pending');
+  });
+  // Clean up any pending countdown timers when switching tiers.
+  Object.keys(pendingTimers).forEach(function(k) { clearInterval(pendingTimers[k]); });
+  pendingTimers = {};
+  // Demo: in Request view, prime the 1X2 Update button in its post-click pending
+  // state so the Pending banner above it makes sense without requiring a click.
+  if (tier === 'request') {
+    var ub = document.getElementById('updateBtn1x2');
+    if (ub) {
+      ub.classList.add('is-pending');
+      var startTime = Date.now() - 42 * 1000;  // pretend submitted 42s ago
+      function tickDemo() {
+        var elapsed = Math.floor((Date.now() - startTime) / 1000);
+        var mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
+        var ss = String(elapsed % 60).padStart(2, '0');
+        ub.textContent = '✓ Submitted · awaiting approval (' + mm + ':' + ss + ')';
+      }
+      tickDemo();
+      pendingTimers[ub] = setInterval(tickDemo, 1000);
+    }
+  }
+}
+
+// ============================================================
+// Demo: Auto Mode pill cycles through 3 states
+//   auto    → green   "Auto · Vendors OK"     (normal automated trading)
+//   manual  → gold    "Manual · Trader op'ing" (Trader has taken over)
+//   warning → red     "Warning · Limit 1/10"   (vendor delayed, system auto-dropped limit)
+// In production: state transitions are system-driven; trader can toggle from
+// warning → auto (= "I acknowledge, restore") via Restore button or by clicking
+// the pill. For wireframe demo, click cycles through all 3.
+// ============================================================
+function cycleAutoMode() {
+  var pill = document.getElementById('autoModePill');
+  var text = document.getElementById('amText');
+  var warningBanner = document.getElementById('vendorWarning');
+  var betradarHealth = document.getElementById('badge-betradar-health');
+  var betradarRow = document.getElementById('vendor-row-betradar');
+  var current = pill.getAttribute('data-mode');
+  var next = current === 'auto' ? 'manual' : (current === 'manual' ? 'warning' : 'auto');
+  pill.setAttribute('data-mode', next);
+  if (next === 'auto') {
+    text.textContent = 'Auto · Vendors OK';
+    warningBanner.style.display = 'none';
+    betradarHealth.textContent = 'OK';
+    betradarHealth.className = 'vendor-badge health-ok';
+    betradarRow.setAttribute('data-health', 'ok');
+  } else if (next === 'manual') {
+    text.textContent = "Manual · Trader op'ing";
+    warningBanner.style.display = 'none';
+    betradarHealth.textContent = 'OK';
+    betradarHealth.className = 'vendor-badge health-ok';
+    betradarRow.setAttribute('data-health', 'ok');
+  } else {
+    text.textContent = 'Warning · Limit 1/10';
+    warningBanner.style.display = 'flex';
+    betradarHealth.textContent = 'Delayed';
+    betradarHealth.className = 'vendor-badge health-delayed';
+    betradarRow.setAttribute('data-health', 'delayed');
+  }
+}
+function restoreAutoMode() {
+  var pill = document.getElementById('autoModePill');
+  pill.setAttribute('data-mode', 'auto');
+  document.getElementById('amText').textContent = 'Auto · Vendors OK';
+  document.getElementById('vendorWarning').style.display = 'none';
+  document.getElementById('badge-betradar-health').textContent = 'OK';
+  document.getElementById('badge-betradar-health').className = 'vendor-badge health-ok';
+  document.getElementById('vendor-row-betradar').setAttribute('data-health', 'ok');
+}
+
+// ============================================================
+// Update button click handler — feedback varies by current view tier.
+// Direct / Supervisor view: brief "✓ Sent" flash, revert in 0.9s.
+// Request view: enter pending state — grey + live countdown — until cleared.
+// ============================================================
+var pendingTimers = {};  // map: btn element → setInterval handle
+function submitUpdate(btn) {
+  if (btn.classList.contains('is-pending')) return;  // already pending; ignore
+  var view = document.body.classList.contains('view-request') ? 'request'
+           : document.body.classList.contains('view-supervisor') ? 'supervisor'
+           : 'direct';
+  if (view === 'request') {
+    // Pending state with live countdown
+    btn.classList.add('is-pending');
+    var startTime = Date.now();
+    function tick() {
+      var elapsed = Math.floor((Date.now() - startTime) / 1000);
+      var mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
+      var ss = String(elapsed % 60).padStart(2, '0');
+      btn.textContent = '✓ Submitted · awaiting approval (' + mm + ':' + ss + ')';
+    }
+    tick();
+    pendingTimers[btn] = setInterval(tick, 1000);
+  } else {
+    // Direct / Supervisor: brief flash then revert
+    var orig = btn.textContent;
+    btn.textContent = '✓ Sent';
+    btn.style.background = '#3fb950';
+    setTimeout(function() {
+      btn.textContent = orig;
+      btn.style.background = '';
+    }, 900);
+  }
+}
+
+// Reset a pending button (called when Supervisor approves/rejects in demo)
+function resetPendingButton(btn) {
+  if (pendingTimers[btn]) { clearInterval(pendingTimers[btn]); delete pendingTimers[btn]; }
+  btn.classList.remove('is-pending');
+  btn.textContent = 'Update';
+}
+
+// ============================================================
+// Sidebar collapse toggle
+// ============================================================
+function toggleSidebar() {
+  var sb = document.getElementById('sidebar');
+  var btn = document.getElementById('sbCollapseBtn');
+  var collapsed = sb.classList.toggle('collapsed');
+  btn.textContent = collapsed ? '»' : '«';
+  btn.title = collapsed ? 'Expand sidebar' : 'Collapse sidebar';
+}
+
 </script>
 </body>
 </html>
