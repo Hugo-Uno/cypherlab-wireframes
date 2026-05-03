@@ -237,6 +237,17 @@
   /* Item cell */
   .item-cell { color: #f0883e; font-weight: 600; font-size: 12px; white-space: nowrap; }
 
+  /* 1X2 / OE / NG view: hide Item column (no sub-lines, would always show '-') */
+  body.market-1x2 .act-table .item-col,
+  body.market-1x2 .act-table .item-cell,
+  body.market-oe .act-table .item-col,
+  body.market-oe .act-table .item-cell,
+  body.market-ng .act-table .item-col,
+  body.market-ng .act-table .item-cell { display: none; }
+
+  /* 2-column variant of odds-grid for 2-selection markets (e.g., OE, future use) */
+  .odds-grid-2col { grid-template-columns: 1fr 1fr !important; }
+
   /* Extra line rows (sub-lines for same event) */
   .extra-line td { border-top: 1px solid #21262d; }
 
@@ -261,10 +272,14 @@
   tbody.event-group tr.active-row { background: #1f6feb33 !important; }
 
   /* ---- AH (handicap) Line side coloring ----
-     For handicap extra-line rows, distinguish Home vs Away lines visually.
-     Item-cell text color + 3px left accent border. */
-  tr.extra-line[data-line-side="home"] td.item-cell { color: #58a6ff; font-weight: 700; }
-  tr.extra-line[data-line-side="away"] td.item-cell { color: #f97583; font-weight: 700; }
+     Extra-line rows OVERRIDE the event-group tint with a neutral bg so the
+     only colors operator sees on these rows are H=blue / A=red. Event-group
+     bg stays on primary rows (where between-event grouping is the point).
+     Coloring applies to BOTH primary and extra-line item-cells via the
+     cell-level data-line-side attribute (set by switchMarket JS). */
+  tbody.event-group tr.extra-line { background: #0a0e14 !important; }
+  .item-cell[data-line-side="home"] { color: #58a6ff !important; font-weight: 700; }
+  .item-cell[data-line-side="away"] { color: #f97583 !important; font-weight: 700; }
   tr.extra-line[data-line-side="home"] td:first-child { box-shadow: inset 3px 0 0 #58a6ff; }
   tr.extra-line[data-line-side="away"] td:first-child { box-shadow: inset 3px 0 0 #f97583; }
 
@@ -588,6 +603,22 @@
      across HOME + AWAY + DRAW. Subtle background tint + bolder numbers to
      visually separate from per-selection columns. */
   .act-table .total-col { background: rgba(230, 237, 243, 0.04); }
+
+  /* CS view: hide all selection columns (HOME / AWAY / DRAW) — CS has 50+
+     selections and 3-col aggregation is artificial. Only TOTAL shown. */
+  body.market-cs .act-table thead .col-group-header > th#col-group-1,
+  body.market-cs .act-table thead .col-group-header > th#col-group-2,
+  body.market-cs .act-table thead .col-group-header > th#col-group-3,
+  body.market-cs .act-table .draw-col,
+  body.market-cs .act-table thead tr:nth-child(2) > th:nth-child(n+6):nth-child(-n+13),
+  body.market-cs .act-table tbody td:nth-child(n+6):nth-child(-n+13) {
+    display: none;
+  }
+
+  /* CS Scores table: color Score cell text by win side (Home/Draw/Away) */
+  .cs-score-row td.cs-score[data-side="home"] { color: #58a6ff !important; }
+  .cs-score-row td.cs-score[data-side="draw"] { color: #d2a8ff !important; }
+  .cs-score-row td.cs-score[data-side="away"] { color: #f97583 !important; }
   .act-table td.total-col { font-weight: 800; font-variant-numeric: tabular-nums; }
   .act-table td.total-col.total-wagers  { color: #e6edf3; }
   .act-table td.total-col.total-players { color: #58a6ff; }
@@ -595,7 +626,7 @@
 
 </style>
 </head>
-<body class="view-direct">
+<body class="view-direct market-1x2">
 <!-- Pending Approval popup notification (Supervisor view only) -->
 <div class="pending-popup" id="pendingPopup">
 <div class="pp-head">
@@ -739,10 +770,10 @@ Home <span style="color:#f85149">+0.06</span> · Away <span style="color:#3fb950
 <table class="act-table">
 <thead>
 <tr class="col-group-header" style="background:#161b22;">
-<th colspan="5" style="text-align:left; color:#8b949e; border-bottom:2px solid #30363d;"></th>
+<th id="col-leftspan" colspan="5" style="text-align:left; color:#8b949e; border-bottom:2px solid #30363d;"></th>
 <th id="col-group-1" colspan="4" style="color:#58a6ff; border-bottom:2px solid #58a6ff; text-align:center; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">HOME</th>
 <th id="col-group-2" colspan="4" style="color:#f97583; border-bottom:2px solid #f97583; text-align:center; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">AWAY</th>
-<th colspan="4" class="draw-col" style="color:#d2a8ff; border-bottom:2px solid #d2a8ff; text-align:center; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">DRAW</th>
+<th id="col-group-3" colspan="4" class="draw-col" style="color:#d2a8ff; border-bottom:2px solid #d2a8ff; text-align:center; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">DRAW</th>
 <th colspan="3" class="total-col" style="color:#e6edf3; border-bottom:2px solid #6e7681; text-align:center; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">TOTAL</th>
 </tr>
 <tr>
@@ -1416,16 +1447,7 @@ Home <span style="color:#f85149">+0.06</span> · Away <span style="color:#3fb950
 <div class="op-entry pending">
 <div class="op-time">17:26:38<br/><span class="op-match-time">79'</span></div>
 <div class="op-body">
-<div class="op-action"><span class="op-tag op-tag-pending">Pending Approval</span> <span class="op-operator">Trader A</span> <select class="op-reason-select">
-<option value="">+ Add reason…</option>
-<option>Market imbalance correction</option>
-<option>Public over-betting</option>
-<option>Vendor odds drift</option>
-<option>Score / event reaction</option>
-<option>Pre-match line set</option>
-<option>Risk: large single bet</option>
-<option>Risk: known sharp player</option>
-</select></div>
+<div class="op-action"><span class="op-tag op-tag-pending">Pending Approval</span> <span class="op-operator">Trader A</span></div>
 <div class="op-odds-change">
 <table class="op-odds-table">
 <tr><td class="op-sel">Home</td><td class="op-old">2.36 <span class="op-prob-old">(42.4%)</span></td><td class="op-arrow">→</td><td class="op-new">2.42 <span class="op-prob-new">(41.3%)</span></td><td class="op-diff diff-up">+0.06</td></tr>
@@ -1442,7 +1464,16 @@ Home <span style="color:#f85149">+0.06</span> · Away <span style="color:#3fb950
 <div class="op-entry">
 <div class="op-time">17:24:38<br/><span class="op-match-time">78'</span></div>
 <div class="op-body">
-<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Trader A</span></div>
+<div class="op-action"><span class="op-tag op-tag-override">Manual Update</span> <span class="op-operator">Trader A</span> <select class="op-reason-select">
+<option value="">+ Add reason…</option>
+<option>Market imbalance correction</option>
+<option>Public over-betting</option>
+<option>Vendor odds drift</option>
+<option>Score / event reaction</option>
+<option>Pre-match line set</option>
+<option>Risk: large single bet</option>
+<option>Risk: known sharp player</option>
+</select></div>
 <div class="op-odds-change">
 <table class="op-odds-table">
 <tr><td class="op-sel">Home</td><td class="op-old">2.30 <span class="op-prob-old">(43.5%)</span></td><td class="op-arrow">→</td><td class="op-new">2.35 <span class="op-prob-new">(42.6%)</span></td><td class="op-diff diff-up">+0.05</td></tr>
@@ -1450,7 +1481,6 @@ Home <span style="color:#f85149">+0.06</span> · Away <span style="color:#3fb950
 <tr><td class="op-sel">Away</td><td class="op-old">2.89 <span class="op-prob-old">(34.6%)</span></td><td class="op-arrow">→</td><td class="op-new">2.95 <span class="op-prob-new">(33.9%)</span></td><td class="op-diff diff-up">+0.06</td></tr>
 </table>
 </div>
-<div class="op-reason"><span class="op-reason-text">Market imbalance correction</span> <button class="op-reason-edit" title="編輯備註">✎</button></div>
 </div>
 </div>
 <div class="op-entry">
@@ -1479,7 +1509,7 @@ Home <span style="color:#f85149">+0.06</span> · Away <span style="color:#3fb950
 <thead>
 <tr style="color:#8b949e; font-size:10px; text-transform:uppercase; letter-spacing:0.5px;">
 <th style="text-align:left; padding:4px 8px; border-bottom:1px solid #30363d;">Line</th>
-<th style="text-align:left; padding:4px 8px; border-bottom:1px solid #30363d;">Source</th>
+<th style="text-align:left; padding:4px 8px; border-bottom:1px solid #30363d;">Vendor</th>
 <th style="text-align:right; padding:4px 8px; border-bottom:2px solid #58a6ff; color:#58a6ff;">HOME</th>
 <th style="text-align:right; padding:4px 8px; border-bottom:2px solid #f97583; color:#f97583;">AWAY</th>
 <th style="text-align:right; padding:4px 8px; border-bottom:1px solid #30363d;">Margin</th>
@@ -1487,56 +1517,56 @@ Home <span style="color:#f85149">+0.06</span> · Away <span style="color:#3fb950
 </thead>
 <tbody>
 <tr class="line-row active-line" data-line="H -1" onclick="selectHandicapLine(this)" style="cursor:pointer;">
-<td style="padding:6px 8px; font-weight:700; color:#f0883e;">H -1</td>
+<td style="padding:6px 8px; font-weight:700; color:#58a6ff;">H -1</td>
 <td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">1.82</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">2.15</td>
 <td style="padding:6px 8px; text-align:right; color:#8b949e;">4.2%</td>
 </tr>
 <tr class="line-row" data-line="H -1" onclick="selectHandicapLine(this)" style="cursor:pointer;">
-<td style="padding:6px 8px; font-weight:700; color:#f0883e;">H -1</td>
+<td style="padding:6px 8px; font-weight:700; color:#58a6ff;">H -1</td>
 <td style="padding:6px 8px; color:#8b949e;">Sportradar</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">1.85</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">2.10</td>
 <td style="padding:6px 8px; text-align:right; color:#8b949e;">3.8%</td>
 </tr>
 <tr class="line-row" data-line="H -2" onclick="selectHandicapLine(this)" style="cursor:pointer;">
-<td style="padding:6px 8px; font-weight:700; color:#f0883e;">H -2</td>
+<td style="padding:6px 8px; font-weight:700; color:#58a6ff;">H -2</td>
 <td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">1.45</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">2.65</td>
 <td style="padding:6px 8px; text-align:right; color:#8b949e;">3.5%</td>
 </tr>
 <tr class="line-row" data-line="H -2" onclick="selectHandicapLine(this)" style="cursor:pointer;">
-<td style="padding:6px 8px; font-weight:700; color:#f0883e;">H -2</td>
+<td style="padding:6px 8px; font-weight:700; color:#58a6ff;">H -2</td>
 <td style="padding:6px 8px; color:#8b949e;">Sportradar</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">1.48</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">2.60</td>
 <td style="padding:6px 8px; text-align:right; color:#8b949e;">3.9%</td>
 </tr>
 <tr class="line-row" data-line="A -1" onclick="selectHandicapLine(this)" style="cursor:pointer;">
-<td style="padding:6px 8px; font-weight:700; color:#f0883e;">A -1</td>
+<td style="padding:6px 8px; font-weight:700; color:#f97583;">A -1</td>
 <td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">2.30</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">1.65</td>
 <td style="padding:6px 8px; text-align:right; color:#8b949e;">4.0%</td>
 </tr>
 <tr class="line-row" data-line="A -1" onclick="selectHandicapLine(this)" style="cursor:pointer;">
-<td style="padding:6px 8px; font-weight:700; color:#f0883e;">A -1</td>
+<td style="padding:6px 8px; font-weight:700; color:#f97583;">A -1</td>
 <td style="padding:6px 8px; color:#8b949e;">Sportradar</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">2.25</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">1.68</td>
 <td style="padding:6px 8px; text-align:right; color:#8b949e;">3.6%</td>
 </tr>
 <tr class="line-row" data-line="H -0.5" onclick="selectHandicapLine(this)" style="cursor:pointer;">
-<td style="padding:6px 8px; font-weight:700; color:#f0883e;">H -0.5</td>
+<td style="padding:6px 8px; font-weight:700; color:#58a6ff;">H -0.5</td>
 <td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">1.62</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">2.35</td>
 <td style="padding:6px 8px; text-align:right; color:#8b949e;">3.4%</td>
 </tr>
 <tr class="line-row" data-line="H -0.5" onclick="selectHandicapLine(this)" style="cursor:pointer;">
-<td style="padding:6px 8px; font-weight:700; color:#f0883e;">H -0.5</td>
+<td style="padding:6px 8px; font-weight:700; color:#58a6ff;">H -0.5</td>
 <td style="padding:6px 8px; color:#8b949e;">Sportradar</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700; color:#58a6ff;">1.60</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700; color:#f97583;">2.38</td>
@@ -1622,7 +1652,7 @@ Home <span style="color:#f85149">+0.06</span> · Away <span style="color:#3fb950
 <thead>
 <tr style="color:#8b949e; font-size:10px; text-transform:uppercase; letter-spacing:0.5px;">
 <th style="text-align:left; padding:4px 8px; border-bottom:1px solid #30363d;">Line</th>
-<th style="text-align:left; padding:4px 8px; border-bottom:1px solid #30363d;">Source</th>
+<th style="text-align:left; padding:4px 8px; border-bottom:1px solid #30363d;">Vendor</th>
 <th style="text-align:right; padding:4px 8px; border-bottom:2px solid #58a6ff; color:#58a6ff;">OVER</th>
 <th style="text-align:right; padding:4px 8px; border-bottom:2px solid #f97583; color:#f97583;">UNDER</th>
 <th style="text-align:right; padding:4px 8px; border-bottom:1px solid #30363d;">Margin</th>
@@ -1765,86 +1795,74 @@ Home <span style="color:#f85149">+0.06</span> · Away <span style="color:#3fb950
 <thead>
 <tr style="color:#8b949e; font-size:10px; text-transform:uppercase; letter-spacing:0.5px;">
 <th style="text-align:left; padding:4px 8px; border-bottom:1px solid #30363d;">Score</th>
-<th style="text-align:left; padding:4px 8px; border-bottom:1px solid #30363d;">Type</th>
-<th style="text-align:left; padding:4px 8px; border-bottom:1px solid #30363d;">Source</th>
+<th style="text-align:left; padding:4px 8px; border-bottom:1px solid #30363d;">Vendor</th>
 <th style="text-align:right; padding:4px 8px; border-bottom:1px solid #30363d;">Odds</th>
 <th style="text-align:right; padding:4px 8px; border-bottom:1px solid #30363d;">Prob</th>
 </tr>
 </thead>
 <tbody>
-<tr class="line-row active-line" data-line="1 – 0" onclick="selectCSLine(this)" style="cursor:pointer;">
-<td style="padding:6px 8px; font-weight:700; color:#f0883e;">1 – 0</td>
-<td style="padding:6px 8px; color:#58a6ff; font-size:10px;">HOME</td>
+<tr class="line-row active-line cs-score-row" data-line="1 – 0" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td class="cs-score" data-side="home" style="padding:6px 8px; font-weight:700;">1 – 0</td>
 <td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700;">7.50</td>
 <td style="padding:6px 8px; text-align:right; color:#8b949e;">13.3%</td>
 </tr>
-<tr class="line-row" data-line="1 – 0" onclick="selectCSLine(this)" style="cursor:pointer;">
-<td style="padding:6px 8px; font-weight:700; color:#f0883e;">1 – 0</td>
-<td style="padding:6px 8px; color:#58a6ff; font-size:10px;">HOME</td>
+<tr class="line-row cs-score-row" data-line="1 – 0" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td class="cs-score" data-side="home" style="padding:6px 8px; font-weight:700;">1 – 0</td>
 <td style="padding:6px 8px; color:#8b949e;">Sportradar</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700;">7.20</td>
 <td style="padding:6px 8px; text-align:right; color:#8b949e;">13.9%</td>
 </tr>
-<tr class="line-row" data-line="2 – 0" onclick="selectCSLine(this)" style="cursor:pointer;">
-<td style="padding:6px 8px; font-weight:700; color:#f0883e;">2 – 0</td>
-<td style="padding:6px 8px; color:#58a6ff; font-size:10px;">HOME</td>
+<tr class="line-row cs-score-row" data-line="2 – 0" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td class="cs-score" data-side="home" style="padding:6px 8px; font-weight:700;">2 – 0</td>
 <td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700;">9.00</td>
 <td style="padding:6px 8px; text-align:right; color:#8b949e;">11.1%</td>
 </tr>
-<tr class="line-row" data-line="2 – 1" onclick="selectCSLine(this)" style="cursor:pointer;">
-<td style="padding:6px 8px; font-weight:700; color:#f0883e;">2 – 1</td>
-<td style="padding:6px 8px; color:#58a6ff; font-size:10px;">HOME</td>
+<tr class="line-row cs-score-row" data-line="2 – 1" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td class="cs-score" data-side="home" style="padding:6px 8px; font-weight:700;">2 – 1</td>
 <td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700;">8.00</td>
 <td style="padding:6px 8px; text-align:right; color:#8b949e;">12.5%</td>
 </tr>
-<tr class="line-row" data-line="3 – 1" onclick="selectCSLine(this)" style="cursor:pointer;">
-<td style="padding:6px 8px; font-weight:700; color:#f0883e;">3 – 1</td>
-<td style="padding:6px 8px; color:#58a6ff; font-size:10px;">HOME</td>
+<tr class="line-row cs-score-row" data-line="3 – 1" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td class="cs-score" data-side="home" style="padding:6px 8px; font-weight:700;">3 – 1</td>
 <td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700;">15.00</td>
 <td style="padding:6px 8px; text-align:right; color:#8b949e;">6.7%</td>
 </tr>
-<tr class="line-row" data-line="0 – 1" onclick="selectCSLine(this)" style="cursor:pointer;">
-<td style="padding:6px 8px; font-weight:700; color:#f0883e;">0 – 1</td>
-<td style="padding:6px 8px; color:#f97583; font-size:10px;">AWAY</td>
+<tr class="line-row cs-score-row" data-line="0 – 1" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td class="cs-score" data-side="away" style="padding:6px 8px; font-weight:700;">0 – 1</td>
 <td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700;">8.50</td>
 <td style="padding:6px 8px; text-align:right; color:#8b949e;">11.8%</td>
 </tr>
-<tr class="line-row" data-line="0 – 2" onclick="selectCSLine(this)" style="cursor:pointer;">
-<td style="padding:6px 8px; font-weight:700; color:#f0883e;">0 – 2</td>
-<td style="padding:6px 8px; color:#f97583; font-size:10px;">AWAY</td>
+<tr class="line-row cs-score-row" data-line="0 – 2" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td class="cs-score" data-side="away" style="padding:6px 8px; font-weight:700;">0 – 2</td>
 <td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700;">12.00</td>
 <td style="padding:6px 8px; text-align:right; color:#8b949e;">8.3%</td>
 </tr>
-<tr class="line-row" data-line="1 – 2" onclick="selectCSLine(this)" style="cursor:pointer;">
-<td style="padding:6px 8px; font-weight:700; color:#f0883e;">1 – 2</td>
-<td style="padding:6px 8px; color:#f97583; font-size:10px;">AWAY</td>
+<tr class="line-row cs-score-row" data-line="1 – 2" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td class="cs-score" data-side="away" style="padding:6px 8px; font-weight:700;">1 – 2</td>
 <td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700;">10.00</td>
 <td style="padding:6px 8px; text-align:right; color:#8b949e;">10.0%</td>
 </tr>
-<tr class="line-row" data-line="0 – 0" onclick="selectCSLine(this)" style="cursor:pointer;">
-<td style="padding:6px 8px; font-weight:700; color:#f0883e;">0 – 0</td>
-<td style="padding:6px 8px; color:#d2a8ff; font-size:10px;">DRAW</td>
+<tr class="line-row cs-score-row" data-line="0 – 0" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td class="cs-score" data-side="draw" style="padding:6px 8px; font-weight:700;">0 – 0</td>
 <td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700;">9.50</td>
 <td style="padding:6px 8px; text-align:right; color:#8b949e;">10.5%</td>
 </tr>
-<tr class="line-row" data-line="1 – 1" onclick="selectCSLine(this)" style="cursor:pointer;">
-<td style="padding:6px 8px; font-weight:700; color:#f0883e;">1 – 1</td>
-<td style="padding:6px 8px; color:#d2a8ff; font-size:10px;">DRAW</td>
+<tr class="line-row cs-score-row" data-line="1 – 1" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td class="cs-score" data-side="draw" style="padding:6px 8px; font-weight:700;">1 – 1</td>
 <td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700;">6.50</td>
 <td style="padding:6px 8px; text-align:right; color:#8b949e;">15.4%</td>
 </tr>
-<tr class="line-row" data-line="2 – 2" onclick="selectCSLine(this)" style="cursor:pointer;">
-<td style="padding:6px 8px; font-weight:700; color:#f0883e;">2 – 2</td>
-<td style="padding:6px 8px; color:#d2a8ff; font-size:10px;">DRAW</td>
+<tr class="line-row cs-score-row" data-line="2 – 2" onclick="selectCSLine(this)" style="cursor:pointer;">
+<td class="cs-score" data-side="draw" style="padding:6px 8px; font-weight:700;">2 – 2</td>
 <td style="padding:6px 8px; color:#8b949e;">BetRadar</td>
 <td style="padding:6px 8px; text-align:right; font-weight:700;">14.00</td>
 <td style="padding:6px 8px; text-align:right; color:#8b949e;">7.1%</td>
@@ -1929,19 +1947,15 @@ Home <span style="color:#f85149">+0.06</span> · Away <span style="color:#3fb950
 </div>
 <div class="panel-section" style="background:#1f6feb11; border:1px solid #1f6feb33; border-radius:8px; padding:14px;">
 <div class="panel-title" style="color:#58a6ff;">New Odds</div>
-<div class="odds-grid">
+<div class="odds-grid odds-grid-2col">
 <div class="odds-grid-label">Odd (單)</div>
-<div class="odds-grid-label" style="color:#484f58;">—</div>
 <div class="odds-grid-label">Even (雙)</div>
 </div>
-<div class="odds-grid" style="margin-top:4px;">
+<div class="odds-grid odds-grid-2col" style="margin-top:4px;">
 <div class="odds-box-new changed" id="box-oe-c1">
 <div class="odds-old">1.90</div>
 <div class="odds-box-value" id="new-oe-c1">1.90</div>
 <div class="odds-diff diff-none" id="diff-oe-c1" style="visibility:hidden;">0.00</div>
-</div>
-<div class="odds-box-new" style="border-color:#30363d; background:transparent; cursor:default;">
-<div class="odds-box-value" style="color:#484f58;">—</div>
 </div>
 <div class="odds-box-new" id="box-oe-c3">
 <div class="odds-old">1.95</div>
@@ -1950,13 +1964,12 @@ Home <span style="color:#f85149">+0.06</span> · Away <span style="color:#3fb950
 </div>
 </div>
 <!-- +/- fine tune -->
-<div class="odds-grid" style="margin-top:6px;">
+<div class="odds-grid odds-grid-2col" style="margin-top:6px;">
 <div class="pct-controls">
 <button class="pct-btn" onclick="adjustOddsGen('oe','c1',-0.01)">−</button>
 <span class="pct-val" id="pct-oe-c1">53%</span>
 <button class="pct-btn" onclick="adjustOddsGen('oe','c1',0.01)">+</button>
 </div>
-<div class="pct-controls" style="visibility:hidden;"></div>
 <div class="pct-controls">
 <button class="pct-btn" onclick="adjustOddsGen('oe','c3',-0.01)">−</button>
 <span class="pct-val" id="pct-oe-c3">51%</span>
@@ -1964,13 +1977,12 @@ Home <span style="color:#f85149">+0.06</span> · Away <span style="color:#3fb950
 </div>
 </div>
 <!-- Quick Adjust -->
-<div class="odds-grid" style="margin-top:10px; gap:8px;">
+<div class="odds-grid odds-grid-2col" style="margin-top:10px; gap:8px;">
 <div style="display:flex; gap:3px;">
 <button class="pct-btn" onclick="quickAdjustGen('oe','c1',0.02)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+2%</button>
 <button class="pct-btn" onclick="quickAdjustGen('oe','c1',0.03)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+3%</button>
 <button class="pct-btn" onclick="quickAdjustGen('oe','c1',0.05)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+5%</button>
 </div>
-<div></div>
 <div style="display:flex; gap:3px;">
 <button class="pct-btn" onclick="quickAdjustGen('oe','c3',0.02)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+2%</button>
 <button class="pct-btn" onclick="quickAdjustGen('oe','c3',0.03)" style="flex:1; width:auto; height:36px; font-size:12px; font-weight:700;">+3%</button>
@@ -2119,7 +2131,7 @@ Home <span style="color:#f85149">+0.06</span> · Away <span style="color:#3fb950
 </div>
 </div>
 </div>
-<div class="wf-note">WIREFRAME v1.13 — Market Activity (2026-05-02)</div>
+<div class="wf-note">WIREFRAME v1.21 — Market Activity (2026-05-02)</div>
 <script>
 // ============================================================
 // Spread control — house 5%, adjustable via ± / input / quick presets
@@ -2342,6 +2354,10 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   renderMatchTime();
   setInterval(renderMatchTime, 1000);
+  // Trigger initial switchMarket to apply per-market header rename + colspan fix
+  // (default body class is market-1x2 which hides Item column).
+  var defaultTab = document.querySelector('#marketTabs .market-tab.active');
+  if (defaultTab) switchMarket(defaultTab);
 });
 
 // ============================================================
@@ -2595,21 +2611,58 @@ function switchMarket(tab) {
 
   var market = tab.dataset.market;
 
+  // Toggle body class for per-market CSS hooks (e.g., 1X2 hides Item column — SPEC §4.11.1)
+  document.body.className = document.body.className.replace(/\bmarket-\S+/g, '').trim();
+  document.body.classList.add('market-' + market);
+
   // Show/hide market content panels (right side)
   document.querySelectorAll('.odds-panel .market-content').forEach(function(mc) {
     mc.style.display = mc.dataset.market === market ? '' : 'none';
   });
 
-  // Markets with 3 selections (show DRAW): 1x2, ng, cs
-  // Markets with 2 selections (hide DRAW): handicap, ou, oe
+  // Markets with 3 selections (show DRAW col): 1x2, ng, cs
+  // Markets with 2 selections (hide DRAW col): handicap, ou, oe
   var hasDraw = (market === '1x2' || market === 'ng' || market === 'cs');
   document.querySelectorAll('.draw-col').forEach(function(el) {
     el.style.display = hasDraw ? '' : 'none';
   });
 
+  // Rename Activity Table column-group headers per market (per SPEC §4.7).
+  // Column slot 1=left/blue, 2=middle/red, 3=right/purple. The third slot
+  // shows only when hasDraw (above).
+  var headerLabels = {
+    '1x2':       ['HOME', 'AWAY', 'DRAW'],
+    'handicap':  ['HOME', 'AWAY', '—'],
+    'ou':        ['OVER', 'UNDER', '—'],
+    'cs':        ['HOME wins', 'AWAY wins', 'DRAW'],
+    'oe':        ['ODD', 'EVEN', '—'],
+    'ng':        ['HOME', 'AWAY', 'NO GOAL']
+  };
+  var labels = headerLabels[market] || ['HOME', 'AWAY', 'DRAW'];
+  var g1 = document.getElementById('col-group-1');
+  var g2 = document.getElementById('col-group-2');
+  var g3 = document.getElementById('col-group-3');
+  if (g1) g1.textContent = labels[0];
+  if (g2) g2.textContent = labels[1];
+  if (g3) g3.textContent = labels[2];
+
+  // Item column is hidden for 1x2 / oe / ng — adjust the leftmost colspan-5 header
+  // (which spans Server/Kickoff/Elapsed/Event/Item) down to 4 so the column-group
+  // headers above stay aligned with their sub-columns.
+  var leftSpan = document.getElementById('col-leftspan');
+  var itemHidden = (market === '1x2' || market === 'oe' || market === 'ng');
+  if (leftSpan) leftSpan.setAttribute('colspan', itemHidden ? '4' : '5');
+
   // Update Item column content per market (only for base rows with data attributes)
+  // Also tag with data-line-side="home"|"away" when text starts with H/A so
+  // primary rows pick up the same H=blue / A=red coloring as extra-line rows.
   document.querySelectorAll('.item-cell[data-1x2]').forEach(function(cell) {
-    cell.textContent = cell.dataset[market] || '-';
+    var text = cell.dataset[market] || '-';
+    cell.textContent = text;
+    cell.removeAttribute('data-line-side');
+    var first = text.charAt(0);
+    if (first === 'H') cell.setAttribute('data-line-side', 'home');
+    else if (first === 'A') cell.setAttribute('data-line-side', 'away');
   });
 
   // Show/hide extra-line rows per market
