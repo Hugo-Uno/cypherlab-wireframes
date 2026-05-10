@@ -2,7 +2,8 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<title>Settlement Review - Wireframe</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settlement Workbench — Wireframe</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -11,8 +12,9 @@
     color: #e4e4e7;
     font-size: 13px;
   }
+  button { font-family: inherit; }
 
-  /* Layout */
+  /* ===== Layout ===== */
   .app { display: flex; min-height: 100vh; }
   .sidebar {
     width: 220px;
@@ -35,10 +37,7 @@
     font-size: 13px;
   }
   .sidebar .nav-item:hover { background: #18181f; color: #fafafa; }
-  .sidebar .nav-item.active {
-    background: #0ea5e9;
-    color: #fff;
-  }
+  .sidebar .nav-item.active { background: #0ea5e9; color: #fff; }
   .sidebar .nav-section {
     padding: 16px 20px 6px;
     font-size: 10px;
@@ -47,7 +46,7 @@
     letter-spacing: 0.05em;
   }
 
-  .main { flex: 1; display: flex; flex-direction: column; }
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
   .topbar {
     height: 52px;
     background: #111116;
@@ -60,136 +59,68 @@
   .topbar .breadcrumb { color: #71717a; font-size: 13px; }
   .topbar .right-section { display: flex; align-items: center; gap: 16px; }
   .topbar .user { font-size: 13px; color: #d4d4d8; }
-
-  /* Bell icon */
-  .bell {
-    position: relative;
-    cursor: pointer;
-    font-size: 18px;
-    color: #a1a1aa;
+  .topbar .role-pill {
+    background: #1f1f24;
+    color: #fcd34d;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 10px;
+    border: 1px solid #2a2a32;
   }
-  .bell:hover { color: #fafafa; }
-  .bell .badge-count {
-    position: absolute;
-    top: -6px;
-    right: -8px;
-    background: #ef4444;
-    color: #fff;
-    font-size: 9px;
-    font-weight: 700;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
+
+  /* ===== View tabs ===== */
+  .view-tabs {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    gap: 0;
+    background: #0d0d12;
+    border-bottom: 1px solid #1f1f24;
+    padding: 0 24px;
   }
+  .view-tab {
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    color: #71717a;
+    cursor: pointer;
+    font-size: 13px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+  .view-tab:hover { color: #d4d4d8; }
+  .view-tab.active {
+    color: #0ea5e9;
+    border-bottom-color: #0ea5e9;
+  }
+  .view-tab .step-num {
+    display: inline-block;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: #1f1f24;
+    color: #71717a;
+    font-size: 10px;
+    line-height: 18px;
+    text-align: center;
+    margin-right: 6px;
+  }
+  .view-tab.active .step-num { background: #0ea5e9; color: #fff; }
 
-  .content { padding: 24px; flex: 1; }
-
-  .page-header { margin-bottom: 20px; }
-  .page-header h1 { font-size: 20px; font-weight: 600; margin-bottom: 4px; color: #fafafa; }
-  .page-header .subtitle { color: #71717a; font-size: 13px; }
+  .content { padding: 20px 24px; flex: 1; }
 
   /* Wireframe banner */
   .wf-banner {
-    background: rgba(245, 158, 11, 0.1);
+    background: rgba(245, 158, 11, 0.08);
     border: 1px dashed rgba(245, 158, 11, 0.4);
     color: #fcd34d;
-    padding: 8px 16px;
+    padding: 8px 14px;
     margin-bottom: 14px;
     border-radius: 4px;
     font-size: 12px;
     text-align: center;
   }
 
-  /* ===== Dashboard Alert Card ===== */
-  .alert-card {
-    background: #111116;
-    border: 1px solid #b91c1c;
-    border-left: 4px solid #ef4444;
-    border-radius: 6px;
-    padding: 16px 20px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-  .alert-card .alert-icon {
-    font-size: 28px;
-    flex-shrink: 0;
-  }
-  .alert-card .alert-body { flex: 1; }
-  .alert-card .alert-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: #fafafa;
-    margin-bottom: 6px;
-  }
-  .alert-card .alert-stats {
-    display: flex;
-    gap: 20px;
-    font-size: 12px;
-    color: #a1a1aa;
-  }
-  .alert-card .alert-stats .stat-val {
-    font-weight: 700;
-    font-size: 18px;
-    display: block;
-    margin-bottom: 2px;
-  }
-  .alert-card .alert-stats .stat-val.red { color: #f87171; }
-  .alert-card .alert-stats .stat-val.yellow { color: #fcd34d; }
-  .alert-card .alert-latest {
-    font-size: 11px;
-    color: #71717a;
-    margin-top: 6px;
-  }
-  .alert-card .alert-action { flex-shrink: 0; }
-
-  /* ===== Filter bar ===== */
-  .filter-card {
-    background: #111116;
-    border: 1px solid #1f1f24;
-    border-radius: 6px;
-    padding: 14px 16px;
-    margin-bottom: 14px;
-  }
-  .filter-row {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .filter {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .filter label {
-    font-size: 11px;
-    color: #71717a;
-    font-weight: 500;
-  }
-  .filter select,
-  .filter input {
-    height: 32px;
-    border: 1px solid #2a2a32;
-    border-radius: 4px;
-    padding: 0 10px;
-    font-size: 12px;
-    background: #18181f;
-    color: #e4e4e7;
-    min-width: 140px;
-  }
-  .filter input.search { min-width: 200px; }
-  .filter input::placeholder { color: #52525b; }
-  .filter-actions {
-    margin-left: auto;
-    display: flex;
-    gap: 8px;
-    align-self: flex-end;
-  }
+  .page-header { margin-bottom: 16px; display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+  .page-header h1 { font-size: 19px; font-weight: 600; color: #fafafa; }
+  .page-header .subtitle { color: #71717a; font-size: 12px; margin-top: 4px; }
 
   /* ===== Buttons ===== */
   .btn {
@@ -202,32 +133,49 @@
     cursor: pointer;
     color: #e4e4e7;
     white-space: nowrap;
+    line-height: 1;
   }
   .btn:hover { background: #22222b; }
-  .btn-primary {
-    background: #0ea5e9;
-    color: #fff;
-    border-color: #0ea5e9;
-  }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-primary { background: #0ea5e9; color: #fff; border-color: #0ea5e9; }
   .btn-primary:hover { background: #0284c7; }
-  .btn-danger {
-    background: rgba(239, 68, 68, 0.15);
-    color: #f87171;
-    border-color: rgba(239, 68, 68, 0.4);
+  .btn-danger { background: rgba(239, 68, 68, 0.15); color: #f87171; border-color: rgba(239, 68, 68, 0.4); }
+  .btn-success { background: rgba(34, 197, 94, 0.15); color: #86efac; border-color: rgba(34, 197, 94, 0.4); }
+  .btn-warning { background: rgba(245, 158, 11, 0.15); color: #fcd34d; border-color: rgba(245, 158, 11, 0.4); }
+  .btn-sm { height: 26px; padding: 0 10px; font-size: 11px; }
+  .btn-xs { height: 22px; padding: 0 8px; font-size: 10px; border-radius: 3px; }
+  .btn-icon { width: 26px; padding: 0; display: inline-flex; align-items: center; justify-content: center; }
+
+  /* ===== Filter / search bar ===== */
+  .filter-card {
+    background: #111116;
+    border: 1px solid #1f1f24;
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
   }
-  .btn-danger:hover { background: rgba(239, 68, 68, 0.25); }
-  .btn-success {
-    background: rgba(34, 197, 94, 0.15);
-    color: #86efac;
-    border-color: rgba(34, 197, 94, 0.4);
+  .filter-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: flex-end;
   }
-  .btn-success:hover { background: rgba(34, 197, 94, 0.25); }
-  .btn-sm {
-    height: 26px;
+  .filter { display: flex; flex-direction: column; gap: 4px; }
+  .filter label { font-size: 11px; color: #71717a; font-weight: 500; }
+  .filter select, .filter input {
+    height: 32px;
+    border: 1px solid #2a2a32;
+    border-radius: 4px;
     padding: 0 10px;
-    font-size: 11px;
+    font-size: 12px;
+    background: #18181f;
+    color: #e4e4e7;
+    min-width: 140px;
+    font-family: inherit;
   }
-  .btn-group { display: flex; gap: 4px; }
+  .filter input.search { min-width: 220px; }
+  .filter input::placeholder { color: #52525b; }
+  .filter-actions { margin-left: auto; display: flex; gap: 8px; }
 
   /* ===== Table ===== */
   .table-card {
@@ -246,14 +194,10 @@
     color: #a1a1aa;
   }
   .table-toolbar strong { color: #fafafa; }
-  .table-toolbar .left { display: flex; gap: 16px; align-items: center; }
 
-  table { width: 100%; border-collapse: collapse; }
-  thead {
-    background: #18181f;
-    border-bottom: 1px solid #1f1f24;
-  }
-  th {
+  table.queue { width: 100%; border-collapse: collapse; }
+  table.queue thead { background: #18181f; border-bottom: 1px solid #1f1f24; }
+  table.queue th {
     text-align: left;
     padding: 10px 12px;
     font-size: 11px;
@@ -263,48 +207,24 @@
     letter-spacing: 0.03em;
     white-space: nowrap;
   }
-  td {
-    padding: 10px 12px;
+  table.queue td {
+    padding: 12px;
     border-bottom: 1px solid #1f1f24;
     font-size: 12px;
     vertical-align: middle;
     color: #d4d4d8;
   }
-  tr:hover td { background-color: #1e1e26; }
-  tr.zebra td { background-color: rgba(255, 255, 255, 0.03); }
+  table.queue tr:hover td { background: #16161d; }
+  table.queue tr.row-locked td:first-child { border-left: 3px solid #22c55e; padding-left: 9px; }
+  table.queue tr.row-pending td:first-child { border-left: 3px solid #0ea5e9; padding-left: 9px; }
+  table.queue tr.row-conflict td:first-child { border-left: 3px solid #ef4444; padding-left: 9px; }
+  table.queue tr.row-waiting td:first-child { border-left: 3px solid #f59e0b; padding-left: 9px; }
 
-  /* Row left border indicators */
-  tr.row-conflict td:first-child {
-    border-left: 3px solid #ef4444;
-    padding-left: 9px;
-  }
-  tr.row-timeout td:first-child {
-    border-left: 3px solid #f59e0b;
-    padding-left: 9px;
-  }
-  tr.row-settled td:first-child {
-    border-left: 3px solid #22c55e;
-    padding-left: 9px;
-  }
+  .match-cell { display: flex; flex-direction: column; gap: 2px; }
+  .match-cell .teams { font-weight: 600; color: #fafafa; font-size: 13px; }
+  .match-cell .match-id { font-family: "SF Mono", Menlo, monospace; font-size: 10px; color: #52525b; }
 
-  /* Match cell */
-  .match-cell {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .match-cell .teams {
-    font-weight: 600;
-    color: #fafafa;
-    font-size: 13px;
-  }
-  .match-cell .match-id {
-    font-family: "SF Mono", Menlo, monospace;
-    font-size: 10px;
-    color: #52525b;
-  }
-
-  /* Status badges */
+  /* ===== Badges ===== */
   .badge {
     display: inline-block;
     padding: 2px 8px;
@@ -314,144 +234,594 @@
     white-space: nowrap;
     border: 1px solid transparent;
   }
+  .badge-pending { background: rgba(14, 165, 233, 0.15); color: #7dd3fc; border-color: rgba(14, 165, 233, 0.3); }
+  .badge-waiting { background: rgba(245, 158, 11, 0.15); color: #fcd34d; border-color: rgba(245, 158, 11, 0.3); }
   .badge-conflict { background: rgba(239, 68, 68, 0.15); color: #fca5a5; border-color: rgba(239, 68, 68, 0.3); }
-  .badge-timeout { background: rgba(245, 158, 11, 0.15); color: #fcd34d; border-color: rgba(245, 158, 11, 0.3); }
-  .badge-settled { background: rgba(34, 197, 94, 0.15); color: #86efac; border-color: rgba(34, 197, 94, 0.3); }
-  .badge-manual { background: rgba(14, 165, 233, 0.15); color: #7dd3fc; border-color: rgba(14, 165, 233, 0.3); }
+  .badge-locked { background: rgba(34, 197, 94, 0.15); color: #86efac; border-color: rgba(34, 197, 94, 0.3); }
+  .badge-manual { background: rgba(168, 85, 247, 0.15); color: #d8b4fe; border-color: rgba(168, 85, 247, 0.3); }
+  .badge-soft { background: #1f1f24; color: #a1a1aa; border-color: #2a2a32; }
 
-  /* Source status */
-  .source-status {
-    display: inline-flex;
+  /* Progress bar in queue */
+  .progress {
+    height: 6px;
+    background: #1f1f24;
+    border-radius: 3px;
+    overflow: hidden;
+    width: 120px;
+  }
+  .progress > .bar { height: 100%; background: #0ea5e9; }
+  .progress > .bar.green { background: #22c55e; }
+  .progress > .bar.red { background: #ef4444; }
+  .progress-label { font-size: 10px; color: #71717a; margin-top: 3px; font-family: "SF Mono", Menlo, monospace; }
+
+  /* ===== Workspace layout ===== */
+  .ws-header {
+    background: #111116;
+    border: 1px solid #1f1f24;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+    display: flex;
     align-items: center;
-    gap: 4px;
-    font-size: 11px;
+    gap: 18px;
+    flex-wrap: wrap;
   }
-  .source-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
+  .ws-header .match-name { font-size: 15px; font-weight: 600; color: #fafafa; }
+  .ws-header .match-meta { font-size: 11px; color: #71717a; }
+  .ws-header .score-final {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fafafa;
+    background: #08080c;
+    padding: 4px 14px;
+    border-radius: 4px;
+    border: 1px solid #2a2a32;
   }
-  .source-dot.received { background: #22c55e; }
-  .source-dot.missing { background: #ef4444; }
-
-  /* Conflict count */
-  .conflict-count {
+  .ws-header .score-half {
     font-family: "SF Mono", Menlo, monospace;
     font-size: 11px;
+    color: #71717a;
+    margin-top: 4px;
+    text-align: center;
+  }
+  .ws-header .role-toggle {
+    margin-left: auto;
+    display: flex;
+    gap: 0;
+    background: #1f1f24;
+    border-radius: 4px;
+    padding: 2px;
+  }
+  .ws-header .role-toggle button {
+    border: none;
+    background: transparent;
+    color: #a1a1aa;
+    padding: 6px 14px;
+    font-size: 11px;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  .ws-header .role-toggle button.active {
+    background: #0ea5e9;
+    color: #fff;
+  }
+  .ws-header .lock-state {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px; color: #86efac;
+    background: rgba(34, 197, 94, 0.08);
+    padding: 4px 10px;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 4px;
+  }
+  .ws-header .lock-state.unlocked { color: #fcd34d; background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.3); }
+
+  /* Section card */
+  .ws-section {
+    background: #111116;
+    border: 1px solid #1f1f24;
+    border-radius: 6px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .ws-section-header {
+    padding: 12px 18px;
+    border-bottom: 1px solid #1f1f24;
+    background: #15151b;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .ws-section-header .layer-tag {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px;
+    background: #0ea5e9;
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: 700;
+  }
+  .ws-section-header .layer-tag.l2 { background: #a855f7; }
+  .ws-section-header h2 { font-size: 14px; color: #fafafa; font-weight: 600; }
+  .ws-section-header .help-text { color: #71717a; font-size: 11px; margin-left: auto; }
+  .ws-section-body { padding: 14px 18px; }
+
+  /* ===== Goal Timeline ===== */
+  .timeline-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .timeline-half {
+    background: #15151b;
+    border: 1px solid #2a2a32;
+    border-radius: 4px;
+    padding: 12px 14px;
+  }
+  .timeline-half h3 {
+    font-size: 12px;
+    color: #fafafa;
+    margin-bottom: 10px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .timeline-half h3 .half-score {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 13px;
+    color: #0ea5e9;
+    background: #0a0a0f;
+    padding: 2px 8px;
+    border-radius: 3px;
+    border: 1px solid #2a2a32;
+  }
+  .goal-row {
+    display: grid;
+    grid-template-columns: 28px 70px 1fr 28px;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .goal-row .goal-num {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 11px;
+    color: #71717a;
+    text-align: right;
+  }
+  .goal-row input.minute {
+    height: 28px;
+    border: 1px solid #2a2a32;
+    background: #0a0a0f;
+    color: #e4e4e7;
+    padding: 0 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-family: "SF Mono", Menlo, monospace;
+    width: 100%;
+  }
+  .goal-row select.scorer {
+    height: 28px;
+    border: 1px solid #2a2a32;
+    background: #0a0a0f;
+    color: #e4e4e7;
+    border-radius: 3px;
+    font-size: 12px;
+    font-family: inherit;
+    padding: 0 8px;
+    width: 100%;
+  }
+  .goal-row select.scorer.home { color: #7dd3fc; }
+  .goal-row select.scorer.away { color: #f87171; }
+  .goal-row .remove-goal {
+    width: 28px; height: 28px;
+    border: 1px solid #2a2a32;
+    background: #18181f;
+    border-radius: 3px;
+    color: #71717a;
+    cursor: pointer;
+    font-size: 11px;
+  }
+  .goal-row .remove-goal:hover { color: #f87171; border-color: rgba(239, 68, 68, 0.3); }
+  .add-goal-btn {
+    width: 100%;
+    margin-top: 4px;
+    height: 28px;
+    border: 1px dashed #2a2a32;
+    background: transparent;
+    color: #71717a;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 11px;
+  }
+  .add-goal-btn:hover { color: #0ea5e9; border-color: #0ea5e9; }
+
+  /* ===== Layer 1 markets grid ===== */
+  .l1-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 1100px) { .l1-grid { grid-template-columns: repeat(2, 1fr); } }
+  .market-card {
+    background: #15151b;
+    border: 1px solid #2a2a32;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .market-card.locked { border-color: rgba(34, 197, 94, 0.4); }
+  .market-card-header {
+    padding: 10px 12px;
+    background: #18181f;
+    border-bottom: 1px solid #2a2a32;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .market-card-header .market-code {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 11px;
+    background: #0a0a0f;
+    color: #fcd34d;
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid #2a2a32;
+  }
+  .market-card-header .market-name {
+    font-size: 12px;
+    color: #fafafa;
     font-weight: 600;
   }
-  .conflict-count.has-conflict { color: #f87171; }
-  .conflict-count.none { color: #71717a; }
-
-  /* Wait time */
-  .wait-time {
-    font-family: "SF Mono", Menlo, monospace;
-    font-size: 11px;
+  .market-card-header .market-status {
+    margin-left: auto;
+    font-size: 10px;
   }
-  .wait-time.urgent { color: #f87171; font-weight: 600; }
-  .wait-time.warning { color: #fcd34d; }
-
-  /* ===== Detail Panel ===== */
-  .detail-row td {
-    padding: 0;
+  .period-tabs {
+    display: flex;
     background: #0d0d12;
+    border-bottom: 1px solid #2a2a32;
   }
-  .detail-panel {
-    padding: 16px 20px;
-    border-top: 2px solid #0ea5e9;
-    border-bottom: 1px solid #1f1f24;
+  .period-tab {
+    flex: 1;
+    padding: 6px 8px;
+    border: none;
+    background: transparent;
+    color: #71717a;
+    font-size: 10px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    border-right: 1px solid #2a2a32;
   }
-  .detail-panel h3 {
-    font-size: 13px;
-    color: #fafafa;
-    margin-bottom: 14px;
+  .period-tab:last-child { border-right: 0; }
+  .period-tab.active { color: #0ea5e9; border-bottom-color: #0ea5e9; background: #15151b; }
+  .period-tab .has-bets { color: #fcd34d; font-size: 9px; margin-left: 3px; }
+  .market-card-body { padding: 12px; }
+  .selection-row {
+    display: flex;
+    align-items: center;
+    padding: 6px 0;
+    gap: 10px;
+    font-size: 12px;
+    border-bottom: 1px dashed #1f1f24;
+  }
+  .selection-row:last-child { border-bottom: none; }
+  .selection-row .sel-name { flex: 1; color: #d4d4d8; }
+  .selection-row .sel-bets {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px;
+    color: #71717a;
+  }
+  .selection-row .sel-result {
+    width: 56px;
+    text-align: center;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    border: 1px solid transparent;
+  }
+  .sel-result.win { background: rgba(34, 197, 94, 0.15); color: #86efac; border-color: rgba(34, 197, 94, 0.3); }
+  .sel-result.lose { background: rgba(239, 68, 68, 0.10); color: #f87171; border-color: rgba(239, 68, 68, 0.2); }
+  .sel-result.void { background: rgba(168, 85, 247, 0.15); color: #d8b4fe; border-color: rgba(168, 85, 247, 0.3); }
+  .sel-result.derived { background: #1f1f24; color: #a1a1aa; border-color: #2a2a32; font-style: italic; }
+
+  .market-card-footer {
+    padding: 8px 12px;
+    background: #0d0d12;
+    border-top: 1px solid #2a2a32;
+    font-size: 10px;
+    color: #71717a;
     display: flex;
     align-items: center;
     gap: 8px;
   }
 
-  /* Market comparison table */
-  .market-table {
-    width: 100%;
-    border-collapse: collapse;
+  /* ===== Layer 2 ad-hoc cards ===== */
+  .l2-stack { display: flex; flex-direction: column; gap: 12px; }
+  .adhoc-card {
+    background: #15151b;
+    border: 1px solid #2a2a32;
+    border-radius: 4px;
+    border-left: 3px solid #ef4444;
+  }
+  .adhoc-card.touched { border-left-color: #f59e0b; }
+  .adhoc-card.completed { border-left-color: #22c55e; }
+  .adhoc-card-header {
+    padding: 10px 14px;
+    background: #18181f;
+    border-bottom: 1px solid #2a2a32;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .adhoc-card-header .market-code {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px;
+    background: #0a0a0f;
+    color: #d8b4fe;
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid #2a2a32;
+  }
+  .adhoc-card-header .market-name {
+    font-size: 13px;
+    color: #fafafa;
+    font-weight: 600;
+  }
+  .adhoc-card-header .opener-info {
+    margin-left: auto;
+    font-size: 10px;
+    color: #71717a;
+  }
+  .adhoc-card-body { padding: 6px 0; }
+  .adhoc-row {
+    display: grid;
+    grid-template-columns: 1fr 110px 250px;
+    align-items: center;
+    padding: 8px 14px;
+    gap: 12px;
+    border-bottom: 1px dashed #1f1f24;
+  }
+  .adhoc-row:last-child { border-bottom: none; }
+  .adhoc-row .selection-label { font-size: 12px; color: #d4d4d8; }
+  .adhoc-row .bets-info {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 11px;
+    color: #71717a;
+  }
+  .adhoc-row .bets-info .stake { color: #fcd34d; }
+  .three-state {
+    display: flex;
+    gap: 4px;
+    background: #0d0d12;
+    border-radius: 4px;
+    padding: 2px;
+    border: 1px solid #2a2a32;
+  }
+  .three-state button {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: #71717a;
+    padding: 4px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+  .three-state button:hover { color: #d4d4d8; }
+  .three-state button.active.win { background: rgba(34, 197, 94, 0.25); color: #86efac; }
+  .three-state button.active.void { background: rgba(168, 85, 247, 0.25); color: #d8b4fe; }
+  .three-state button.active.lose { background: rgba(239, 68, 68, 0.20); color: #f87171; }
+  .three-state .label-default {
+    font-size: 9px;
+    color: #52525b;
+    margin-left: 2px;
+    text-transform: uppercase;
+  }
+
+  .adhoc-card-footer {
+    padding: 10px 14px;
+    background: #0d0d12;
+    border-top: 1px solid #2a2a32;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+  }
+  .adhoc-card-footer .summary {
+    color: #71717a;
+    flex: 1;
+  }
+  .adhoc-card-footer .summary strong { color: #fafafa; }
+
+  /* Ad-hoc add new market */
+  .add-adhoc {
+    border: 1px dashed #2a2a32;
+    background: transparent;
+    border-radius: 4px;
+    padding: 12px 14px;
+    color: #71717a;
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+  }
+  .add-adhoc:hover { color: #d8b4fe; border-color: #a855f7; }
+
+  /* ===== Workspace bottom action bar ===== */
+  .ws-action-bar {
+    position: sticky;
+    bottom: 0;
+    background: #111116;
+    border: 1px solid #1f1f24;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.4);
+  }
+  .ws-action-bar .progress-info {
+    display: flex; flex-direction: column; gap: 2px; font-size: 11px; color: #a1a1aa;
+  }
+  .ws-action-bar .partner-status {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px;
+    background: #15151b;
+    padding: 6px 10px;
+    border-radius: 4px;
+    border: 1px solid #2a2a32;
+    color: #d4d4d8;
+  }
+  .ws-action-bar .partner-status .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .ws-action-bar .partner-status .dot.done { background: #22c55e; }
+  .ws-action-bar .partner-status .dot.wait { background: #f59e0b; animation: pulse-dot 1.5s ease-in-out infinite; }
+  .ws-action-bar .partner-status .dot.miss { background: #71717a; }
+  @keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .ws-action-bar .confirm-check {
+    display: flex; align-items: center; gap: 6px;
+    color: #d4d4d8;
+    font-size: 11px;
+  }
+  .ws-action-bar .submit-btn { margin-left: auto; }
+
+  /* ===== Cross-check view ===== */
+  .cc-header {
+    background: #111116;
+    border: 1px solid #1f1f24;
+    border-radius: 6px;
+    padding: 14px 18px;
     margin-bottom: 14px;
   }
-  .market-table thead {
-    background: #15151b;
+  .cc-header .source-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
   }
-  .market-table th {
-    padding: 8px 12px;
-    font-size: 10px;
+  .source-pill {
+    background: #15151b;
+    border: 1px solid #2a2a32;
+    border-radius: 4px;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+  }
+  .source-pill .src-name { color: #fafafa; font-weight: 600; }
+  .source-pill .src-meta { color: #71717a; font-size: 10px; }
+  .source-pill.primary { border-color: #0ea5e9; background: rgba(14, 165, 233, 0.08); }
+  .source-pill.fallback { border-color: #a855f7; background: rgba(168, 85, 247, 0.08); }
+  .source-pill.dead { border-color: #ef4444; background: rgba(239, 68, 68, 0.08); }
+  .source-pill.dead .src-name { color: #f87171; }
+  .vs-divider { color: #52525b; font-size: 12px; font-weight: 700; padding: 0 4px; }
+
+  /* Cross-check table */
+  .cc-table {
+    background: #111116;
+    border: 1px solid #1f1f24;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  table.compare { width: 100%; border-collapse: collapse; }
+  table.compare thead { background: #15151b; }
+  table.compare th {
+    padding: 10px 12px;
+    font-size: 11px;
     font-weight: 600;
     color: #71717a;
     text-transform: uppercase;
     text-align: left;
     border-bottom: 1px solid #2a2a32;
+    letter-spacing: 0.03em;
   }
-  .market-table td {
-    padding: 8px 12px;
+  table.compare td {
+    padding: 10px 12px;
     font-size: 12px;
     border-bottom: 1px solid #1f1f24;
     color: #d4d4d8;
   }
-  .market-table tr.mismatch td {
-    background: rgba(239, 68, 68, 0.06);
+  table.compare tr.match-row td { color: #71717a; }
+  table.compare tr.mismatch-row td {
+    background: rgba(239, 68, 68, 0.05);
   }
-  .market-table tr.match td {
-    color: #71717a;
+  table.compare tr.mismatch-row td:first-child {
+    border-left: 3px solid #ef4444;
+    padding-left: 9px;
   }
-  .market-table .result-val {
+  table.compare .market-label { font-weight: 600; color: #fafafa; }
+  table.compare .market-period {
     font-family: "SF Mono", Menlo, monospace;
-    font-weight: 500;
-  }
-  .market-table .result-val.diff {
-    color: #f87171;
-    font-weight: 600;
-  }
-  .market-table .status-icon { font-size: 14px; }
-  .market-table .status-icon.ok { color: #22c55e; }
-  .market-table .status-icon.warn { color: #f87171; }
-  .market-table .status-icon.na { color: #52525b; }
-
-  /* Detail sections */
-  .detail-section {
-    background: #15151b;
-    border: 1px solid #2a2a32;
-    border-radius: 4px;
-    padding: 12px 14px;
-    margin-bottom: 12px;
-  }
-  .detail-section h4 {
-    font-size: 11px;
-    text-transform: uppercase;
+    font-size: 10px;
     color: #71717a;
-    margin-bottom: 8px;
-    letter-spacing: 0.03em;
+    margin-left: 6px;
+  }
+  table.compare .result-val { font-family: "SF Mono", Menlo, monospace; }
+  table.compare .result-val.diff { color: #f87171; font-weight: 600; }
+  table.compare .icon-ok { color: #22c55e; font-weight: 700; }
+  table.compare .icon-diff { color: #f87171; font-weight: 700; }
+  table.compare tr.section-divider td {
+    background: #15151b;
+    color: #71717a;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 6px 12px;
+    border-bottom: 1px solid #2a2a32;
   }
 
-  /* Confirm bar */
-  .confirm-bar {
+  /* Cross-check verdict bar */
+  .cc-verdict {
+    background: #111116;
+    border: 1px solid #1f1f24;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-top: 14px;
     display: flex;
-    gap: 10px;
     align-items: center;
-    padding: 12px 14px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .cc-verdict.ok { border-color: rgba(34, 197, 94, 0.5); background: rgba(34, 197, 94, 0.05); }
+  .cc-verdict.fail { border-color: rgba(239, 68, 68, 0.5); background: rgba(239, 68, 68, 0.05); }
+  .cc-verdict .verdict-icon { font-size: 22px; }
+  .cc-verdict .verdict-body { flex: 1; }
+  .cc-verdict .verdict-title { font-size: 14px; color: #fafafa; font-weight: 600; margin-bottom: 4px; }
+  .cc-verdict .verdict-text { font-size: 12px; color: #a1a1aa; }
+  .cc-verdict .verdict-actions { display: flex; gap: 8px; }
+  .lock-input {
+    display: flex;
+    gap: 8px;
+    align-items: center;
     background: #15151b;
     border: 1px solid #2a2a32;
     border-radius: 4px;
-    margin-bottom: 12px;
+    padding: 6px 8px;
   }
-  .confirm-bar input {
-    flex: 1;
-    height: 32px;
+  .lock-input input {
+    height: 26px;
+    width: 130px;
     border: 1px solid #2a2a32;
     background: #0a0a0f;
     color: #e4e4e7;
-    border-radius: 4px;
-    padding: 0 10px;
-    font-size: 12px;
+    border-radius: 3px;
+    padding: 0 8px;
+    font-size: 11px;
+    font-family: inherit;
   }
-  .confirm-bar input::placeholder { color: #52525b; }
+  .lock-input label { font-size: 10px; color: #71717a; }
 
   /* Audit log */
+  .audit-section {
+    background: #111116;
+    border: 1px solid #1f1f24;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-top: 14px;
+  }
+  .audit-section h3 {
+    font-size: 11px;
+    color: #71717a;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+  }
   .audit-item {
     display: flex;
     gap: 12px;
@@ -462,83 +832,10 @@
   .audit-item .ts {
     color: #52525b;
     font-family: "SF Mono", Menlo, monospace;
-    width: 130px;
+    width: 140px;
     flex-shrink: 0;
   }
   .audit-item .who { color: #fafafa; font-weight: 500; }
-
-  /* ===== Toast notification ===== */
-  .toast {
-    position: fixed;
-    top: 16px;
-    right: 16px;
-    width: 380px;
-    background: #1a1a22;
-    border: 1px solid #2a2a32;
-    border-left: 4px solid #ef4444;
-    border-radius: 6px;
-    padding: 12px 16px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-    z-index: 1000;
-    animation: slideIn 0.3s ease-out;
-    cursor: pointer;
-  }
-  .toast.timeout {
-    border-left-color: #f59e0b;
-  }
-  .toast .toast-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 6px;
-  }
-  .toast .toast-title {
-    font-size: 12px;
-    font-weight: 600;
-    color: #fafafa;
-  }
-  .toast .toast-close {
-    color: #52525b;
-    cursor: pointer;
-    font-size: 16px;
-    line-height: 1;
-  }
-  .toast .toast-close:hover { color: #a1a1aa; }
-  .toast .toast-body {
-    font-size: 12px;
-    color: #a1a1aa;
-    line-height: 1.5;
-  }
-  .toast .toast-body strong { color: #fafafa; }
-  .toast .toast-hint {
-    font-size: 10px;
-    color: #52525b;
-    margin-top: 6px;
-  }
-  .toast .toast-timer {
-    height: 2px;
-    background: #2a2a32;
-    border-radius: 1px;
-    margin-top: 8px;
-    overflow: hidden;
-  }
-  .toast .toast-timer-bar {
-    height: 100%;
-    background: #ef4444;
-    border-radius: 1px;
-    animation: timerShrink 10s linear forwards;
-  }
-  .toast.timeout .toast-timer-bar {
-    background: #f59e0b;
-  }
-  @keyframes slideIn {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-  }
-  @keyframes timerShrink {
-    from { width: 100%; }
-    to { width: 0%; }
-  }
 
   /* Pagination */
   .pagination {
@@ -563,16 +860,23 @@
   .page-btn:hover { background: #22222b; }
   .page-btn.active { background: #0ea5e9; color: #fff; border-color: #0ea5e9; }
 
-  /* Expandable row */
-  .expandable { cursor: pointer; }
-  .expand-icon {
-    display: inline-block;
-    transition: transform 0.2s;
-    font-size: 10px;
-    color: #52525b;
-    margin-right: 4px;
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* Help text */
+  .info-strip {
+    background: rgba(14, 165, 233, 0.08);
+    border: 1px solid rgba(14, 165, 233, 0.2);
+    color: #7dd3fc;
+    padding: 8px 14px;
+    border-radius: 4px;
+    font-size: 11px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
-  .expand-icon.open { transform: rotate(90deg); }
+  .info-strip .info-icon { font-size: 14px; }
 </style>
 </head>
 <body>
@@ -588,7 +892,8 @@
     <div class="nav-item">Markets</div>
     <div class="nav-item">Orders</div>
     <div class="nav-section">Settlement</div>
-    <div class="nav-item active">Settlement Review</div>
+    <div class="nav-item active">Settlement Workbench</div>
+    <div class="nav-item">Settlement History</div>
     <div class="nav-section">Data Quality</div>
     <div class="nav-item">Match ID Reconciliation</div>
     <div class="nav-item">Market Mapping</div>
@@ -599,523 +904,988 @@
 
   <!-- Main -->
   <main class="main">
+
     <div class="topbar">
-      <div class="breadcrumb">Settlement / Settlement Review</div>
+      <div class="breadcrumb">Settlement / Workbench / <span style="color:#fafafa">Lakers vs Celtics</span></div>
       <div class="right-section">
-        <div class="bell" id="bell-icon">
-          &#128276;
-          <span class="badge-count">3</span>
-        </div>
-        <div class="user">Hugo (Supervisor)</div>
+        <span class="role-pill" id="role-pill">Role: Trader</span>
+        <div class="user">Hugo</div>
       </div>
+    </div>
+
+    <!-- View tabs (3 stages) -->
+    <div class="view-tabs">
+      <button class="view-tab active" data-view="queue">
+        <span class="step-num">1</span>結算佇列 / Queue
+      </button>
+      <button class="view-tab" data-view="workspace">
+        <span class="step-num">2</span>填單作業 / Workspace
+      </button>
+      <button class="view-tab" data-view="crosscheck">
+        <span class="step-num">3</span>核對與鎖定 / Cross-check &amp; Lock
+      </button>
     </div>
 
     <div class="content">
 
       <div class="wf-banner">
-        WIREFRAME — 注單結算審核頁面 / Settlement Review Console
+        WIREFRAME — Settlement Workbench (兩層 Settlement / Goal Timeline + Ad-hoc 手動兜底)
       </div>
 
-      <!-- ===== Dashboard Alert Card (示意，實際在 Dashboard 頁) ===== -->
-      <div class="alert-card" id="dashboard-alert">
-        <div class="alert-icon">&#9888;&#65039;</div>
-        <div class="alert-body">
-          <div class="alert-title">待處理注單結算</div>
-          <div class="alert-stats">
-            <div>
-              <span class="stat-val red">2</span>
-              結算衝突
-            </div>
-            <div>
-              <span class="stat-val yellow">1</span>
-              超時等待
-            </div>
-          </div>
-          <div class="alert-latest">最近事件：Lakers vs Celtics — 2 分鐘前</div>
-        </div>
-        <div class="alert-action">
-          <button class="btn btn-primary">前往 Settlement Review →</button>
-        </div>
-      </div>
+      <!-- ============================================================== -->
+      <!-- VIEW 1: QUEUE                                                   -->
+      <!-- ============================================================== -->
+      <section class="view view-queue active" id="view-queue">
 
-      <div class="page-header">
-        <h1>Settlement Review</h1>
-        <div class="subtitle">注單結算審核 — Double Confirmation（Sportradar × L-sport），Supervisor 人工介入處理衝突與超時</div>
-      </div>
-
-      <!-- Filter bar -->
-      <div class="filter-card">
-        <div class="filter-row">
-          <div class="filter">
-            <label>狀態</label>
-            <select>
-              <option>待確認（預設）</option>
-              <option>全部</option>
-              <option>待確認（超時）</option>
-              <option>已結算</option>
-              <option>已結算（人工確認）</option>
-            </select>
-          </div>
-          <div class="filter">
-            <label>聯賽</label>
-            <select><option>全部</option><option>NBA</option><option>EPL</option><option>La Liga</option></select>
-          </div>
-          <div class="filter">
-            <label>時間範圍</label>
-            <select><option>今天</option><option>昨天</option><option>本週</option><option>自訂</option></select>
-          </div>
-          <div class="filter">
-            <label>搜尋</label>
-            <input type="text" class="search" placeholder="隊名 / 賽事 ID">
-          </div>
-          <div class="filter-actions">
-            <button class="btn">重置</button>
-            <button class="btn btn-primary">套用</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Table -->
-      <div class="table-card">
-
-        <div class="table-toolbar">
-          <div class="left">
-            <span>待處理：<strong style="color:#f87171">2 場衝突</strong> · <strong style="color:#fcd34d">1 場超時</strong></span>
-            <span style="color:#52525b">|</span>
-            <span>SLA：30 秒（從第一個 Source 到達起算）</span>
-          </div>
+        <div class="page-header">
           <div>
+            <h1>Settlement Queue</h1>
+            <div class="subtitle">所有等待 / 進行中 / 已完成的賽事結算</div>
+          </div>
+          <div style="display:flex;gap:8px;">
             <button class="btn">匯出 CSV</button>
+            <button class="btn btn-primary" onclick="switchView('workspace')">進入 Workspace →</button>
           </div>
         </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th>賽事</th>
-              <th>聯賽</th>
-              <th>開賽時間</th>
-              <th>衝突 Market</th>
-              <th>Sportradar</th>
-              <th>L-sport</th>
-              <th>狀態</th>
-              <th>等待時間</th>
-              <th style="text-align:right">操作</th>
-            </tr>
-          </thead>
-          <tbody>
-
-            <!-- ===== Row 1: 衝突 (Lakers vs Celtics) — EXPANDED ===== -->
-            <tr class="row-conflict expandable" id="row-lakers">
-              <td>
-                <div class="match-cell">
-                  <span class="teams"><span class="expand-icon open">&#9654;</span> Lakers vs Celtics</span>
-                  <span class="match-id">MATCH_2026_NBA_00821</span>
-                </div>
-              </td>
-              <td>NBA</td>
-              <td>2026-04-30 10:30</td>
-              <td><span class="conflict-count has-conflict">2 / 6</span></td>
-              <td><span class="source-status"><span class="source-dot received"></span> 已收到</span></td>
-              <td><span class="source-status"><span class="source-dot received"></span> 已收到</span></td>
-              <td><span class="badge badge-conflict">待確認</span></td>
-              <td><span class="wait-time urgent">2m 15s</span></td>
-              <td style="text-align:right"><button class="btn btn-sm">收合</button></td>
-            </tr>
-
-            <!-- DETAIL PANEL: Lakers vs Celtics -->
-            <tr class="detail-row" id="detail-lakers">
-              <td colspan="9">
-                <div class="detail-panel">
-                  <h3>
-                    <span class="badge badge-conflict">衝突</span>
-                    MATCH_2026_NBA_00821 — Lakers vs Celtics
-                    <span style="margin-left:auto;font-size:11px;color:#71717a;font-weight:400;">
-                      Sportradar 10:30:12 到達 · L-sport 10:30:18 到達 · 2 個 market 不一致
-                    </span>
-                  </h3>
-
-                  <!-- Market comparison table -->
-                  <table class="market-table">
-                    <thead>
-                      <tr>
-                        <th>Market</th>
-                        <th>Sportradar 結果</th>
-                        <th>L-sport 結果</th>
-                        <th>狀態</th>
-                        <th style="text-align:right">操作</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr class="match">
-                        <td>1X2</td>
-                        <td><span class="result-val">Home Win (1)</span></td>
-                        <td><span class="result-val">Home Win (1)</span></td>
-                        <td><span class="status-icon ok">&#10003;</span> 一致</td>
-                        <td style="text-align:right">—</td>
-                      </tr>
-                      <tr class="mismatch">
-                        <td style="font-weight:600;color:#fafafa;">AH -5.5</td>
-                        <td><span class="result-val diff">Home Cover (108-102)</span></td>
-                        <td><span class="result-val diff">Push (108-103)</span></td>
-                        <td><span class="status-icon warn">&#9888;</span> 不一致</td>
-                        <td style="text-align:right">
-                          <div class="btn-group">
-                            <button class="btn btn-sm btn-select" data-source="sportradar" data-market="AH">採用 Sportradar</button>
-                            <button class="btn btn-sm btn-select" data-source="lsport" data-market="AH">採用 L-sport</button>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr class="match">
-                        <td>OU 210.5</td>
-                        <td><span class="result-val">Over (211)</span></td>
-                        <td><span class="result-val">Over (211)</span></td>
-                        <td><span class="status-icon ok">&#10003;</span> 一致</td>
-                        <td style="text-align:right">—</td>
-                      </tr>
-                      <tr class="match">
-                        <td>OE</td>
-                        <td><span class="result-val">Odd (211)</span></td>
-                        <td><span class="result-val">Odd (211)</span></td>
-                        <td><span class="status-icon ok">&#10003;</span> 一致</td>
-                        <td style="text-align:right">—</td>
-                      </tr>
-                      <tr class="mismatch">
-                        <td style="font-weight:600;color:#fafafa;">CS</td>
-                        <td><span class="result-val diff">108-102</span></td>
-                        <td><span class="result-val diff">108-103</span></td>
-                        <td><span class="status-icon warn">&#9888;</span> 不一致</td>
-                        <td style="text-align:right">
-                          <div class="btn-group">
-                            <button class="btn btn-sm btn-select" data-source="sportradar" data-market="CS">採用 Sportradar</button>
-                            <button class="btn btn-sm btn-select" data-source="lsport" data-market="CS">採用 L-sport</button>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr class="match">
-                        <td>NG</td>
-                        <td><span class="result-val">No (both scored)</span></td>
-                        <td><span class="result-val">No (both scored)</span></td>
-                        <td><span class="status-icon ok">&#10003;</span> 一致</td>
-                        <td style="text-align:right">—</td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <!-- Confirm bar -->
-                  <div class="confirm-bar">
-                    <span style="white-space:nowrap;color:#71717a;font-size:12px;">已選擇 <strong style="color:#fafafa" id="selected-count">0</strong> / 2 個衝突 market</span>
-                    <input type="text" placeholder="備註（選填）— 例如：以 Sportradar 為準，L-sport 比分疑似延遲錯誤">
-                    <button class="btn btn-primary" id="btn-confirm-settle" disabled>確認結算</button>
-                  </div>
-
-                  <!-- Audit log -->
-                  <div class="detail-section">
-                    <h4>操作紀錄</h4>
-                    <div class="audit-item">
-                      <span class="ts">2026-04-30 10:30:12</span>
-                      <span><span class="who">System</span> — 收到 Sportradar 結算數據（6 markets），開始 30 秒倒數</span>
-                    </div>
-                    <div class="audit-item">
-                      <span class="ts">2026-04-30 10:30:18</span>
-                      <span><span class="who">System</span> — 收到 L-sport 結算數據（6 markets）</span>
-                    </div>
-                    <div class="audit-item">
-                      <span class="ts">2026-04-30 10:30:18</span>
-                      <span><span class="who">System</span> — 比對完成：4 market 一致、2 market 衝突（AH -5.5、CS）。整場 hold，通知 Supervisor</span>
-                    </div>
-                  </div>
-
-                </div>
-              </td>
-            </tr>
-
-            <!-- ===== Row 2: 衝突 (Man City vs Arsenal) — collapsed ===== -->
-            <tr class="row-conflict expandable zebra" id="row-mancity">
-              <td>
-                <div class="match-cell">
-                  <span class="teams"><span class="expand-icon">&#9654;</span> Man City vs Arsenal</span>
-                  <span class="match-id">MATCH_2026_EPL_00318</span>
-                </div>
-              </td>
-              <td>EPL</td>
-              <td>2026-04-30 03:00</td>
-              <td><span class="conflict-count has-conflict">1 / 4</span></td>
-              <td><span class="source-status"><span class="source-dot received"></span> 已收到</span></td>
-              <td><span class="source-status"><span class="source-dot received"></span> 已收到</span></td>
-              <td><span class="badge badge-conflict">待確認</span></td>
-              <td><span class="wait-time urgent">7h 32m</span></td>
-              <td style="text-align:right"><button class="btn btn-sm">展開</button></td>
-            </tr>
-
-            <!-- ===== Row 3: 超時 (Warriors vs Heat) — collapsed ===== -->
-            <tr class="row-timeout expandable" id="row-warriors">
-              <td>
-                <div class="match-cell">
-                  <span class="teams"><span class="expand-icon">&#9654;</span> Warriors vs Heat</span>
-                  <span class="match-id">MATCH_2026_NBA_00822</span>
-                </div>
-              </td>
-              <td>NBA</td>
-              <td>2026-04-30 11:00</td>
-              <td><span class="conflict-count none">— / 5</span></td>
-              <td><span class="source-status"><span class="source-dot received"></span> 已收到</span></td>
-              <td><span class="source-status"><span class="source-dot missing"></span> 未收到</span></td>
-              <td><span class="badge badge-timeout">待確認（超時）</span></td>
-              <td><span class="wait-time warning">45s</span></td>
-              <td style="text-align:right"><button class="btn btn-sm">展開</button></td>
-            </tr>
-
-            <!-- Detail panel for Warriors (超時) — hidden by default, togglable -->
-            <tr class="detail-row" id="detail-warriors" style="display:none">
-              <td colspan="9">
-                <div class="detail-panel">
-                  <h3>
-                    <span class="badge badge-timeout">超時</span>
-                    MATCH_2026_NBA_00822 — Warriors vs Heat
-                    <span style="margin-left:auto;font-size:11px;color:#71717a;font-weight:400;">
-                      Sportradar 11:00:08 到達 · L-sport 未送達（已超過 30 秒 SLA）
-                    </span>
-                  </h3>
-
-                  <table class="market-table">
-                    <thead>
-                      <tr>
-                        <th>Market</th>
-                        <th>Sportradar 結果</th>
-                        <th>L-sport 結果</th>
-                        <th>狀態</th>
-                        <th style="text-align:right">操作</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>1X2</td>
-                        <td><span class="result-val">Away Win (2)</span></td>
-                        <td><span class="result-val" style="color:#52525b;">— 未收到</span></td>
-                        <td><span class="status-icon na">—</span> 缺失</td>
-                        <td style="text-align:right"><button class="btn btn-sm btn-success">採用 Sportradar</button></td>
-                      </tr>
-                      <tr>
-                        <td>AH +3.5</td>
-                        <td><span class="result-val">Away Cover (98-105)</span></td>
-                        <td><span class="result-val" style="color:#52525b;">— 未收到</span></td>
-                        <td><span class="status-icon na">—</span> 缺失</td>
-                        <td style="text-align:right"><button class="btn btn-sm btn-success">採用 Sportradar</button></td>
-                      </tr>
-                      <tr>
-                        <td>OU 205.5</td>
-                        <td><span class="result-val">Under (203)</span></td>
-                        <td><span class="result-val" style="color:#52525b;">— 未收到</span></td>
-                        <td><span class="status-icon na">—</span> 缺失</td>
-                        <td style="text-align:right"><button class="btn btn-sm btn-success">採用 Sportradar</button></td>
-                      </tr>
-                      <tr>
-                        <td>OE</td>
-                        <td><span class="result-val">Odd (203)</span></td>
-                        <td><span class="result-val" style="color:#52525b;">— 未收到</span></td>
-                        <td><span class="status-icon na">—</span> 缺失</td>
-                        <td style="text-align:right"><button class="btn btn-sm btn-success">採用 Sportradar</button></td>
-                      </tr>
-                      <tr>
-                        <td>CS</td>
-                        <td><span class="result-val">98-105</span></td>
-                        <td><span class="result-val" style="color:#52525b;">— 未收到</span></td>
-                        <td><span class="status-icon na">—</span> 缺失</td>
-                        <td style="text-align:right"><button class="btn btn-sm btn-success">採用 Sportradar</button></td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <div class="confirm-bar">
-                    <span style="white-space:nowrap;color:#fcd34d;font-size:12px;">&#9888; 僅有 Sportradar 數據，L-sport 超時未送達</span>
-                    <input type="text" placeholder="備註（選填）">
-                    <button class="btn btn-primary">全部採用 Sportradar 結算</button>
-                    <button class="btn">繼續等待</button>
-                  </div>
-
-                  <div class="detail-section">
-                    <h4>操作紀錄</h4>
-                    <div class="audit-item">
-                      <span class="ts">2026-04-30 11:00:08</span>
-                      <span><span class="who">System</span> — 收到 Sportradar 結算數據（5 markets），開始 30 秒倒數</span>
-                    </div>
-                    <div class="audit-item">
-                      <span class="ts">2026-04-30 11:00:38</span>
-                      <span><span class="who">System</span> — 30 秒 SLA 到期，L-sport 未送達。整場 hold，通知 Supervisor</span>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <!-- ===== Row 4: 已結算（人工確認）— 歷史紀錄 ===== -->
-            <tr class="row-settled expandable zebra" id="row-barca">
-              <td>
-                <div class="match-cell">
-                  <span class="teams"><span class="expand-icon">&#9654;</span> Barcelona vs Real Madrid</span>
-                  <span class="match-id">MATCH_2026_LAL_00055</span>
-                </div>
-              </td>
-              <td>La Liga</td>
-              <td>2026-04-29 03:00</td>
-              <td><span class="conflict-count none">0 / 5</span></td>
-              <td><span class="source-status"><span class="source-dot received"></span> 已收到</span></td>
-              <td><span class="source-status"><span class="source-dot received"></span> 已收到</span></td>
-              <td><span class="badge badge-manual">已結算（人工）</span></td>
-              <td><span class="wait-time" style="color:#71717a;">—</span></td>
-              <td style="text-align:right"><button class="btn btn-sm">展開</button></td>
-            </tr>
-
-          </tbody>
-        </table>
-
-        <div class="pagination">
-          <span>顯示 1–4 / 共 4 筆</span>
-          <div class="page-btns">
-            <button class="page-btn active">1</button>
+        <!-- Filter bar -->
+        <div class="filter-card">
+          <div class="filter-row">
+            <div class="filter">
+              <label>狀態</label>
+              <select>
+                <option>全部 (進行中)</option>
+                <option>等待 Vendor</option>
+                <option>Cross-check 待處理</option>
+                <option>Cross-check 失敗 (人工)</option>
+                <option>已 Lock</option>
+              </select>
+            </div>
+            <div class="filter">
+              <label>聯賽</label>
+              <select><option>全部</option><option>NBA</option><option>EPL</option><option>La Liga</option><option>FIFA WC</option></select>
+            </div>
+            <div class="filter">
+              <label>時間範圍</label>
+              <select><option>今天</option><option>昨天</option><option>本週</option><option>自訂</option></select>
+            </div>
+            <div class="filter">
+              <label>搜尋</label>
+              <input type="text" class="search" placeholder="隊名 / 賽事 ID">
+            </div>
+            <div class="filter-actions">
+              <button class="btn">重置</button>
+              <button class="btn btn-primary">套用</button>
+            </div>
           </div>
         </div>
 
-      </div>
+        <!-- Queue Table -->
+        <div class="table-card">
+          <div class="table-toolbar">
+            <span>共 <strong>5</strong> 場 · 待處理 <strong style="color:#fcd34d">3</strong> 場 · Cross-check 失敗 <strong style="color:#f87171">1</strong> 場 · 已 Lock <strong style="color:#86efac">1</strong> 場</span>
+            <span style="color:#52525b">Auto-refresh 每 15 秒</span>
+          </div>
+
+          <table class="queue">
+            <thead>
+              <tr>
+                <th>賽事</th>
+                <th>聯賽</th>
+                <th>結束時間</th>
+                <th>Vendor 來源</th>
+                <th>Layer 1 / Layer 2</th>
+                <th>狀態</th>
+                <th>進度</th>
+                <th style="text-align:right">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <!-- Row 1: Cross-check 失敗 → 整場人工 (這是 user 的主要 demo case) -->
+              <tr class="row-conflict">
+                <td>
+                  <div class="match-cell">
+                    <span class="teams">Lakers vs Celtics</span>
+                    <span class="match-id">MATCH_2026_NBA_00821</span>
+                  </div>
+                </td>
+                <td>NBA</td>
+                <td>2026-05-09 12:48</td>
+                <td>
+                  <span class="badge badge-soft">Sportradar</span>
+                  <span class="badge badge-soft">L-sport</span>
+                </td>
+                <td>6 標準 / 2 Ad-hoc</td>
+                <td><span class="badge badge-conflict">Cross-check 失敗 · 整場人工</span></td>
+                <td>
+                  <div class="progress"><div class="bar red" style="width:35%"></div></div>
+                  <div class="progress-label">Trader 已填 · Supervisor 進行中</div>
+                </td>
+                <td style="text-align:right">
+                  <button class="btn btn-sm btn-primary" onclick="switchView('workspace')">進入 Workspace</button>
+                </td>
+              </tr>
+
+              <!-- Row 2: Cross-check 待處理 (vendor 兩家都到了，演算結果待比對) -->
+              <tr class="row-pending">
+                <td>
+                  <div class="match-cell">
+                    <span class="teams">Man City vs Arsenal</span>
+                    <span class="match-id">MATCH_2026_EPL_00318</span>
+                  </div>
+                </td>
+                <td>EPL</td>
+                <td>2026-05-09 22:00</td>
+                <td>
+                  <span class="badge badge-soft">Sportradar</span>
+                  <span class="badge badge-soft">L-sport</span>
+                </td>
+                <td>6 標準 / 0 Ad-hoc</td>
+                <td><span class="badge badge-pending">Cross-check 待處理</span></td>
+                <td>
+                  <div class="progress"><div class="bar" style="width:80%"></div></div>
+                  <div class="progress-label">兩家 vendor 已到，演算 vs vendor 比對中</div>
+                </td>
+                <td style="text-align:right">
+                  <button class="btn btn-sm" onclick="switchView('crosscheck')">查看 Cross-check</button>
+                </td>
+              </tr>
+
+              <!-- Row 3: 等待 vendor (其中一家還沒到) -->
+              <tr class="row-waiting">
+                <td>
+                  <div class="match-cell">
+                    <span class="teams">Warriors vs Heat</span>
+                    <span class="match-id">MATCH_2026_NBA_00822</span>
+                  </div>
+                </td>
+                <td>NBA</td>
+                <td>2026-05-10 13:15</td>
+                <td>
+                  <span class="badge badge-locked">Sportradar</span>
+                  <span class="badge badge-waiting">L-sport (45s)</span>
+                </td>
+                <td>6 標準 / 0 Ad-hoc</td>
+                <td><span class="badge badge-waiting">等待 Vendor</span></td>
+                <td>
+                  <div class="progress"><div class="bar" style="width:50%; background:#f59e0b"></div></div>
+                  <div class="progress-label">Sportradar 已到 · 等 L-sport (SLA 30s 已超)</div>
+                </td>
+                <td style="text-align:right">
+                  <button class="btn btn-sm btn-warning">改走人工</button>
+                </td>
+              </tr>
+
+              <!-- Row 4: 整場人工 (兩家 vendor 都死了) -->
+              <tr class="row-conflict">
+                <td>
+                  <div class="match-cell">
+                    <span class="teams">FIFA WC: 巴西 vs 阿根廷</span>
+                    <span class="match-id">MATCH_2026_FIFA_00012</span>
+                  </div>
+                </td>
+                <td>FIFA WC</td>
+                <td>2026-05-10 06:30</td>
+                <td>
+                  <span class="badge badge-conflict">Sportradar 死</span>
+                  <span class="badge badge-conflict">L-sport 死</span>
+                </td>
+                <td>6 標準 / 4 Ad-hoc</td>
+                <td><span class="badge badge-manual">Trader+Supervisor 人工</span></td>
+                <td>
+                  <div class="progress"><div class="bar" style="width:0%"></div></div>
+                  <div class="progress-label">Trader 未填 · Supervisor 未填</div>
+                </td>
+                <td style="text-align:right">
+                  <button class="btn btn-sm btn-primary">進入 Workspace</button>
+                </td>
+              </tr>
+
+              <!-- Row 5: 已 Lock -->
+              <tr class="row-locked">
+                <td>
+                  <div class="match-cell">
+                    <span class="teams">Barcelona vs Real Madrid</span>
+                    <span class="match-id">MATCH_2026_LAL_00055</span>
+                  </div>
+                </td>
+                <td>La Liga</td>
+                <td>2026-05-09 03:00</td>
+                <td>
+                  <span class="badge badge-locked">Sportradar</span>
+                  <span class="badge badge-locked">L-sport</span>
+                </td>
+                <td>6 標準 / 1 Ad-hoc</td>
+                <td><span class="badge badge-locked">Locked &amp; Settled</span></td>
+                <td>
+                  <div class="progress"><div class="bar green" style="width:100%"></div></div>
+                  <div class="progress-label">7 markets settled · 派彩 3 分鐘前完成</div>
+                </td>
+                <td style="text-align:right">
+                  <button class="btn btn-sm">檢視</button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+          <div class="pagination">
+            <span>顯示 1–5 / 共 5 筆</span>
+            <div class="page-btns">
+              <button class="page-btn active">1</button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- VIEW 2: WORKSPACE (Trader / Supervisor 作業)                   -->
+      <!-- ============================================================== -->
+      <section class="view view-workspace" id="view-workspace">
+
+        <!-- Match header + role toggle -->
+        <div class="ws-header">
+          <div>
+            <div class="match-name">Lakers vs Celtics</div>
+            <div class="match-meta">MATCH_2026_NBA_00821 · NBA · 結束於 2026-05-09 12:48</div>
+          </div>
+
+          <div style="text-align:center;">
+            <div class="score-final">2 — 1</div>
+            <div class="score-half">HT 1 — 1 · FT 2 — 1</div>
+          </div>
+
+          <div class="lock-state unlocked" id="lock-state">
+            <span>&#128275;</span>
+            <span>未鎖定 · 待 Cross-check</span>
+          </div>
+
+          <div class="role-toggle" id="role-toggle">
+            <button class="active" data-role="trader">Trader 視角</button>
+            <button data-role="supervisor">Supervisor 視角</button>
+          </div>
+        </div>
+
+        <div class="info-strip">
+          <span class="info-icon">&#9432;</span>
+          <span><strong>本場 Cross-check 失敗，已切人工模式</strong> — Vendor A 跟 B 對 OU 2.5 結果不一致，整場改由 Trader + Supervisor 各自獨立填一份，再交叉比對（請見 Tab 3）。</span>
+        </div>
+
+        <!-- ===== Section A: Goal Timeline ===== -->
+        <div class="ws-section">
+          <div class="ws-section-header">
+            <span class="layer-tag">INPUT</span>
+            <h2>進球 Timeline (Basic Data)</h2>
+            <span class="help-text">填好順序，下方 6 個標準盤口會自動 derive 結果</span>
+          </div>
+          <div class="ws-section-body">
+            <div class="timeline-grid">
+
+              <!-- 上半 -->
+              <div class="timeline-half">
+                <h3>上半場 1st Half <span class="half-score">1 — 1</span></h3>
+                <div class="goal-row">
+                  <span class="goal-num">#1</span>
+                  <input class="minute" value="22'">
+                  <select class="scorer home"><option selected>Home (Lakers)</option><option>Away (Celtics)</option></select>
+                  <button class="remove-goal" title="移除">&times;</button>
+                </div>
+                <div class="goal-row">
+                  <span class="goal-num">#2</span>
+                  <input class="minute" value="38'">
+                  <select class="scorer away"><option>Home (Lakers)</option><option selected>Away (Celtics)</option></select>
+                  <button class="remove-goal" title="移除">&times;</button>
+                </div>
+                <button class="add-goal-btn">+ 新增進球</button>
+              </div>
+
+              <!-- 下半 -->
+              <div class="timeline-half">
+                <h3>下半場 2nd Half <span class="half-score">1 — 0</span></h3>
+                <div class="goal-row">
+                  <span class="goal-num">#3</span>
+                  <input class="minute" value="71'">
+                  <select class="scorer home"><option selected>Home (Lakers)</option><option>Away (Celtics)</option></select>
+                  <button class="remove-goal" title="移除">&times;</button>
+                </div>
+                <button class="add-goal-btn">+ 新增進球</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== Section B: Layer 1 — 6 標準盤口 (auto-derived) ===== -->
+        <div class="ws-section">
+          <div class="ws-section-header">
+            <span class="layer-tag">L1</span>
+            <h2>第 1 層 — 標準盤口（演算法推算）</h2>
+            <span class="help-text">從 timeline 自動 derive，read-only。每張卡可切全場/上半/下半</span>
+          </div>
+          <div class="ws-section-body">
+            <div class="l1-grid">
+
+              <!-- 1X2 -->
+              <div class="market-card locked">
+                <div class="market-card-header">
+                  <span class="market-code">ML</span>
+                  <span class="market-name">獨贏 1X2</span>
+                  <span class="market-status">&#128274;</span>
+                </div>
+                <div class="period-tabs">
+                  <button class="period-tab active">全場 <span class="has-bets">·12</span></button>
+                  <button class="period-tab">上半 <span class="has-bets">·5</span></button>
+                  <button class="period-tab">下半</button>
+                </div>
+                <div class="market-card-body">
+                  <div class="selection-row">
+                    <span class="sel-name">Home (Lakers)</span>
+                    <span class="sel-bets">8 注 / $4.2k</span>
+                    <span class="sel-result win">陪</span>
+                  </div>
+                  <div class="selection-row">
+                    <span class="sel-name">Away (Celtics)</span>
+                    <span class="sel-bets">3 注 / $1.5k</span>
+                    <span class="sel-result lose">輸</span>
+                  </div>
+                  <div class="selection-row">
+                    <span class="sel-name">Draw</span>
+                    <span class="sel-bets">1 注 / $200</span>
+                    <span class="sel-result lose">輸</span>
+                  </div>
+                </div>
+                <div class="market-card-footer">
+                  <span>從比分 2-1 推算 → Home Win</span>
+                </div>
+              </div>
+
+              <!-- AH -->
+              <div class="market-card">
+                <div class="market-card-header">
+                  <span class="market-code">AH</span>
+                  <span class="market-name">讓分 Asian Handicap</span>
+                  <span class="market-status">&#128274;</span>
+                </div>
+                <div class="period-tabs">
+                  <button class="period-tab active">全場 <span class="has-bets">·8</span></button>
+                  <button class="period-tab">上半</button>
+                  <button class="period-tab">下半</button>
+                </div>
+                <div class="market-card-body">
+                  <div class="selection-row">
+                    <span class="sel-name">Home -0.5 / -1</span>
+                    <span class="sel-bets">5 注 / $2.8k</span>
+                    <span class="sel-result win">陪 全</span>
+                  </div>
+                  <div class="selection-row">
+                    <span class="sel-name">Away +0.5 / +1</span>
+                    <span class="sel-bets">3 注 / $1.6k</span>
+                    <span class="sel-result lose">輸 全</span>
+                  </div>
+                </div>
+                <div class="market-card-footer">
+                  <span>讓 0.75 球 · 比分差 1 → Home 全贏</span>
+                </div>
+              </div>
+
+              <!-- OU -->
+              <div class="market-card">
+                <div class="market-card-header">
+                  <span class="market-code">OU</span>
+                  <span class="market-name">大小 Over/Under</span>
+                  <span class="market-status">&#128274;</span>
+                </div>
+                <div class="period-tabs">
+                  <button class="period-tab active">全場 <span class="has-bets">·9</span></button>
+                  <button class="period-tab">上半 <span class="has-bets">·2</span></button>
+                  <button class="period-tab">下半</button>
+                </div>
+                <div class="market-card-body">
+                  <div class="selection-row">
+                    <span class="sel-name">Over 2.5</span>
+                    <span class="sel-bets">6 注 / $3.1k</span>
+                    <span class="sel-result win">陪</span>
+                  </div>
+                  <div class="selection-row">
+                    <span class="sel-name">Under 2.5</span>
+                    <span class="sel-bets">3 注 / $900</span>
+                    <span class="sel-result lose">輸</span>
+                  </div>
+                </div>
+                <div class="market-card-footer">
+                  <span>總進球 3 球 &gt; 2.5 → Over</span>
+                </div>
+              </div>
+
+              <!-- CS -->
+              <div class="market-card">
+                <div class="market-card-header">
+                  <span class="market-code">CS</span>
+                  <span class="market-name">波膽 Correct Score</span>
+                  <span class="market-status">&#128274;</span>
+                </div>
+                <div class="period-tabs">
+                  <button class="period-tab active">全場 <span class="has-bets">·6</span></button>
+                  <button class="period-tab">上半 <span class="has-bets">·2</span></button>
+                  <button class="period-tab">下半</button>
+                </div>
+                <div class="market-card-body">
+                  <div class="selection-row">
+                    <span class="sel-name">2-1</span>
+                    <span class="sel-bets">2 注 / $400</span>
+                    <span class="sel-result win">陪</span>
+                  </div>
+                  <div class="selection-row">
+                    <span class="sel-name">1-0</span>
+                    <span class="sel-bets">1 注 / $300</span>
+                    <span class="sel-result lose">輸</span>
+                  </div>
+                  <div class="selection-row">
+                    <span class="sel-name">3-2 / Other (24+)</span>
+                    <span class="sel-bets">3 注 / $1.2k</span>
+                    <span class="sel-result lose">輸</span>
+                  </div>
+                </div>
+                <div class="market-card-footer">
+                  <span>比分 2-1 唯一中</span>
+                </div>
+              </div>
+
+              <!-- OE -->
+              <div class="market-card">
+                <div class="market-card-header">
+                  <span class="market-code">OE</span>
+                  <span class="market-name">單雙 Odd/Even</span>
+                  <span class="market-status">&#128274;</span>
+                </div>
+                <div class="period-tabs">
+                  <button class="period-tab active">全場 <span class="has-bets">·4</span></button>
+                  <button class="period-tab">上半</button>
+                  <button class="period-tab">下半</button>
+                </div>
+                <div class="market-card-body">
+                  <div class="selection-row">
+                    <span class="sel-name">Odd</span>
+                    <span class="sel-bets">3 注 / $1.5k</span>
+                    <span class="sel-result win">陪</span>
+                  </div>
+                  <div class="selection-row">
+                    <span class="sel-name">Even</span>
+                    <span class="sel-bets">1 注 / $300</span>
+                    <span class="sel-result lose">輸</span>
+                  </div>
+                </div>
+                <div class="market-card-footer">
+                  <span>總進球 3 為單數</span>
+                </div>
+              </div>
+
+              <!-- NG -->
+              <div class="market-card">
+                <div class="market-card-header">
+                  <span class="market-code">NG</span>
+                  <span class="market-name">下一進球 Next Goal</span>
+                  <span class="market-status">&#128274;</span>
+                </div>
+                <div class="period-tabs">
+                  <button class="period-tab active">下一球 (全場) <span class="has-bets">·3</span></button>
+                  <button class="period-tab">上半下一球</button>
+                  <button class="period-tab">下半下一球</button>
+                </div>
+                <div class="market-card-body">
+                  <div class="selection-row">
+                    <span class="sel-name">Home (下一球)</span>
+                    <span class="sel-bets">2 注 / $800</span>
+                    <span class="sel-result win">陪</span>
+                  </div>
+                  <div class="selection-row">
+                    <span class="sel-name">Away (下一球)</span>
+                    <span class="sel-bets">1 注 / $400</span>
+                    <span class="sel-result lose">輸</span>
+                  </div>
+                  <div class="selection-row">
+                    <span class="sel-name">No Goal</span>
+                    <span class="sel-bets">0 注</span>
+                    <span class="sel-result derived">不結算</span>
+                  </div>
+                </div>
+                <div class="market-card-footer">
+                  <span>從 0-0 起 · 第 1 球 = Home (22')</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== Section C: Layer 2 — Ad-hoc 手動盤口 ===== -->
+        <div class="ws-section">
+          <div class="ws-section-header">
+            <span class="layer-tag l2">L2</span>
+            <h2>第 2 層 — Ad-hoc 盤口（手動）</h2>
+            <span class="help-text">演算法不認識的盤 · 預設「玩家輸」· trader 只需點贏家 + 退本</span>
+          </div>
+          <div class="ws-section-body">
+            <div class="l2-stack">
+
+              <!-- Ad-hoc Card 1: 首支進球者 (touched, partial) -->
+              <div class="adhoc-card touched">
+                <div class="adhoc-card-header">
+                  <span class="market-code">FGS</span>
+                  <span class="market-name">首支進球球員 First Goal Scorer</span>
+                  <span class="opener-info">由 Trader Alex 於 2026-05-09 11:30 開盤 · 12 注下注 / $5.4k</span>
+                </div>
+                <div class="adhoc-card-body">
+                  <div class="adhoc-row">
+                    <span class="selection-label">LeBron James (#23)</span>
+                    <span class="bets-info">3 注 · <span class="stake">$1,200</span></span>
+                    <div class="three-state">
+                      <button class="active win">陪</button>
+                      <button>退本</button>
+                      <button>輸 <span class="label-default">預設</span></button>
+                    </div>
+                  </div>
+                  <div class="adhoc-row">
+                    <span class="selection-label">Anthony Davis (#3)</span>
+                    <span class="bets-info">2 注 · <span class="stake">$800</span></span>
+                    <div class="three-state">
+                      <button>陪</button>
+                      <button>退本</button>
+                      <button class="active lose">輸 <span class="label-default">預設</span></button>
+                    </div>
+                  </div>
+                  <div class="adhoc-row">
+                    <span class="selection-label">Jayson Tatum (#0)</span>
+                    <span class="bets-info">2 注 · <span class="stake">$700</span></span>
+                    <div class="three-state">
+                      <button>陪</button>
+                      <button>退本</button>
+                      <button class="active lose">輸 <span class="label-default">預設</span></button>
+                    </div>
+                  </div>
+                  <div class="adhoc-row">
+                    <span class="selection-label">Jaylen Brown (#7)</span>
+                    <span class="bets-info">1 注 · <span class="stake">$400</span></span>
+                    <div class="three-state">
+                      <button>陪</button>
+                      <button>退本</button>
+                      <button class="active lose">輸 <span class="label-default">預設</span></button>
+                    </div>
+                  </div>
+                  <div class="adhoc-row">
+                    <span class="selection-label">Other / No Goal Scorer</span>
+                    <span class="bets-info">4 注 · <span class="stake">$2,300</span></span>
+                    <div class="three-state">
+                      <button>陪</button>
+                      <button>退本</button>
+                      <button class="active lose">輸 <span class="label-default">預設</span></button>
+                    </div>
+                  </div>
+                </div>
+                <div class="adhoc-card-footer">
+                  <span class="summary">已標記：<strong>1 陪</strong> · 0 退本 · <strong>4 輸</strong>（其中 4 為預設）</span>
+                  <button class="btn btn-xs">全部標輸 (套用預設)</button>
+                  <span class="badge badge-waiting">已操作</span>
+                </div>
+              </div>
+
+              <!-- Ad-hoc Card 2: 球員得分區間 (untouched, all default lose) -->
+              <div class="adhoc-card">
+                <div class="adhoc-card-header">
+                  <span class="market-code">PPR</span>
+                  <span class="market-name">LeBron 得分區間 LeBron Points Range</span>
+                  <span class="opener-info">由 Trader Alex 於 2026-05-09 11:32 開盤 · 8 注下注 / $3.2k</span>
+                </div>
+                <div class="adhoc-card-body">
+                  <div class="adhoc-row">
+                    <span class="selection-label">≤ 19 分</span>
+                    <span class="bets-info">2 注 · <span class="stake">$700</span></span>
+                    <div class="three-state">
+                      <button>陪</button>
+                      <button>退本</button>
+                      <button class="active lose">輸 <span class="label-default">預設</span></button>
+                    </div>
+                  </div>
+                  <div class="adhoc-row">
+                    <span class="selection-label">20–29 分</span>
+                    <span class="bets-info">3 注 · <span class="stake">$1,200</span></span>
+                    <div class="three-state">
+                      <button>陪</button>
+                      <button>退本</button>
+                      <button class="active lose">輸 <span class="label-default">預設</span></button>
+                    </div>
+                  </div>
+                  <div class="adhoc-row">
+                    <span class="selection-label">30–39 分</span>
+                    <span class="bets-info">2 注 · <span class="stake">$900</span></span>
+                    <div class="three-state">
+                      <button>陪</button>
+                      <button>退本</button>
+                      <button class="active lose">輸 <span class="label-default">預設</span></button>
+                    </div>
+                  </div>
+                  <div class="adhoc-row">
+                    <span class="selection-label">≥ 40 分</span>
+                    <span class="bets-info">1 注 · <span class="stake">$400</span></span>
+                    <div class="three-state">
+                      <button>陪</button>
+                      <button>退本</button>
+                      <button class="active lose">輸 <span class="label-default">預設</span></button>
+                    </div>
+                  </div>
+                </div>
+                <div class="adhoc-card-footer">
+                  <span class="summary">尚未操作 · 全部為「輸」(預設) — 請至少標出一個贏家</span>
+                  <button class="btn btn-xs">全部標輸 (套用預設)</button>
+                  <span class="badge badge-conflict">紅燈</span>
+                </div>
+              </div>
+
+              <!-- Add new ad-hoc -->
+              <button class="add-adhoc">+ 新增 Ad-hoc 盤口（從本場已開的盤口載入）</button>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom action bar -->
+        <div class="ws-action-bar">
+          <div class="progress-info">
+            <span><strong style="color:#fafafa">Trader 進度：</strong> Timeline 已填 · 6 標準盤口已 derive · Ad-hoc 1/2 已標記</span>
+            <span style="color:#71717a">2 個 Ad-hoc 盤口待處理 · 1 個尚未確認</span>
+          </div>
+          <div class="partner-status">
+            <span class="dot wait"></span>
+            <span>Supervisor 進行中（已填 Timeline · Ad-hoc 0/2）</span>
+          </div>
+          <label class="confirm-check">
+            <input type="checkbox" id="confirm-check">
+            我已確認所有 selection
+          </label>
+          <button class="btn submit-btn btn-primary" disabled id="submit-trader">送出我的版本 →</button>
+        </div>
+
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- VIEW 3: CROSS-CHECK & LOCK                                     -->
+      <!-- ============================================================== -->
+      <section class="view view-crosscheck" id="view-crosscheck">
+
+        <div class="page-header">
+          <div>
+            <h1>Cross-check &amp; Lock — Lakers vs Celtics</h1>
+            <div class="subtitle">兩個來源比對 · 一致則自動 Lock 觸發派彩 · 不一致則整場改人工</div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn" onclick="switchView('workspace')">← 回 Workspace</button>
+          </div>
+        </div>
+
+        <!-- Source banner: Cross-check 失敗 case (整場人工 fallback) -->
+        <div class="cc-header">
+          <div class="source-banner">
+
+            <div class="source-pill dead">
+              <span>&#128268;</span>
+              <div>
+                <div class="src-name">Vendor: Sportradar</div>
+                <div class="src-meta">CS 結果 2-1 · OU 2.5 → Over</div>
+              </div>
+            </div>
+
+            <span class="vs-divider">VS</span>
+
+            <div class="source-pill dead">
+              <span>&#128268;</span>
+              <div>
+                <div class="src-name">Vendor: L-sport</div>
+                <div class="src-meta">CS 結果 2-1 · OU 2.5 → <span style="color:#f87171">Under</span></div>
+              </div>
+            </div>
+
+            <span style="color:#f87171; font-size:11px; margin-left:auto; padding: 6px 10px; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.3); border-radius:4px;">
+              &#9888;&#65039; Vendor 比對失敗 · 已切人工 fallback
+            </span>
+          </div>
+
+          <div style="border-top:1px solid #1f1f24; margin-top:14px; padding-top:14px;">
+            <div style="font-size:11px;color:#71717a; margin-bottom:8px;">人工 Fallback：</div>
+            <div class="source-banner">
+              <div class="source-pill primary">
+                <span>&#128100;</span>
+                <div>
+                  <div class="src-name">Trader: Alex</div>
+                  <div class="src-meta">送出 2026-05-09 13:02 · 6 L1 + 2 L2</div>
+                </div>
+              </div>
+              <span class="vs-divider">VS</span>
+              <div class="source-pill primary">
+                <span>&#128100;</span>
+                <div>
+                  <div class="src-name">Supervisor: Hugo</div>
+                  <div class="src-meta">送出 2026-05-09 13:08 · 6 L1 + 2 L2</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Compare table -->
+        <div class="cc-table">
+          <div class="table-toolbar">
+            <span>Trader vs Supervisor 比對 · <strong>8 markets</strong> 比對中 · <strong style="color:#f87171">1 不一致</strong></span>
+            <span style="color:#71717a">期數展開：每個 market 比對全場/上半/下半</span>
+          </div>
+
+          <table class="compare">
+            <thead>
+              <tr>
+                <th style="width:30%">Market</th>
+                <th>Trader (Alex)</th>
+                <th>Supervisor (Hugo)</th>
+                <th style="text-align:center;width:80px">比對</th>
+                <th style="text-align:right;width:180px">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr class="section-divider"><td colspan="5">Layer 1 — 標準盤口</td></tr>
+
+              <tr class="match-row">
+                <td><span class="market-label">1X2</span><span class="market-period">FT / 1H / 2H</span></td>
+                <td><span class="result-val">Home / Draw / Home</span></td>
+                <td><span class="result-val">Home / Draw / Home</span></td>
+                <td style="text-align:center"><span class="icon-ok">&#10003;</span></td>
+                <td style="text-align:right"><span class="badge badge-locked">一致</span></td>
+              </tr>
+              <tr class="match-row">
+                <td><span class="market-label">AH -0.75</span><span class="market-period">FT</span></td>
+                <td><span class="result-val">Home Win All</span></td>
+                <td><span class="result-val">Home Win All</span></td>
+                <td style="text-align:center"><span class="icon-ok">&#10003;</span></td>
+                <td style="text-align:right"><span class="badge badge-locked">一致</span></td>
+              </tr>
+              <tr class="match-row">
+                <td><span class="market-label">OU 2.5</span><span class="market-period">FT</span></td>
+                <td><span class="result-val">Over (3 goals)</span></td>
+                <td><span class="result-val">Over (3 goals)</span></td>
+                <td style="text-align:center"><span class="icon-ok">&#10003;</span></td>
+                <td style="text-align:right"><span class="badge badge-locked">一致</span></td>
+              </tr>
+              <tr class="match-row">
+                <td><span class="market-label">CS</span><span class="market-period">FT / 1H / 2H</span></td>
+                <td><span class="result-val">2-1 / 1-1 / 1-0</span></td>
+                <td><span class="result-val">2-1 / 1-1 / 1-0</span></td>
+                <td style="text-align:center"><span class="icon-ok">&#10003;</span></td>
+                <td style="text-align:right"><span class="badge badge-locked">一致</span></td>
+              </tr>
+              <tr class="match-row">
+                <td><span class="market-label">OE</span><span class="market-period">FT</span></td>
+                <td><span class="result-val">Odd (3)</span></td>
+                <td><span class="result-val">Odd (3)</span></td>
+                <td style="text-align:center"><span class="icon-ok">&#10003;</span></td>
+                <td style="text-align:right"><span class="badge badge-locked">一致</span></td>
+              </tr>
+              <tr class="match-row">
+                <td><span class="market-label">NG</span><span class="market-period">下一球 (從 0-0)</span></td>
+                <td><span class="result-val">Home (22')</span></td>
+                <td><span class="result-val">Home (22')</span></td>
+                <td style="text-align:center"><span class="icon-ok">&#10003;</span></td>
+                <td style="text-align:right"><span class="badge badge-locked">一致</span></td>
+              </tr>
+
+              <tr class="section-divider"><td colspan="5">Layer 2 — Ad-hoc 盤口</td></tr>
+
+              <tr class="match-row">
+                <td><span class="market-label">FGS — 首支進球球員</span><span class="market-period">5 selections</span></td>
+                <td><span class="result-val">LeBron 陪 · 4 輸</span></td>
+                <td><span class="result-val">LeBron 陪 · 4 輸</span></td>
+                <td style="text-align:center"><span class="icon-ok">&#10003;</span></td>
+                <td style="text-align:right"><span class="badge badge-locked">一致</span></td>
+              </tr>
+
+              <tr class="mismatch-row">
+                <td>
+                  <span class="market-label">PPR — LeBron 得分區間</span>
+                  <span class="market-period">4 selections</span>
+                </td>
+                <td><span class="result-val diff">"30–39" 陪 · 3 輸</span></td>
+                <td><span class="result-val diff">"20–29" 陪 · 3 輸</span></td>
+                <td style="text-align:center"><span class="icon-diff">&times;</span></td>
+                <td style="text-align:right">
+                  <button class="btn btn-xs btn-warning">展開細項</button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Verdict -->
+        <div class="cc-verdict fail">
+          <span class="verdict-icon">&#10060;</span>
+          <div class="verdict-body">
+            <div class="verdict-title">比對失敗 · 1 個盤口不一致</div>
+            <div class="verdict-text">
+              PPR (LeBron 得分區間) Trader 跟 Supervisor 標的贏家不同。請兩人面談 / 比對球員實際得分後重填，或由有權限者覆寫。
+            </div>
+          </div>
+          <div class="verdict-actions">
+            <button class="btn" onclick="switchView('workspace')">回 Workspace 重填</button>
+            <button class="btn btn-warning">由 Manager 覆寫（需密碼）</button>
+          </div>
+        </div>
+
+        <!-- (Alternate scenario) Verdict OK + Lock action — collapsed by default; show below as illustrative -->
+        <div class="cc-verdict ok" style="opacity:0.6;">
+          <span class="verdict-icon">&#9989;</span>
+          <div class="verdict-body">
+            <div class="verdict-title">如果全部一致：自動 Lock + 觸發派彩（範例呈現）</div>
+            <div class="verdict-text">
+              所有 8 個 markets 比對通過 → 鎖頭關上 → wallet-service 收到 settlement package → 派彩 saga 啟動。
+              一旦 Lock 後若需再修改：需要 Trader + Supervisor 雙人密碼解鎖（此功能初期可後做）。
+            </div>
+          </div>
+          <div class="verdict-actions">
+            <div class="lock-input">
+              <label>Trader PIN</label>
+              <input type="password" placeholder="••••" disabled>
+              <label>Supervisor PIN</label>
+              <input type="password" placeholder="••••" disabled>
+            </div>
+            <button class="btn btn-success" disabled>確認 Lock &amp; 派彩</button>
+          </div>
+        </div>
+
+        <!-- Audit log -->
+        <div class="audit-section">
+          <h3>操作紀錄 (Audit Trail)</h3>
+          <div class="audit-item">
+            <span class="ts">2026-05-09 12:48:08</span>
+            <span><span class="who">System</span> — 賽事結束，等待 vendor 結算數據</span>
+          </div>
+          <div class="audit-item">
+            <span class="ts">2026-05-09 12:48:14</span>
+            <span><span class="who">System</span> — 收到 Sportradar 結算（6 markets）</span>
+          </div>
+          <div class="audit-item">
+            <span class="ts">2026-05-09 12:48:21</span>
+            <span><span class="who">System</span> — 收到 L-sport 結算（6 markets）</span>
+          </div>
+          <div class="audit-item">
+            <span class="ts">2026-05-09 12:48:21</span>
+            <span><span class="who">System</span> — Vendor 比對：5 一致、1 不一致 (OU 2.5)。整場 hold，切 Trader+Supervisor 人工模式</span>
+          </div>
+          <div class="audit-item">
+            <span class="ts">2026-05-09 13:02:44</span>
+            <span><span class="who">Alex (Trader)</span> — 送出 Workspace（6 L1 + 2 L2）</span>
+          </div>
+          <div class="audit-item">
+            <span class="ts">2026-05-09 13:08:11</span>
+            <span><span class="who">Hugo (Supervisor)</span> — 送出 Workspace（6 L1 + 2 L2）</span>
+          </div>
+          <div class="audit-item">
+            <span class="ts">2026-05-09 13:08:11</span>
+            <span><span class="who">System</span> — Trader vs Supervisor 比對：7 一致、1 不一致 (PPR)。整場仍 hold</span>
+          </div>
+        </div>
+
+      </section>
 
     </div>
   </main>
 </div>
 
-<!-- ===== Toast Notification (conflict) ===== -->
-<div class="toast" id="toast-conflict">
-  <div class="toast-header">
-    <span class="toast-title">&#9888;&#65039; 注單結算衝突</span>
-    <span class="toast-close" id="toast-close">&times;</span>
-  </div>
-  <div class="toast-body">
-    <strong>Lakers vs Celtics</strong> — Sportradar 與 L-sport 結果不一致（2 個 market），需人工確認
-  </div>
-  <div class="toast-hint">點擊前往 Settlement Review</div>
-  <div class="toast-timer"><div class="toast-timer-bar"></div></div>
-</div>
-
 <script>
 (function() {
 
-  /* ── Toast close ── */
-  document.getElementById('toast-close').addEventListener('click', function(e) {
-    e.stopPropagation();
-    document.getElementById('toast-conflict').style.display = 'none';
+  /* ── View tab switching ── */
+  function switchView(name) {
+    document.querySelectorAll('.view-tab').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.view === name);
+    });
+    document.querySelectorAll('.view').forEach(function(v) {
+      v.classList.toggle('active', v.id === 'view-' + name);
+    });
+    window.scrollTo(0, 0);
+  }
+  window.switchView = switchView;
+  document.querySelectorAll('.view-tab').forEach(function(b) {
+    b.addEventListener('click', function() { switchView(b.dataset.view); });
   });
-  document.getElementById('toast-conflict').addEventListener('click', function() {
-    this.style.display = 'none';
-    // Scroll to the conflict row
-    document.getElementById('row-lakers').scrollIntoView({ behavior: 'smooth', block: 'center' });
-  });
 
-  /* ── Expand / Collapse rows ── */
-  document.querySelectorAll('.expandable').forEach(function(row) {
-    row.addEventListener('click', function(e) {
-      if (e.target.closest('button') && !e.target.closest('.btn-sm')) return;
-
-      var id = row.id;
-      var detailId = id.replace('row-', 'detail-');
-      var detail = document.getElementById(detailId);
-      var icon = row.querySelector('.expand-icon');
-      var btn = row.querySelector('.btn-sm');
-
-      if (detail) {
-        if (detail.style.display === 'none') {
-          detail.style.display = '';
-          if (icon) icon.classList.add('open');
-          if (btn) btn.textContent = '收合';
-        } else {
-          detail.style.display = 'none';
-          if (icon) icon.classList.remove('open');
-          if (btn) btn.textContent = '展開';
-        }
-      } else {
-        alert('展開 Detail Panel — 顯示 market 逐項比對');
+  /* ── Role toggle ── */
+  document.querySelectorAll('#role-toggle button').forEach(function(b) {
+    b.addEventListener('click', function() {
+      document.querySelectorAll('#role-toggle button').forEach(function(x) {
+        x.classList.toggle('active', x === b);
+      });
+      var rolePill = document.getElementById('role-pill');
+      if (rolePill) {
+        rolePill.textContent = b.dataset.role === 'trader' ? 'Role: Trader' : 'Role: Supervisor';
       }
     });
   });
 
-  /* ── Expand/collapse buttons ── */
-  document.querySelectorAll('.expandable .btn-sm').forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      btn.closest('.expandable').click();
-    });
-  });
-
-  /* ── Market selection (二選一) ── */
-  var selections = {};
-  var totalConflicts = 2;
-
-  document.querySelectorAll('.btn-select').forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      var market = btn.getAttribute('data-market');
-      var source = btn.getAttribute('data-source');
-
-      // Reset siblings in same row
-      var group = btn.closest('.btn-group');
-      group.querySelectorAll('.btn-select').forEach(function(b) {
-        b.style.background = '';
-        b.style.borderColor = '';
-        b.style.color = '';
-      });
-
-      // Highlight selected
-      btn.style.background = 'rgba(14, 165, 233, 0.3)';
-      btn.style.borderColor = '#0ea5e9';
-      btn.style.color = '#7dd3fc';
-
-      selections[market] = source;
-
-      // Update count
-      var count = Object.keys(selections).length;
-      document.getElementById('selected-count').textContent = count;
-
-      // Enable confirm button when all selected
-      var confirmBtn = document.getElementById('btn-confirm-settle');
-      if (count >= totalConflicts) {
-        confirmBtn.disabled = false;
-        confirmBtn.style.opacity = '1';
-      } else {
-        confirmBtn.disabled = true;
-        confirmBtn.style.opacity = '0.5';
-      }
-    });
-  });
-
-  /* ── Confirm settlement ── */
-  document.getElementById('btn-confirm-settle').addEventListener('click', function() {
-    var msg = '確認結算：\n';
-    for (var market in selections) {
-      msg += '  ' + market + ' → 採用 ' + selections[market] + '\n';
-    }
-    msg += '\n此操作不可逆。確定執行注單結算？';
-    alert(msg);
-  });
-
-  /* ── Dashboard alert button ── */
-  document.querySelector('.alert-card .btn-primary').addEventListener('click', function() {
-    document.querySelector('.page-header').scrollIntoView({ behavior: 'smooth' });
-  });
-
-  /* ── Warriors timeout buttons ── */
-  var warriorsPanel = document.getElementById('detail-warriors');
-  if (warriorsPanel) {
-    warriorsPanel.querySelectorAll('.btn-primary').forEach(function(btn) {
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        alert('確定以 Sportradar 唯一數據源執行全部 5 個 market 的注單結算？');
-      });
-    });
-    warriorsPanel.querySelectorAll('.btn:not(.btn-primary):not(.btn-sm):not(.btn-success)').forEach(function(btn) {
-      if (btn.textContent.trim() === '繼續等待') {
-        btn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          alert('維持 hold 狀態，繼續等待 L-sport 數據送達');
+  /* ── Period tabs (per market card) ── */
+  document.querySelectorAll('.period-tabs').forEach(function(tabs) {
+    tabs.querySelectorAll('.period-tab').forEach(function(t) {
+      t.addEventListener('click', function() {
+        tabs.querySelectorAll('.period-tab').forEach(function(x) {
+          x.classList.toggle('active', x === t);
         });
+      });
+    });
+  });
+
+  /* ── 3-state selector for ad-hoc selections ── */
+  document.querySelectorAll('.three-state').forEach(function(group) {
+    var btns = group.querySelectorAll('button');
+    btns.forEach(function(b, idx) {
+      b.addEventListener('click', function() {
+        btns.forEach(function(x) {
+          x.classList.remove('active', 'win', 'void', 'lose');
+        });
+        b.classList.add('active');
+        if (idx === 0) b.classList.add('win');
+        else if (idx === 1) b.classList.add('void');
+        else b.classList.add('lose');
+        // Bump the card to "touched" state if untouched
+        var card = group.closest('.adhoc-card');
+        if (card) {
+          card.classList.add('touched');
+          card.classList.remove('completed');
+        }
+      });
+    });
+  });
+
+  /* ── Confirm checkbox enables submit ── */
+  var confirmCheck = document.getElementById('confirm-check');
+  var submitBtn = document.getElementById('submit-trader');
+  if (confirmCheck && submitBtn) {
+    confirmCheck.addEventListener('change', function() {
+      submitBtn.disabled = !confirmCheck.checked;
+    });
+  }
+  if (submitBtn) {
+    submitBtn.addEventListener('click', function() {
+      alert('送出 Trader 版本。\n等 Supervisor 完成後系統會自動 cross-check（→ Tab 3）。');
+    });
+  }
+
+  /* ── Lock state click toggle (visual demo) ── */
+  var lockBox = document.getElementById('lock-state');
+  if (lockBox) {
+    lockBox.addEventListener('click', function() {
+      lockBox.classList.toggle('unlocked');
+      if (lockBox.classList.contains('unlocked')) {
+        lockBox.innerHTML = '<span>&#128275;</span><span>未鎖定 · 待 Cross-check</span>';
+      } else {
+        lockBox.innerHTML = '<span>&#128274;</span><span>已鎖定 · 已派彩</span>';
       }
     });
   }
