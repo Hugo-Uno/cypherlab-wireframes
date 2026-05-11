@@ -323,27 +323,40 @@
     border-radius: 6px;
     margin-bottom: 14px;
     overflow: hidden;
+    border-left-width: 4px;
   }
+  .ws-section.section-input { border-left-color: #71717a; }
+  .ws-section.section-l1 { border-left-color: #0ea5e9; }
+  .ws-section.section-l2 { border-left-color: #a855f7; }
   .ws-section-header {
-    padding: 12px 18px;
+    padding: 16px 20px;
     border-bottom: 1px solid #1f1f24;
     background: #15151b;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
   }
+  .ws-section.section-l1 .ws-section-header { background: linear-gradient(90deg, rgba(14, 165, 233, 0.10), #15151b 60%); }
+  .ws-section.section-l2 .ws-section-header { background: linear-gradient(90deg, rgba(168, 85, 247, 0.10), #15151b 60%); }
   .ws-section-header .layer-tag {
     font-family: "SF Mono", Menlo, monospace;
-    font-size: 10px;
-    background: #0ea5e9;
+    font-size: 13px;
+    background: #71717a;
     color: #fff;
-    padding: 2px 6px;
-    border-radius: 3px;
+    padding: 7px 14px;
+    border-radius: 4px;
     font-weight: 700;
+    letter-spacing: 0.05em;
+    min-width: 84px;
+    text-align: center;
+    line-height: 1;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
   }
+  .ws-section-header .layer-tag.l1 { background: #0ea5e9; }
   .ws-section-header .layer-tag.l2 { background: #a855f7; }
-  .ws-section-header h2 { font-size: 14px; color: #fafafa; font-weight: 600; }
-  .ws-section-header .help-text { color: #71717a; font-size: 11px; margin-left: auto; }
+  .ws-section-header .title-block { display: flex; flex-direction: column; gap: 2px; }
+  .ws-section-header h2 { font-size: 17px; color: #fafafa; font-weight: 700; line-height: 1.25; }
+  .ws-section-header .help-text { color: #a1a1aa; font-size: 12px; margin-left: auto; max-width: 380px; text-align: right; line-height: 1.4; }
   .ws-section-body { padding: 14px 18px; }
 
   /* ===== Goal Timeline ===== */
@@ -626,6 +639,58 @@
     flex: 1;
   }
   .adhoc-card-footer .summary strong { color: #fafafa; }
+
+  /* Actual result input (顯示給玩家看的正確答案說明) */
+  .adhoc-actual-result {
+    padding: 10px 14px;
+    background: #0d0d12;
+    border-top: 1px solid #2a2a32;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .adhoc-actual-result .ar-label {
+    font-size: 11px;
+    color: #a1a1aa;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .adhoc-actual-result .ar-label .hint {
+    color: #71717a;
+    font-weight: 400;
+  }
+  .adhoc-actual-result .ar-label .req-pill {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .adhoc-actual-result input {
+    height: 32px;
+    background: #0a0a0f;
+    border: 1px solid #2a2a32;
+    color: #e4e4e7;
+    border-radius: 3px;
+    padding: 0 10px;
+    font-size: 12px;
+    font-family: inherit;
+  }
+  .adhoc-actual-result input::placeholder { color: #52525b; }
+  .adhoc-actual-result.required input { border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.04); }
+  .adhoc-actual-result.required input:focus { border-color: #ef4444; outline: none; }
+  .adhoc-actual-result .ar-warning {
+    font-size: 10px;
+    color: #f87171;
+    display: none;
+    line-height: 1.4;
+  }
+  .adhoc-actual-result.required .ar-warning { display: block; }
 
   /* Ad-hoc add new market */
   .add-adhoc {
@@ -1174,10 +1239,10 @@
         </div>
 
         <!-- ===== Section A: Goal Timeline ===== -->
-        <div class="ws-section">
+        <div class="ws-section section-input">
           <div class="ws-section-header">
             <span class="layer-tag">INPUT</span>
-            <h2>進球 Timeline (Basic Data)</h2>
+            <h2>輸入 — 進球 Timeline (Basic Data)</h2>
             <span class="help-text">填好順序，下方 6 個標準盤口會自動 derive 結果</span>
           </div>
           <div class="ws-section-body">
@@ -1218,11 +1283,14 @@
         </div>
 
         <!-- ===== Section B: Layer 1 — 6 標準盤口 (auto-derived) ===== -->
-        <div class="ws-section">
+        <div class="ws-section section-l1">
           <div class="ws-section-header">
-            <span class="layer-tag">L1</span>
-            <h2>第 1 層 — 標準盤口（演算法推算）</h2>
-            <span class="help-text">從 timeline 自動 derive，read-only。每張卡可切全場/上半/下半</span>
+            <span class="layer-tag l1">第 1 層</span>
+            <div class="title-block">
+              <h2>標準盤口 · 演算法自動推算</h2>
+              <div style="font-size:12px;color:#a1a1aa;">1X2 / AH / OU / CS / OE / NG — 從 timeline 自動 derive，trader read-only</div>
+            </div>
+            <span class="help-text">每張卡可切 全場 / 上半 / 下半</span>
           </div>
           <div class="ws-section-body">
             <div class="l1-grid">
@@ -1421,11 +1489,14 @@
         </div>
 
         <!-- ===== Section C: Layer 2 — Ad-hoc 手動盤口 ===== -->
-        <div class="ws-section">
+        <div class="ws-section section-l2">
           <div class="ws-section-header">
-            <span class="layer-tag l2">L2</span>
-            <h2>第 2 層 — Ad-hoc 盤口（手動）</h2>
-            <span class="help-text">演算法不認識的盤 · 預設 Collect (收) · trader 只需點中獎 selection + 退本</span>
+            <span class="layer-tag l2">第 2 層</span>
+            <div class="title-block">
+              <h2>Ad-hoc 盤口 · 手動逐項標記</h2>
+              <div style="font-size:12px;color:#a1a1aa;">演算法不認識的盤口（例：FGS、Player Points）— trader 對每個 selection 標 Pay / Void / Collect</div>
+            </div>
+            <span class="help-text">預設 Collect (收)<br/>只需點中獎 selection + 退本</span>
           </div>
           <div class="ws-section-body">
             <div class="l2-stack">
@@ -1484,6 +1555,14 @@
                     </div>
                   </div>
                 </div>
+                <div class="adhoc-actual-result">
+                  <div class="ar-label">
+                    正確結果說明
+                    <span class="hint">— 顯示於玩家注單頁</span>
+                  </div>
+                  <input type="text" value="首位進球者 = LeBron James (#23) — 已標 Pay" />
+                  <div class="ar-warning">當整張卡無 Pay 時為必填 — 否則玩家在注單上看不到「正確答案」</div>
+                </div>
                 <div class="adhoc-card-footer">
                   <span class="summary">已標記：<strong>1 Pay</strong> · 0 Void · <strong>4 Collect</strong>（其中 4 為預設）</span>
                   <button class="btn btn-xs">全部標 Collect (套用預設)</button>
@@ -1535,6 +1614,15 @@
                       <button class="active lose">收 <span class="label-default">預設</span></button>
                     </div>
                   </div>
+                </div>
+                <div class="adhoc-actual-result required">
+                  <div class="ar-label">
+                    正確結果說明
+                    <span class="req-pill">必填</span>
+                    <span class="hint">— 顯示於玩家注單頁</span>
+                  </div>
+                  <input type="text" placeholder="例：LeBron 實際得 25 分（落在 20–29 區間 → 該 selection 為 Pay；本卡若全 Collect 則說明此事）" />
+                  <div class="ar-warning">⚠ 整張卡無 Pay — 玩家若只看到「Collect」會不知道正確答案是什麼，請務必填寫</div>
                 </div>
                 <div class="adhoc-card-footer">
                   <span class="summary">尚未操作 · 全部為「Collect」(預設) — 請至少標出一個 Pay selection</span>
